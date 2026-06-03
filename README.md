@@ -2,7 +2,7 @@
 
 > **Auteure :** Asma Daoui — 4ème année Ingénierie Cybersécurité  
 > **Module :** DevSecOps | **Année :** 2025–2026
-> **Université :** Euro-Méditerranéenne de Fès (UEMF) — EDIA  
+> **Université :** Euro-Méditerranéenne de Fès (UEMF) — EIDIA  
 > **GitHub :** [@BeeHope](https://github.com/BeeHope)
 
 ---
