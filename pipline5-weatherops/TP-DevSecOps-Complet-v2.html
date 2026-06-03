@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support de TP — Chaîne DevSecOps multi-cloud (AWS / Azure)</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --primary: #1e3a5f;
+      --success: #0d5c2e;
+      --warning: #8a5a00;
+      --danger: #8b2635;
+      --info: #0d4f5c;
+      --border: #cbd5e1;
+      --text: #1e293b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      line-height: 1.65;
+      color: var(--text);
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: #fafafa;
+    }
+    h1 { font-family: 'Segoe UI', system-ui, sans-serif; color: var(--primary); border-bottom: 2px solid var(--primary); padding-bottom: 0.4em; font-size: 1.6rem; font-weight: 600; }
+    h2 { font-family: 'Segoe UI', system-ui, sans-serif; color: #334155; margin-top: 2.25rem; font-size: 1.28rem; font-weight: 600; }
+    h3 { font-size: 1.12rem; margin-top: 1.5rem; color: #475569; font-weight: 600; }
+    h4 { font-size: 1rem; margin-top: 1rem; color: #64748b; font-weight: 600; }
+
+    .toc { background: #f1f5f9; border: 1px solid var(--border); padding: 1.25rem 1.5rem; margin-bottom: 2rem; }
+    .toc-title { font-weight: 600; margin-bottom: 0.75rem; font-size: 1rem; }
+    .toc ul { list-style: none; padding-left: 0; }
+    .toc li { margin: 0.3rem 0; }
+    .toc a { color: var(--primary); text-decoration: none; font-size: 0.95em; }
+    .toc a:hover { text-decoration: underline; }
+    .toc .toc-sub { padding-left: 1rem; font-size: 0.9em; }
+
+    .box { border-radius: 6px; padding: 1rem 1.25rem; margin: 1rem 0; border-left: 4px solid; }
+    .box-def { background: #f8fafc; border-color: #94a3b8; }
+    .box-objectif { background: #eff6ff; border-color: var(--primary); }
+    .box-astuce { background: #f0fdf4; border-color: var(--success); }
+    .box-attention { background: #fffbeb; border-color: var(--warning); }
+    .box-erreur { background: #fef2f2; border-color: var(--danger); }
+    .box-retenir { background: #ecfeff; border-color: var(--info); }
+    .box-commande { background: #1e293b; color: #e2e8f0; font-family: 'Consolas', monospace; padding: 1rem; overflow-x: auto; border-left: 4px solid #64748b; font-size: 0.88em; }
+    .box-commande .label { color: #94a3b8; font-size: 0.85em; margin-bottom: 0.25rem; }
+    .box-resultat { background: #f1f5f9; border: 1px solid var(--border); padding: 1rem; font-size: 0.9em; }
+    .box-capture { border: 2px dashed #94a3b8; background: #f8fafc; padding: 2rem; text-align: center; color: #64748b; font-style: italic; }
+    .checkpoint { background: #f0fdf4; border: 1px solid var(--success); padding: 1rem; border-radius: 6px; margin: 1rem 0; }
+    .checkpoint strong { color: var(--success); }
+    section { margin-bottom: 2.5rem; }
+    pre, code { font-family: 'Consolas', 'Monaco', monospace; font-size: 0.86em; }
+    code { background: #f1f5f9; padding: 0.15em 0.4em; border-radius: 4px; }
+    pre { background: #1e293b; color: #e2e8f0; padding: 1rem; overflow-x: auto; border-radius: 6px; margin: 0.5rem 0; }
+    pre code { background: none; padding: 0; }
+    .figure { margin: 1.75rem 0; }
+    .figure-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.25rem; }
+    .figure-legend { font-size: 0.9em; color: #64748b; margin-top: 0.5rem; }
+    .figure-interp { margin-top: 0.75rem; padding: 0.75rem; background: #f8fafc; border-left: 3px solid var(--info); font-size: 0.95em; }
+    .mermaid { text-align: center; }
+    ul.steps { list-style: none; padding-left: 0; }
+    ul.steps li { margin: 0.5rem 0; padding-left: 1.5rem; position: relative; }
+    ul.steps li::before { content: "→"; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.94em; }
+    th, td { border: 1px solid var(--border); padding: 0.5rem 0.75rem; text-align: left; }
+    th { background: #f1f5f9; font-weight: 600; }
+    .obligatoire { font-weight: 600; color: var(--success); }
+    .optional { color: #64748b; font-style: italic; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Support de travaux pratiques — Chaîne DevSecOps multi-cloud</h1>
+  <p style="margin-top: 0.5rem; color: #64748b;">Module DevSecOps — Node.js, Jest, Docker, GitLab CI/CD, Terraform (AWS staging / Azure production)</p>
+</header>
+
+<nav class="toc" aria-label="Table des matières">
+  <p class="toc-title">Table des matières</p>
+  <ul>
+    <li><a href="#s1">1. Objectifs pédagogiques et résultats attendus</a></li>
+    <li><a href="#s2">2. Architecture cible de la solution</a></li>
+    <li><a href="#s3">3. Préparation de l’environnement de travail</a></li>
+    <li><a href="#s4">4. Développement de l’application Node.js (Partie A)</a></li>
+    <li><a href="#s5">5. Tests automatisés avec Jest et Supertest (Partie B)</a></li>
+    <li><a href="#s6">6. Conteneurisation avec Docker (Partie C)</a></li>
+    <li><a href="#s7">7. Pipeline GitLab CI/CD : qualité et sécurité (Partie D + E)</a></li>
+    <li><a href="#s8">8. Publication de l’image dans GitLab Container Registry</a></li>
+    <li><a href="#s9">9. Infrastructure as Code avec Terraform</a></li>
+    <li><a href="#s10">10. Déploiement en staging sur AWS (Partie F)</a></li>
+    <li><a href="#s11">11. Déploiement en production sur Azure (Partie G)</a></li>
+    <li><a href="#s12">12. Chaîne de livraison : de GitLab à AWS/Azure (Partie H)</a></li>
+    <li><a href="#s13">13. Validation finale et plan de démonstration (Partie I)</a></li>
+    <li><a href="#s14">14. Livrables à rendre</a></li>
+    <li><a href="#s15">15. Barème d’évaluation</a></li>
+    <li><a href="#s16">16. Dépannage rapide (FAQ)</a></li>
+    <li><a href="#s17">17. Nettoyage des ressources (coûts)</a></li>
+  </ul>
+</nav>
+
+<!-- ========== 1. OBJECTIFS PÉDAGOGIQUES ET RÉSULTATS ATTENDUS ========== -->
+<section id="s1">
+  <h2>1. Objectifs pédagogiques et résultats attendus</h2>
+  <p><strong>But du TP</strong> — Réaliser une chaîne DevSecOps complète : développement d’une application Node.js, tests automatisés, conteneurisation Docker, pipeline GitLab (qualité et sécurité), publication de l’image dans le GitLab Container Registry, création de l’infrastructure cloud avec Terraform (AWS pour le staging, Azure pour la production), et déploiement de l’image sur ces deux environnements.</p>
+  <p><strong>Compétences visées</strong> — À l’issue du TP, l’étudiant est capable de :</p>
+  <ul>
+    <li>Structurer une application Node.js/Express (séparation app / server, variables d’environnement).</li>
+    <li>Écrire des tests automatisés avec Jest et Supertest.</li>
+    <li>Conteneuriser l’application avec un Dockerfile et exploiter le GitLab Container Registry.</li>
+    <li>Définir un pipeline GitLab CI/CD avec les stages test, security, build et déploiement.</li>
+    <li>Décrire l’infrastructure (AWS EC2, Azure App Service) en Terraform et déployer l’image Docker depuis le registry.</li>
+    <li>Expliquer le parcours de l’image : construction dans le pipeline, stockage dans le registry, récupération par AWS et Azure.</li>
+  </ul>
+  <div class="box box-objectif">
+    <strong>Résultats attendus</strong> — Application déployée et accessible : route <code>/</code> et route <code>/health</code> fonctionnelles en local, dans un conteneur Docker, sur l’environnement de staging (AWS) et sur l’environnement de production (Azure). Pipeline GitLab vert (tests, sécurité, build, push registry). Infrastructure créée et détruite proprement avec Terraform.
+  </div>
+</section>
+
+<!-- ========== 2. ARCHITECTURE CIBLE ========== -->
+<section id="s2">
+  <h2>2. Architecture cible de la solution</h2>
+  <p>La solution comporte : un dépôt GitLab contenant le code source et le fichier de pipeline ; un pipeline CI/CD qui exécute les tests, le contrôle de sécurité, le build de l’image Docker et sa publication dans le GitLab Container Registry ; deux environnements cloud créés par Terraform — <strong>staging</strong> sur AWS (instance EC2) et <strong>production</strong> sur Azure (App Service for Containers) — qui récupèrent l’image depuis le registry et exécutent le conteneur.</p>
+
+  <div class="figure">
+    <p class="figure-title">Figure 1 — Architecture DevSecOps globale</p>
+    <div class="mermaid" id="fig1">
+flowchart LR
+  subgraph dev[Code]
+    A[Développeur]
+    B[GitLab repo]
+  end
+  subgraph ci[CI/CD]
+    C[GitLab CI]
+    D[test]
+    E[security]
+    F[build]
+    G[deploy_staging]
+    H[deploy_production]
+  end
+  I[(GitLab Registry)]
+  J[Staging AWS EC2]
+  K[Production Azure]
+  A --> B --> C
+  C --> D --> E --> F
+  F --> I
+  I --> J
+  I --> K
+  G --> J
+  H --> K
+    </div>
+    <p class="figure-legend">Du code au registry, puis aux environnements staging (AWS) et production (Azure).</p>
+    <p class="figure-interp">Le pipeline construit l’image et la pousse dans le GitLab Container Registry. Terraform (via les jobs de déploiement ou en manuel) crée ou met à jour l’infrastructure ; les instances EC2 et le service Azure tirent l’image depuis le registry et lancent le conteneur.</p>
+  </div>
+
+  <div class="figure">
+    <p class="figure-title">Figure 2 — Pipeline GitLab CI/CD (stages et flux)</p>
+    <div class="mermaid" id="fig2">
+flowchart TB
+  subgraph pipeline[Pipeline]
+    S1[test]
+    S2[security]
+    S3[build]
+    S4[deploy_staging]
+    S5[deploy_production]
+  end
+  Commit[Commit / Push] --> S1 --> S2 --> S3
+  S3 --> |image| REG[(Registry)]
+  S3 --> S4
+  S4 --> |terraform apply| AWS[AWS EC2]
+  S4 --> S5
+  S5 --> |manual gate| AZ[Azure App Service]
+  REG --> AWS
+  REG --> AZ
+    </div>
+    <p class="figure-legend">Enchaînement des stages : test, security, build, puis déploiement staging (automatique) et production (manuel).</p>
+    <p class="figure-interp">Chaque stage s’exécute après le succès du précédent. Le stage build produit l’image et la pousse vers le registry. Les stages deploy_staging et deploy_production exécutent Terraform pour mettre à jour l’infrastructure et faire en sorte que l’instance EC2 ou Azure utilise la nouvelle image.</p>
+  </div>
+
+  <h3>Staging vs production</h3>
+  <p><strong>Staging (AWS)</strong> : environnement de préproduction. On y déploie une version pour valider le comportement avant la mise en production. Ici : une instance EC2 qui exécute le conteneur Docker.</p>
+  <p><strong>Production (Azure)</strong> : environnement final exposé aux utilisateurs. Ici : une Web App Azure (App Service for Containers) qui tire l’image depuis le GitLab Registry et expose l’application.</p>
+</section>
+
+<!-- ========== 3. PRÉPARATION DE L'ENVIRONNEMENT ========== -->
+<section id="s3">
+  <h2>3. Préparation de l’environnement de travail</h2>
+  <h3>Checklist logicielle</h3>
+  <table>
+    <thead><tr><th>Élément</th><th>Obligatoire / Optionnel</th><th>Vérification</th></tr></thead>
+    <tbody>
+      <tr><td>Node.js (LTS 20.x)</td><td class="obligatoire">Obligatoire</td><td><code>node -v</code></td></tr>
+      <tr><td>npm</td><td class="obligatoire">Obligatoire</td><td><code>npm -v</code></td></tr>
+      <tr><td>Git</td><td class="obligatoire">Obligatoire</td><td><code>git --version</code></td></tr>
+      <tr><td>Docker Desktop</td><td class="obligatoire">Obligatoire</td><td><code>docker --version</code>, démon actif</td></tr>
+      <tr><td>Terraform</td><td class="obligatoire">Obligatoire</td><td><code>terraform -version</code></td></tr>
+      <tr><td>Éditeur de code (VS Code, etc.)</td><td class="obligatoire">Obligatoire</td><td>—</td></tr>
+      <tr><td>AWS CLI</td><td class="optional">Optionnel</td><td><code>aws --version</code></td></tr>
+      <tr><td>Azure CLI</td><td class="optional">Optionnel</td><td><code>az --version</code></td></tr>
+    </tbody>
+  </table>
+  <h3>Checklist comptes cloud</h3>
+  <ul>
+    <li><strong>GitLab</strong> : compte sur gitlab.com (ou instance fournie).</li>
+    <li><strong>AWS</strong> : compte AWS avec accès IAM (création d’utilisateur avec accès programmatique et droits EC2 pour le TP).</li>
+    <li><strong>Azure</strong> : compte Azure avec un abonnement actif ; Service Principal (App registration + secret) pour Terraform.</li>
+  </ul>
+  <h3>Vérification des installations</h3>
+  <p>Dans un terminal : exécuter les commandes de vérification ci-dessus. Pour Docker, s’assurer que <code>docker run hello-world</code> fonctionne. Pour Terraform, exécuter <code>terraform -version</code> et vérifier qu’aucune erreur n’apparaît.</p>
+</section>
+
+<!-- ========== 4. DÉVELOPPEMENT DE L'APPLICATION NODE.JS (PARTIE A) ========== -->
+<section id="s4">
+  <h2>4. Développement de l’application Node.js (Partie A)</h2>
+  <div class="box box-objectif"><strong>Objectif</strong> — Créer une application web minimale avec Node.js et Express : routes <code>/</code> et <code>/health</code>, configuration par variable d’environnement <code>PORT</code>, structure avec <code>src/app.js</code> (application Express) et <code>src/server.js</code> (démarrage du serveur).</div>
+
+  <h3>Procédure</h3>
+  <ul class="steps">
+    <li>Créer le dossier du projet (ex. <code>tp-devsecops-app</code>), se placer dedans.</li>
+    <li>Initialiser le projet npm : <code>npm init -y</code>.</li>
+    <li>Installer Express : <code>npm install express</code>.</li>
+    <li>Créer le dossier <code>src</code>. Créer <code>src/app.js</code> : application Express avec les routes <code>GET /</code> et <code>GET /health</code>. Exporter l’objet <code>app</code>.</li>
+    <li>Créer <code>src/server.js</code> : importer <code>app</code>, lire <code>process.env.PORT</code> (défaut 3000), appeler <code>app.listen(PORT, ...)</code>.</li>
+    <li>Dans <code>package.json</code>, définir <code>"main": "src/server.js"</code> et le script <code>"start": "node src/server.js"</code>.</li>
+    <li>Créer <code>.env.example</code> avec <code>PORT=3000</code>. Créer <code>.env</code> (même contenu) pour le développement local. Ajouter à <code>.gitignore</code> : <code>node_modules</code>, <code>.env</code>, <code>*.log</code>.</li>
+    <li>Lancer <code>npm start</code>, ouvrir <code>http://localhost:3000</code> et <code>http://localhost:3000/health</code>.</li>
+  </ul>
+
+  <h3>Fichiers complets</h3>
+  <p><strong>package.json</strong> (extrait essentiel) :</p>
+  <pre><code>{
+  "name": "tp-devsecops-app",
+  "version": "1.0.0",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}</code></pre>
+  <p><strong>src/app.js</strong> :</p>
+  <pre><code>const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Bienvenue sur l\'application DevSecOps TP',
+    version: '1.0'
+  });
+});
+
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    timestamp: new Date().toISOString()
+  });
+});
+
+module.exports = app;</code></pre>
+  <p><strong>src/server.js</strong> :</p>
+  <pre><code>const app = require('./app');
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Serveur démarré sur http://localhost:${PORT}`);
+});</code></pre>
+  <p><strong>.env.example</strong> :</p>
+  <pre><code>PORT=3000</code></pre>
+  <p><strong>.gitignore</strong> :</p>
+  <pre><code>node_modules
+.env
+*.log
+.DS_Store</code></pre>
+  <div class="box box-retenir"><strong>Pourquoi</strong> — <code>process.env.PORT</code> permet de configurer le port sans modifier le code (Docker, cloud). Le fichier <code>.env</code> n’est pas versionné pour éviter d’y mettre des secrets.</div>
+  <h3>Résultat attendu</h3>
+  <p>L’application répond en JSON sur <code>/</code> (message, version) et sur <code>/health</code> (status: "ok", timestamp).</p>
+  <div class="checkpoint"><strong>Checkpoint A</strong> — <code>npm start</code> fonctionne ; les deux routes sont accessibles. Arrêter le serveur (Ctrl+C) avant de continuer.</div>
+  <div class="box box-capture">Insérer capture : réponse <code>/</code> et <code>/health</code> (navigateur ou curl).</div>
+  <h3>Erreurs fréquentes et correctifs</h3>
+  <div class="box box-erreur">Port déjà utilisé : changer <code>PORT</code> dans <code>.env</code> ou arrêter le processus. Module introuvable : exécuter <code>npm install</code> depuis la racine du projet. Erreur « Cannot find module './app' » : vérifier que <code>src/app.js</code> existe et que vous lancez depuis la racine (<code>node src/server.js</code>).</div>
+</section>
+
+<!-- ========== 5. TESTS AUTOMATISÉS JEST + SUPERTEST (PARTIE B) ========== -->
+<section id="s5">
+  <h2>5. Tests automatisés avec Jest et Supertest (Partie B)</h2>
+  <div class="box box-objectif"><strong>Objectif</strong> — Mettre en place des tests avec Jest et Supertest pour les routes <code>/</code> et <code>/health</code>, exécutables en local et dans le pipeline CI.</div>
+
+  <h3>Procédure</h3>
+  <ul class="steps">
+    <li>Installer Jest et Supertest en devDependencies : <code>npm install --save-dev jest supertest</code>.</li>
+    <li>Dans <code>package.json</code>, ajouter (ou compléter) le script <code>"test": "jest"</code>. Optionnel : <code>"jest": { "testMatch": ["**/__tests__/**/*.test.js"] }</code> pour cibler les fichiers de test.</li>
+    <li>Créer le dossier <code>__tests__</code> à la racine. Créer <code>__tests__/app.test.js</code> : importer <code>supertest</code> et <code>app</code> depuis <code>../src/app</code>, écrire deux tests — <code>GET /</code> (status 200, body.message contient "DevSecOps") et <code>GET /health</code> (status 200, body.status === 'ok').</li>
+    <li>Lancer <code>npm test</code>.</li>
+  </ul>
+
+  <h3>Fichier de test complet</h3>
+  <pre><code>const request = require('supertest');
+const app = require('../src/app');
+
+describe('Routes', () => {
+  test('GET / retourne un message', async () => {
+    const res = await request(app).get('/');
+    expect(res.status).toBe(200);
+    expect(res.body.message).toContain('DevSecOps');
+  });
+
+  test('GET /health retourne status ok', async () => {
+    const res = await request(app).get('/health');
+    expect(res.status).toBe(200);
+    expect(res.body.status).toBe('ok');
+  });
+});</code></pre>
+  <div class="box box-commande"><span class="label">Commande</span><br>npm test</div>
+  <h3>Résultat attendu</h3>
+  <p>Sortie du type « Tests: 2 passed ».</p>
+  <div class="checkpoint"><strong>Checkpoint B</strong> — Tous les tests passent en local.</div>
+  <div class="box box-capture">Insérer capture : sortie <code>npm test</code>.</div>
+  <h3>Échec volontaire puis correction</h3>
+  <p>Modifier temporairement <code>src/app.js</code> (par exemple changer le message ou le status) pour faire échouer un test. Relancer <code>npm test</code> : le test concerné doit être en échec. Restaurer le code correct et vérifier que les tests repassent.</p>
+  <h3>Erreurs fréquentes et correctifs</h3>
+  <div class="box box-erreur">Jest ne trouve pas les tests : placer les fichiers dans <code>__tests__</code> avec l’extension <code>.test.js</code> ou configurer <code>testMatch</code> dans <code>package.json</code>. Timeout : augmenter avec <code>jest.setTimeout(5000)</code> si nécessaire.</div>
+</section>
+
+<!-- ========== 6. CONTENEURISATION DOCKER (PARTIE C) ========== -->
+<section id="s6">
+  <h2>6. Conteneurisation avec Docker (Partie C)</h2>
+  <div class="box box-objectif"><strong>Objectif</strong> — Produire une image Docker de l’application avec Node 20, la construire et l’exécuter en local pour valider le comportement en conteneur (port 3000).</div>
+
+  <h3>Procédure</h3>
+  <ul class="steps">
+    <li>Créer un <code>Dockerfile</code> à la racine du projet (voir ci-dessous).</li>
+    <li>Créer un <code>.dockerignore</code> pour exclure <code>node_modules</code>, <code>.env</code>, <code>.git</code>, <code>*.log</code>, <code>__tests__</code> du contexte de build.</li>
+    <li>Builder l’image : <code>docker build -t tp-devsecops-app:latest .</code></li>
+    <li>Lancer le conteneur : <code>docker run -p 3000:3000 --name tp-app tp-devsecops-app:latest</code>. Tester <code>http://localhost:3000/health</code>.</li>
+    <li>Consulter les conteneurs : <code>docker ps</code>. Consulter les logs : <code>docker logs tp-app</code>. Arrêter : <code>docker stop tp-app</code> ; supprimer : <code>docker rm tp-app</code>.</li>
+  </ul>
+
+  <h3>Dockerfile complet</h3>
+  <pre><code># Image de base : Node.js 20 (LTS)
+FROM node:20-alpine
+
+# Répertoire de travail dans le conteneur
+WORKDIR /app
+
+# Copier les fichiers de dépendances
+COPY package*.json ./
+
+# Installer les dépendances (production uniquement)
+RUN npm ci --only=production
+
+# Copier le code source (y compris src/)
+COPY . .
+
+# Port exposé par l'application
+EXPOSE 3000
+
+# Variable d'environnement par défaut
+ENV PORT=3000
+
+# Point d'entrée : lancer le serveur Node
+CMD ["node", "src/server.js"]</code></pre>
+  <h3>Explication ligne par ligne</h3>
+  <ul>
+    <li><code>FROM node:20-alpine</code> — Image légère avec Node.js 20.</li>
+    <li><code>WORKDIR /app</code> — Répertoire de travail dans le conteneur.</li>
+    <li><code>COPY package*.json ./</code> — Fichiers nécessaires pour <code>npm ci</code>.</li>
+    <li><code>RUN npm ci --only=production</code> — Installation des dépendances sans devDependencies (Jest, etc.).</li>
+    <li><code>COPY . .</code> — Copie du reste du code (le <code>.dockerignore</code> exclut ce qui ne doit pas entrer).</li>
+    <li><code>EXPOSE 3000</code> — Documente le port d’écoute.</li>
+    <li><code>ENV PORT=3000</code> — Valeur par défaut pour l’application.</li>
+    <li><code>CMD ["node", "src/server.js"]</code> — Commande exécutée au démarrage du conteneur.</li>
+  </ul>
+  <h3>.dockerignore</h3>
+  <pre><code>node_modules
+.env
+.git
+*.log
+__tests__
+.gitignore
+README.md</code></pre>
+  <div class="box box-commande"><span class="label">Commandes</span><br>docker build -t tp-devsecops-app:latest .<br>docker run -p 3000:3000 --name tp-app tp-devsecops-app:latest<br>docker ps<br>docker logs tp-app</div>
+  <h3>Résultat attendu</h3>
+  <p>Image construite avec succès ; conteneur répond sur <code>/</code> et <code>/health</code> comme en local.</p>
+  <div class="checkpoint"><strong>Checkpoint C</strong> — Image buildée, conteneur exécuté, routes validées.</div>
+  <div class="box box-capture">Insérer capture : <code>docker build</code> réussi et réponse <code>/health</code>.</div>
+  <h3>Erreurs fréquentes et correctifs</h3>
+  <div class="box box-erreur">Docker daemon non démarré : lancer Docker Desktop. Erreur de build (npm ci) : s’assurer que <code>package-lock.json</code> existe. Fichier non trouvé dans le conteneur : vérifier que <code>src/</code> est bien copié (pas exclu par <code>.dockerignore</code>).</div>
+</section>
+
+<!-- ========== 7. PIPELINE GITLAB CI/CD : QUALITÉ ET SÉCURITÉ (PARTIE D + E) ========== -->
+<section id="s7">
+  <h2>7. Pipeline GitLab CI/CD : qualité et sécurité (Partie D + E)</h2>
+  <div class="box box-objectif"><strong>Objectif</strong> — Définir un pipeline GitLab avec les stages <code>test</code>, <code>security</code>, <code>build</code>, puis (section 8) publication dans le registry et (sections 10–11) déploiement. Faire échouer le pipeline en introduisant un faux secret, puis corriger.</div>
+
+  <h3>Fichier .gitlab-ci.yml complet (commenté)</h3>
+  <p>À la racine du projet, créer <code>.gitlab-ci.yml</code>. Ce fichier décrit les <strong>stages</strong> (étapes) et les <strong>jobs</strong>. Les variables <code>CI_REGISTRY_*</code> sont fournies automatiquement par GitLab pour s’authentifier au Container Registry.</p>
+  <pre><code># ========== Stages (ordre d'exécution) ==========
+stages:
+  - test
+  - security
+  - build
+  - deploy_staging
+  - deploy_production
+
+variables:
+  NODE_VERSION: "20"
+
+# ========== Stage test : exécuter les tests Jest ==========
+test:
+  stage: test
+  image: node:${NODE_VERSION}-alpine
+  before_script:
+    - npm ci
+  script:
+    - npm test
+
+# ========== Stage security : détection de secret exposé ==========
+# Si le code contient un motif type API_KEY=sk-demo-..., le job échoue
+security:
+  stage: security
+  image: alpine:latest
+  script:
+    - |
+      if grep -rE 'API_KEY\s*=\s*["\x27]?sk-[a-zA-Z0-9-]+' --include="*.js" --include="*.json" . 2>/dev/null; then
+        echo "ERREUR : secret ou faux secret détecté (API_KEY=sk-...). Ne pas exposer de clés dans le code."
+        exit 1
+      fi
+      echo "Aucun secret suspect détecté."
+
+# ========== Stage build : construction de l'image Docker ==========
+# Le login et le push vers le registry sont détaillés en section 8
+build:
+  stage: build
+  image: docker:24
+  services:
+    - docker:24-dind
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  before_script:
+    - docker info
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA -t $CI_REGISTRY_IMAGE:latest .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+    - docker push $CI_REGISTRY_IMAGE:latest
+
+# ========== Deploy staging (AWS) : automatique sur branche develop ==========
+deploy_staging:
+  stage: deploy_staging
+  image: hashicorp/terraform:latest
+  script:
+    - cd terraform/aws-staging
+    - terraform init
+    - terraform apply -auto-approve -var "docker_image=$CI_REGISTRY_IMAGE" -var "docker_tag=$CI_COMMIT_SHORT_SHA" -var "registry_url=$CI_REGISTRY" -var "registry_user=$CI_REGISTRY_USER" -var "registry_password=$CI_REGISTRY_PASSWORD"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
+
+# ========== Deploy production (Azure) : manuel (gate) sur branche main ==========
+deploy_production:
+  stage: deploy_production
+  image: hashicorp/terraform:latest
+  when: manual
+  script:
+    - cd terraform/azure-production
+    - terraform init
+    - terraform apply -auto-approve -var "docker_image=$CI_REGISTRY_IMAGE" -var "docker_image_tag=latest" -var "registry_url=https://$CI_REGISTRY" -var "registry_user=$CI_REGISTRY_USER" -var "registry_password=$CI_REGISTRY_PASSWORD"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"</code></pre>
+
+  <h3>Démonstration pédagogique : faux secret</h3>
+  <ol>
+    <li><strong>Injecter un faux secret</strong> : dans un fichier (par ex. <code>src/app.js</code> ou un fichier de config factice), ajouter une ligne du type <code>API_KEY=sk-demo-123456789</code> (uniquement des données fictives). Commiter et pousser.</li>
+    <li><strong>Résultat attendu</strong> : le job <code>security</code> du pipeline échoue (grep trouve le motif et le script fait <code>exit 1</code>).</li>
+    <li><strong>Corriger</strong> : supprimer la ligne contenant le faux secret. Remplacer par l’usage d’une variable d’environnement (ex. <code>process.env.API_KEY</code>) et documenter dans le README ou dans GitLab CI/CD Variables que les secrets ne doivent jamais être dans le code. Commiter et pousser.</li>
+    <li><strong>Résultat attendu</strong> : le pipeline repasse au vert (test, security, build).</li>
+  </ol>
+  <div class="box box-attention">N’utiliser que des <strong>faux</strong> secrets (ex. <code>sk-demo-123456789</code>) pour cet exercice. En production, les clés sont dans GitLab CI Variables (masked) ou dans un secret manager.</div>
+  <h3>Lecture des logs GitLab</h3>
+  <p>Dans GitLab : <strong>Build → Pipelines</strong>. Cliquer sur le pipeline concerné, puis sur chaque job pour afficher les logs. Les messages d’erreur (script security, échec des tests) s’affichent dans ces logs.</p>
+  <h3>Résultat attendu</h3>
+  <p>Pipeline vert après correction : stages test, security et build en succès.</p>
+  <div class="checkpoint"><strong>Checkpoint D + E</strong> — Pipeline configuré ; démonstration échec (secret) puis succès (correction).</div>
+  <div class="box box-capture">Insérer capture : pipeline en échec (job security) puis pipeline corrigé (tous les jobs verts).</div>
+  <h3>Erreurs fréquentes et correctifs</h3>
+  <div class="box box-erreur">Job build échoue (Docker) : vérifier que le runner a accès à Docker (service dind). Indentation YAML : utiliser des espaces, pas des tabulations. Job test échoue : vérifier que <code>npm ci</code> et <code>npm test</code> fonctionnent en local.</div>
+</section>
+
+<!-- ========== 8. PUBLICATION DE L'IMAGE DANS GITLAB CONTAINER REGISTRY ========== -->
+<section id="s8">
+  <h2>8. Publication de l’image Docker dans GitLab Container Registry</h2>
+  <div class="box box-objectif"><strong>Objectif</strong> — Compléter le job <code>build</code> (ou créer un job dédié) pour : s’authentifier au GitLab Container Registry, construire l’image, la taguer avec le SHA du commit et <code>latest</code>, puis la pousser vers le registry.</div>
+
+  <h3>Variables GitLab pour le Registry</h3>
+  <p>GitLab fournit automatiquement dans chaque job CI :</p>
+  <ul>
+    <li><code>CI_REGISTRY</code> — URL du registry (ex. <code>registry.gitlab.com</code>).</li>
+    <li><code>CI_REGISTRY_IMAGE</code> — URL complète de l’image du projet (ex. <code>registry.gitlab.com/groupe/tp-devsecops-app</code>).</li>
+    <li><code>CI_REGISTRY_USER</code> et <code>CI_REGISTRY_PASSWORD</code> — Identifiants pour <code>docker login</code>.</li>
+  </ul>
+  <h3>Job build complet (login + build + tag + push)</h3>
+  <pre><code>build:
+  stage: build
+  image: docker:24
+  services:
+    - docker:24-dind
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA -t $CI_REGISTRY_IMAGE:latest .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+    - docker push $CI_REGISTRY_IMAGE:latest</code></pre>
+  <p><strong>Tags</strong> : <code>$CI_COMMIT_SHORT_SHA</code> assure la traçabilité (chaque commit a une image taguée) ; <code>latest</code> pointe vers la dernière image buildée (pratique pour staging). En production on peut utiliser un tag de release (ex. <code>v1.0.0</code>) poussé manuellement ou par un job conditionné sur un tag Git.</p>
+  <h3>Résultat attendu</h3>
+  <p>Après un push, le pipeline exécute le job build ; l’image apparaît dans GitLab : <strong>Deploy → Container Registry</strong>. On y voit les tags (ex. <code>abc1234</code>, <code>latest</code>).</p>
+  <div class="checkpoint"><strong>Checkpoint</strong> — Image visible dans le Container Registry du projet.</div>
+  <div class="box box-capture">Insérer capture : pipeline (job build vert) et vue Container Registry avec les tags.</div>
+</section>
+
+<!-- ========== 9. INFRASTRUCTURE AS CODE AVEC TERRAFORM ========== -->
+<section id="s9">
+  <h2>9. Infrastructure as Code avec Terraform (AWS staging / Azure production)</h2>
+  <h3>Terraform en quelques notions</h3>
+  <div class="box box-def">
+    <strong>Provider</strong> — Module qui communique avec un cloud (ex. <code>hashicorp/aws</code>, <code>hashicorp/azurerm</code>). Déclaré dans <code>terraform { required_providers { ... } }</code> et configuré via <code>provider "aws"</code> (région, credentials).<br><br>
+    <strong>Resource</strong> — Élément d’infrastructure (ex. <code>aws_instance</code>, <code>azurerm_linux_web_app</code>). Chaque ressource a un type et un nom logique.<br><br>
+    <strong>Variable</strong> — Paramètre d’entrée (fichier <code>variables.tf</code> ou <code>.tfvars</code>) pour rendre la config réutilisable (région, type d’instance, URL d’image, etc.).<br><br>
+    <strong>Output</strong> — Valeur exportée après <code>apply</code> (IP publique, URL) pour exploitation manuelle ou par d’autres outils.<br><br>
+    <strong>State</strong> — Fichier (local ou distant) qui enregistre l’état des ressources. Terraform l’utilise pour calculer les changements. Ne pas modifier à la main.<br><br>
+    <strong>plan / apply / destroy</strong> — <code>terraform plan</code> affiche les changements sans les appliquer ; <code>terraform apply</code> crée ou modifie les ressources ; <code>terraform destroy</code> les supprime.
+  </div>
+  <div class="figure">
+    <p class="figure-title">Figure 3 — Terraform multi-cloud (AWS staging / Azure production)</p>
+    <div class="mermaid" id="fig-terraform">
+flowchart TB
+  subgraph TF[Terraform]
+    F[Fichiers .tf]
+    V[variables]
+    O[outputs]
+  end
+  F --> AWS
+  F --> AZ
+  subgraph AWS[AWS Staging]
+    SG[Security Group]
+    EC2[EC2 instance]
+  end
+  subgraph AZ[Azure Production]
+    RG[Resource group]
+    PLAN[App Service Plan]
+    WEB[Linux Web App]
+  end
+    </div>
+    <p class="figure-legend">Un même outil Terraform décrit l’infrastructure des deux clouds.</p>
+    <p class="figure-interp">Les dossiers <code>terraform/aws-staging/</code> et <code>terraform/azure-production/</code> contiennent chacun un provider et des ressources propres à chaque cloud. Les variables (image, tag, credentials registry) sont injectées pour déployer la même image Docker.</p>
+  </div>
+  <h3>Arborescence imposée</h3>
+  <pre><code>terraform/
+  aws-staging/
+    main.tf
+    variables.tf
+    outputs.tf
+    terraform.tfvars.example
+  azure-production/
+    main.tf
+    variables.tf
+    outputs.tf
+    terraform.tfvars.example</code></pre>
+  <p>Les sections 10 et 11 détaillent le contenu de chaque dossier.</p>
+</section>
+
+<!-- ========== 10. DÉPLOIEMENT EN STAGING SUR AWS (PARTIE F) ========== -->
+<section id="s10">
+  <h2>10. Déploiement en staging sur AWS (Partie F)</h2>
+  <div class="box box-objectif"><strong>Objectif</strong> — Créer l’infrastructure de staging sur AWS avec Terraform : VPC par défaut (ou usage du default VPC), Security Group (HTTP 80, SSH 22), instance EC2. Le script <code>user_data</code> installe Docker, se connecte au GitLab Registry, tire l’image et lance le conteneur sur le port 80 (mapping 80→3000).</div>
+
+  <h3>Structure des fichiers Terraform AWS</h3>
+  <p>Dans <code>terraform/aws-staging/</code> : <code>main.tf</code> (provider, security group, instance, user_data, clé SSH), <code>variables.tf</code>, <code>outputs.tf</code>, <code>terraform.tfvars.example</code> (sans secrets réels).</p>
+
+  <h3>main.tf (complet)</h3>
+  <pre><code>terraform {
+  required_providers {
+    aws    = { source = "hashicorp/aws", version = "~> 5.0" }
+    tls    = { source = "hashicorp/tls", version = "~> 4.0" }
+  }
+}
+
+provider "aws" {
+  region = var.aws_region
+}
+
+# Utiliser la VPC par défaut
+data "aws_vpc" "default" {
+  default = true
+}
+data "aws_subnets" "default" {
+  filter { name = "vpc-id"; values = [data.aws_vpc.default.id] }
+}
+
+# Security Group : HTTP 80 (accès web) et SSH 22 (dépannage)
+resource "aws_security_group" "staging_sg" {
+  name        = "tp-devsecops-staging-sg"
+  description = "HTTP 80, SSH 22 pour TP staging"
+  vpc_id      = data.aws_vpc.default.id
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+# Clé SSH pour se connecter à l'instance (optionnel)
+resource "tls_private_key" "staging" {
+  algorithm = "RSA"
+  rsa_bits  = 2048
+}
+resource "aws_key_pair" "staging" {
+  key_name   = "tp-staging-key"
+  public_key = tls_private_key.staging.public_key_openssh
+}
+
+# AMI Amazon Linux 2
+data "aws_ami" "amazon_linux_2" {
+  most_recent = true
+  owners      = ["amazon"]
+  filter { name = "name"; values = ["amzn2-ami-hvm-*-x86_64-gp2"] }
+}
+
+# Script user_data : installer Docker, login registry, pull, run
+resource "aws_instance" "staging" {
+  ami                    = data.aws_ami.amazon_linux_2.id
+  instance_type           = var.instance_type
+  key_name               = aws_key_pair.staging.key_name
+  vpc_security_group_ids = [aws_security_group.staging_sg.id]
+  subnet_id              = tolist(data.aws_subnets.default.ids)[0]
+
+  user_data = &lt;&lt;-EOT
+#!/bin/bash
+set -e
+yum update -y
+yum install -y docker
+systemctl start docker
+systemctl enable docker
+echo "${var.registry_password}" | docker login -u "${var.registry_user}" --password-stdin ${var.registry_url}
+docker pull ${var.docker_image}:${var.docker_tag}
+docker stop app 2>/dev/null || true
+docker rm app 2>/dev/null || true
+docker run -d --name app --restart unless-stopped -p 80:3000 ${var.docker_image}:${var.docker_tag}
+EOT
+
+  tags = { Name = "tp-devsecops-staging" }
+}</code></pre>
+
+  <h3>variables.tf</h3>
+  <pre><code>variable "aws_region" {
+  type        = string
+  default     = "eu-west-1"
+  description = "Région AWS"
+}
+variable "instance_type" {
+  type    = string
+  default = "t2.micro"
+}
+variable "docker_image" {
+  type        = string
+  description = "URL complète de l'image (ex. registry.gitlab.com/groupe/tp-devsecops-app)"
+}
+variable "docker_tag" {
+  type    = string
+  default = "latest"
+}
+variable "registry_url" {
+  type        = string
+  description = "URL du registry (ex. registry.gitlab.com)"
+}
+variable "registry_user" {
+  type        = string
+  description = "Utilisateur pour docker login (ex. GitLab Deploy Token)"
+  sensitive   = true
+}
+variable "registry_password" {
+  type        = string
+  description = "Mot de passe / token pour docker login"
+  sensitive   = true
+}</code></pre>
+
+  <h3>outputs.tf</h3>
+  <pre><code>output "staging_public_ip" {
+  value       = aws_instance.staging.public_ip
+  description = "IP publique de l'instance (test: http://IP/health)"
+}</code></pre>
+
+  <h3>terraform.tfvars.example</h3>
+  <pre><code>aws_region    = "eu-west-1"
+instance_type = "t2.micro"
+docker_image  = "registry.gitlab.com/VOTRE_GROUPE/tp-devsecops-app"
+docker_tag    = "latest"
+registry_url  = "registry.gitlab.com"
+# registry_user et registry_password : ne pas commiter ; utiliser tfvars ou variables d'environnement TF_VAR_*</code></pre>
+
+  <h3>Identifiants du registry</h3>
+  <p>Pour que l’instance EC2 puisse faire <code>docker pull</code> sur une image privée GitLab : créer un <strong>Deploy Token</strong> (GitLab : Settings → Repository → Deploy tokens) avec la permission <code>read_registry</code>. Renseigner <code>registry_user</code> et <code>registry_password</code> dans un fichier <code>terraform.tfvars</code> (non versionné) ou via les variables d’environnement <code>TF_VAR_registry_user</code> et <code>TF_VAR_registry_password</code>. En production réelle, on utiliserait par exemple AWS Secrets Manager ou SSM Parameter Store au lieu de les passer en clair dans Terraform.</p>
+  <h3>Commandes Terraform</h3>
+  <div class="box box-commande"><span class="label">Dans terraform/aws-staging/</span><br>terraform init<br>terraform plan -var-file=terraform.tfvars<br>terraform apply -var-file=terraform.tfvars</div>
+  <p>Remplacer <code>terraform.tfvars</code> par vos valeurs (ou utiliser <code>-var</code> pour chaque variable). À la fin de <code>apply</code>, noter <code>staging_public_ip</code>.</p>
+  <h3>Test et mise à jour du conteneur</h3>
+  <p>Ouvrir <code>http://&lt;staging_public_ip&gt;/</code> et <code>http://&lt;staging_public_ip&gt;/health</code>. Pour mettre à jour l’application : soit relancer <code>terraform apply</code> avec un nouveau <code>docker_tag</code> (le user_data ne s’exécute qu’au premier boot ; il faudrait alors recréer l’instance ou exécuter le script à la main en SSH), soit se connecter en SSH et exécuter manuellement : <code>docker pull ... ; docker stop app ; docker rm app ; docker run -d ...</code>.</p>
+  <div class="checkpoint"><strong>Checkpoint F</strong> — Infrastructure AWS créée, <code>/health</code> accessible depuis l’IP publique.</div>
+  <div class="box box-capture">Insérer capture : sortie <code>terraform apply</code> et réponse <code>/health</code> dans le navigateur.</div>
+  <h3>Erreurs fréquentes et correctifs</h3>
+  <div class="box box-erreur"><strong>Port 80 inaccessible</strong> : vérifier le Security Group (ingress 80 depuis 0.0.0.0/0). <strong>Docker non lancé / image non trouvée</strong> : se connecter en SSH et vérifier les logs (<code>sudo journalctl -u docker</code>), puis exécuter manuellement <code>docker login</code>, <code>docker pull</code>, <code>docker run</code>. <strong>Registry login failed</strong> : vérifier le Deploy Token et que <code>registry_url</code> correspond bien (sans https://).</div>
+</section>
+
+<!-- ========== 11. DÉPLOIEMENT EN PRODUCTION SUR AZURE (PARTIE G) ========== -->
+<section id="s11">
+  <h2>11. Déploiement en production sur Azure (Partie G)</h2>
+  <div class="box box-objectif"><strong>Objectif</strong> — Créer l’infrastructure de production sur Azure avec Terraform : Resource Group, App Service Plan, Linux Web App (App Service for Containers). L’application Azure tire l’image Docker depuis le GitLab Container Registry (image privée) et expose le port 3000 via <code>WEBSITES_PORT=3000</code>.</div>
+
+  <h3>Structure des fichiers Terraform Azure</h3>
+  <p>Dans <code>terraform/azure-production/</code> : <code>main.tf</code>, <code>variables.tf</code>, <code>outputs.tf</code>, <code>terraform.tfvars.example</code>.</p>
+
+  <h3>main.tf (complet)</h3>
+  <pre><code>terraform {
+  required_providers {
+    azurerm = { source = "hashicorp/azurerm", version = "~> 3.0" }
+  }
+}
+
+provider "azurerm" {
+  features {}
+}
+
+resource "azurerm_resource_group" "rg" {
+  name     = var.resource_group_name
+  location = var.azure_region
+}
+
+resource "azurerm_service_plan" "plan" {
+  name                = "tp-devsecops-prod-plan"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  os_type             = "Linux"
+  sku_name            = "B1"
+}
+
+resource "azurerm_linux_web_app" "app" {
+  name                = var.app_name
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  service_plan_id     = azurerm_service_plan.plan.id
+
+  site_config {
+    application_stack {
+      docker_image     = var.docker_image
+      docker_image_tag = var.docker_image_tag
+    }
+  }
+
+  app_settings = {
+    WEBSITES_PORT = "3000"
+    DOCKER_REGISTRY_SERVER_URL      = var.registry_url
+    DOCKER_REGISTRY_SERVER_USERNAME  = var.registry_user
+    DOCKER_REGISTRY_SERVER_PASSWORD = var.registry_password
+  }
+}</code></pre>
+
+  <h3>variables.tf</h3>
+  <pre><code>variable "resource_group_name" {
+  type    = string
+  default = "tp-devsecops-rg"
+}
+variable "azure_region" {
+  type    = string
+  default = "West Europe"
+}
+variable "app_name" {
+  type    = string
+  default = "tp-devsecops-prod"
+}
+variable "docker_image" {
+  type = string
+}
+variable "docker_image_tag" {
+  type    = string
+  default = "latest"
+}
+variable "registry_url" {
+  type = string
+}
+variable "registry_user" {
+  type      = string
+  sensitive = true
+}
+variable "registry_password" {
+  type      = string
+  sensitive = true
+}</code></pre>
+
+  <h3>outputs.tf</h3>
+  <pre><code>output "production_url" {
+  value       = "https://${azurerm_linux_web_app.app.default_hostname}"
+  description = "URL de l'application en production"
+}</code></pre>
+
+  <h3>terraform.tfvars.example</h3>
+  <pre><code>resource_group_name = "tp-devsecops-rg"
+azure_region        = "West Europe"
+app_name            = "tp-devsecops-prod"
+docker_image        = "registry.gitlab.com/VOTRE_GROUPE/tp-devsecops-app"
+docker_image_tag    = "latest"
+registry_url        = "https://registry.gitlab.com"
+# registry_user, registry_password : ne pas commiter</code></pre>
+
+  <h3>Variables nécessaires pour l’image privée</h3>
+  <p><strong>image name</strong> et <strong>tag</strong> : <code>docker_image</code>, <code>docker_image_tag</code>. <strong>Registry</strong> : <code>DOCKER_REGISTRY_SERVER_URL</code> (ex. <code>https://registry.gitlab.com</code>), <code>DOCKER_REGISTRY_SERVER_USERNAME</code>, <code>DOCKER_REGISTRY_SERVER_PASSWORD</code> (Deploy Token GitLab). <strong>WEBSITES_PORT=3000</strong> : indique à Azure le port d’écoute du conteneur pour router le trafic HTTP.</p>
+  <h3>Commandes Terraform</h3>
+  <div class="box box-commande"><span class="label">Dans terraform/azure-production/</span><br>terraform init<br>terraform plan -var-file=terraform.tfvars<br>terraform apply -var-file=terraform.tfvars</div>
+  <p>Configurer les variables ARM (Service Principal) : <code>ARM_CLIENT_ID</code>, <code>ARM_CLIENT_SECRET</code>, <code>ARM_SUBSCRIPTION_ID</code>, <code>ARM_TENANT_ID</code>. Après <code>apply</code>, noter <code>production_url</code> et tester <code>https://&lt;production_url&gt;/health</code>.</p>
+  <div class="checkpoint"><strong>Checkpoint G</strong> — Web App Azure créée, <code>/health</code> accessible.</div>
+  <div class="box box-capture">Insérer capture : URL production et réponse <code>/health</code>.</div>
+  <h3>Erreurs fréquentes et correctifs</h3>
+  <div class="box box-erreur"><strong>Image pull failed</strong> : vérifier l’URL du registry (avec https:// pour Azure), le nom d’utilisateur et le mot de passe (Deploy Token). <strong>Port</strong> : s’assurer que <code>WEBSITES_PORT=3000</code> est bien défini et que l’application écoute sur 3000 dans le conteneur. <strong>Authentification Azure</strong> : vérifier les variables ARM_* et les droits du Service Principal (Contributor sur le resource group ou l’abonnement).</div>
+</section>
+
+<!-- ========== 12. CHAÎNE DE LIVRAISON : DE GITLAB À AWS/AZURE (PARTIE H) ========== -->
+<section id="s12">
+  <h2>12. Chaîne de livraison : de GitLab à AWS/Azure (Partie H)</h2>
+  <p>Cette section détaille pas à pas comment l’image Docker est construite, stockée, puis récupérée par AWS et Azure, et ce qui est manuel ou automatisé.</p>
+
+  <div class="figure">
+    <p class="figure-title">Figure 4 — Flux Docker (build / tag / push / pull / run)</p>
+    <div class="mermaid" id="fig4-docker">
+flowchart LR
+  subgraph CI[GitLab CI]
+    B[docker build]
+    T[tag]
+    P[push]
+  end
+  B --> T --> P
+  P --> REG[(Registry)]
+  REG --> PULL1[pull]
+  REG --> PULL2[pull]
+  PULL1 --> RUN1[run]
+  PULL2 --> RUN2[run]
+  RUN1 --> AWS[EC2]
+  RUN2 --> AZ[Azure]
+    </div>
+    <p class="figure-legend">Construction et publication dans le registry, puis récupération par les environnements cloud.</p>
+  </div>
+
+  <h3>A. Construction de l’image Docker</h3>
+  <p><strong>Qui construit l’image ?</strong> — Le <strong>runner GitLab CI</strong> (machine qui exécute les jobs du pipeline).</p>
+  <p><strong>À quel moment ?</strong> — Lors du <strong>stage build</strong>, après les stages test et security.</p>
+  <p><strong>À partir de quel fichier ?</strong> — Le <strong>Dockerfile</strong> à la racine du projet (et le contexte : code source, package.json, etc.).</p>
+  <p><strong>Avec quelles commandes ?</strong> — <code>docker build -t &lt;image&gt;:&lt;tag&gt; .</code> Le point désigne le contexte (répertoire courant). Les tags utilisés sont en général <code>$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA</code> et <code>$CI_REGISTRY_IMAGE:latest</code>.</p>
+
+  <h3>B. Stockage dans GitLab Container Registry</h3>
+  <p><strong>Où l’image est stockée ?</strong> — Dans le <strong>GitLab Container Registry</strong> du projet (Deploy → Container Registry). L’URL est du type <code>registry.gitlab.com/&lt;groupe&gt;/&lt;projet&gt;</code>.</p>
+  <p><strong>Variables GitLab</strong> :</p>
+  <ul>
+    <li><code>CI_REGISTRY</code> — URL du registry (ex. <code>registry.gitlab.com</code>).</li>
+    <li><code>CI_REGISTRY_IMAGE</code> — URL complète de l’image du projet.</li>
+    <li><code>CI_REGISTRY_USER</code> / <code>CI_REGISTRY_PASSWORD</code> — Identifiants pour <code>docker login</code> dans le job.</li>
+  </ul>
+  <p><strong>Tags</strong> : <code>:$CI_COMMIT_SHORT_SHA</code> (traçabilité), <code>:latest</code> (dernier build), <code>:v1.0.0</code> (release). On ne déploie pas directement le code source car le conteneur garantit un environnement reproductible (même OS, mêmes dépendances) et évite d’installer Node.js sur les serveurs ; l’image est l’unité de déploiement.</p>
+
+  <h3>C. Récupération par AWS (staging)</h3>
+  <p>Terraform crée l’instance EC2. Au premier démarrage, l’instance exécute le script <strong>user_data</strong> qui : (1) installe Docker, (2) se connecte au registry GitLab (<code>docker login</code>), (3) télécharge l’image (<code>docker pull</code>), (4) lance le conteneur (<code>docker run -d -p 80:3000 ...</code>). Les identifiants du registry sont fournis via les <strong>variables Terraform</strong> (<code>registry_user</code>, <code>registry_password</code>), elles-mêmes renseignées par un fichier <code>terraform.tfvars</code> non versionné ou par des variables GitLab CI (dans les jobs de déploiement) exportées en <code>TF_VAR_*</code>. En production réelle, on stockerait ces secrets dans un secret manager (AWS Secrets Manager, SSM Parameter Store) et on les récupérerait au moment du déploiement au lieu de les passer en clair dans Terraform.</p>
+
+  <h3>D. Récupération par Azure (production)</h3>
+  <p>Terraform crée le service App Service (Linux Web App). Azure tire l’image depuis le GitLab Registry. Azure a besoin de : l’<strong>URL du registry</strong>, le <strong>username</strong> et le <strong>password</strong> (Deploy Token), et l’<strong>image + tag</strong>. Ces paramètres sont configurés dans la ressource <code>azurerm_linux_web_app</code> (image, tag, et <code>app_settings</code> pour <code>DOCKER_REGISTRY_SERVER_*</code>). <strong>WEBSITES_PORT=3000</strong> indique à Azure quel port le conteneur écoute pour router le trafic HTTP.</p>
+
+  <h3>E. Automatisation depuis GitLab</h3>
+  <p><strong>Stage deploy_staging</strong> : exécution automatique (par ex. sur la branche <code>develop</code>) — le job lance <code>terraform init</code> / <code>apply</code> dans <code>terraform/aws-staging/</code> en passant l’image et le tag (variables CI). <strong>Stage deploy_production</strong> : <strong>manual gate</strong> (<code>when: manual</code>) sur la branche <code>main</code> — un opérateur déclenche le job pour déployer en production. <strong>GitLab Environments</strong> (staging, production) permettent d’associer ces jobs à des environnements et d’afficher les URLs. Dans les jobs de déploiement, GitLab exporte les variables définies dans Settings → CI/CD → Variables ; le script exporte <code>TF_VAR_docker_tag=$CI_COMMIT_SHORT_SHA</code> (ou équivalent) puis exécute <code>terraform apply -auto-approve</code>.</p>
+
+  <h3>F. Manuel vs automatisé</h3>
+  <table>
+    <thead><tr><th>Élément</th><th>Manuel (dans le TP)</th><th>Automatisé (pipeline)</th><th>En entreprise</th></tr></thead>
+    <tbody>
+      <tr><td>Tests</td><td>—</td><td>Job test à chaque push</td><td>Idem + revue de code</td></tr>
+      <tr><td>Sécurité</td><td>—</td><td>Job security (grep secrets)</td><td>Idem + scan dépendances, SAST</td></tr>
+      <tr><td>Build image</td><td>docker build local</td><td>Job build</td><td>Pipeline</td></tr>
+      <tr><td>Push registry</td><td>—</td><td>Job build (docker push)</td><td>Pipeline</td></tr>
+      <tr><td>Déploiement staging</td><td>terraform apply à la main</td><td>Job deploy_staging (optionnel)</td><td>Automatisé sur develop</td></tr>
+      <tr><td>Déploiement production</td><td>terraform apply à la main</td><td>Job deploy_production (manual)</td><td>Manual gate ou approbation</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Qui fait quoi ?</h3>
+  <table>
+    <thead><tr><th>Acteur</th><th>Rôle</th></tr></thead>
+    <tbody>
+      <tr><td>Développeur</td><td>Commit / push du code ; déclenche le pipeline</td></tr>
+      <tr><td>GitLab CI</td><td>Exécute test, security, build ; login registry ; push image ; optionnel : terraform apply (deploy)</td></tr>
+      <tr><td>Registry</td><td>Stocke les images Docker ; les rend disponibles pour AWS et Azure</td></tr>
+      <tr><td>Terraform</td><td>Crée ou met à jour l’infrastructure (EC2, Security Group, Resource Group, Web App) ; peut être lancé par le pipeline ou manuellement</td></tr>
+      <tr><td>AWS (EC2)</td><td>Exécute user_data : install Docker, login, pull, run ; expose le conteneur sur le port 80</td></tr>
+      <tr><td>Azure (Web App)</td><td>Tire l’image depuis le registry (credentials dans app_settings) ; exécute le conteneur ; expose selon WEBSITES_PORT</td></tr>
+    </tbody>
+  </table>
+
+  <div class="figure">
+    <p class="figure-title">Figure 5 — Séquence complète : commit → pipeline → registry → Terraform → cloud</p>
+    <div class="mermaid" id="fig5">
+sequenceDiagram
+  participant Dev as Développeur
+  participant GitLab as GitLab
+  participant CI as Pipeline
+  participant Reg as Registry
+  participant TF as Terraform
+  participant AWS as AWS EC2
+  participant AZ as Azure
+  Dev->>GitLab: git push
+  GitLab->>CI: déclenche pipeline
+  CI->>CI: test, security, build
+  CI->>Reg: docker push
+  Dev->>TF: terraform apply (ou CI)
+  TF->>AWS: crée instance + user_data
+  TF->>AZ: crée Web App
+  AWS->>Reg: docker pull
+  AWS->>AWS: docker run
+  AZ->>Reg: pull image
+  AZ->>AZ: run container
+    </div>
+    <p class="figure-legend">Parcours du code jusqu’à l’exécution du conteneur en staging et en production.</p>
+  </div>
+
+  <h3>Bonnes pratiques : secrets</h3>
+  <div class="box box-retenir">Ne jamais commiter de secrets (mots de passe, tokens) dans le code. Utiliser <strong>GitLab CI/CD Variables</strong> (Settings → CI/CD → Variables) avec l’option « Masked » pour les jobs ; pour Terraform, utiliser des variables sensibles (<code>sensitive = true</code>) et des fichiers <code>.tfvars</code> non versionnés ou un backend distant pour le state.</div>
+</section>
+
+<!-- ========== 13. VALIDATION FINALE ET PLAN DE DÉMONSTRATION (PARTIE I) ========== -->
+<section id="s13">
+  <h2>13. Validation finale et plan de démonstration (Partie I)</h2>
+  <h3>Checklist complète</h3>
+  <ul>
+    <li>Application locale : <code>npm start</code>, <code>/</code> et <code>/health</code> répondent.</li>
+    <li>Tests : <code>npm test</code> passants.</li>
+    <li>Docker local : <code>docker build</code> et <code>docker run</code>, routes accessibles.</li>
+    <li>Pipeline GitLab : stages test, security, build verts ; image visible dans Container Registry.</li>
+    <li>Staging AWS : <code>terraform apply</code> exécuté, IP publique notée, <code>/</code> et <code>/health</code> accessibles.</li>
+    <li>Production Azure : <code>terraform apply</code> exécuté, URL notée, <code>/</code> et <code>/health</code> accessibles.</li>
+  </ul>
+  <h3>Ordre de démonstration en classe</h3>
+  <ol>
+    <li>Montrer le dépôt GitLab (structure, <code>.gitlab-ci.yml</code>).</li>
+    <li>Montrer un pipeline réussi (Pipelines → job test, security, build).</li>
+    <li>Montrer le Container Registry (tags de l’image).</li>
+    <li>Ouvrir l’URL staging (AWS) et appeler <code>/health</code>.</li>
+    <li>Ouvrir l’URL production (Azure) et appeler <code>/health</code>.</li>
+    <li>Résumer en une phrase : « Le code est poussé → le pipeline build l’image et la met dans le registry → Terraform crée les serveurs → AWS et Azure tirent l’image et lancent le conteneur. »</li>
+  </ol>
+</section>
+
+<!-- ========== 14. LIVRABLES À RENDRE ========== -->
+<section id="s14">
+  <h2>14. Livrables à rendre</h2>
+  <ul>
+    <li>Lien du dépôt GitLab (code source, <code>.gitlab-ci.yml</code>, <code>terraform/</code>).</li>
+    <li>Capture : tests OK (<code>npm test</code>).</li>
+    <li>Capture : pipeline sécurité KO (faux secret) puis OK (correction).</li>
+    <li>Capture : Container Registry (image et tags).</li>
+    <li>Capture : staging AWS (IP ou URL, réponse <code>/</code> et <code>/health</code>).</li>
+    <li>Capture : production Azure (URL, réponse <code>/</code> et <code>/health</code>).</li>
+    <li>Mini compte-rendu (5–10 lignes) : résumé de la chaîne de livraison et du rôle de chaque composant.</li>
+  </ul>
+</section>
+
+<!-- ========== 15. BARÈME D'ÉVALUATION ========== -->
+<section id="s15">
+  <h2>15. Barème d’évaluation (/20)</h2>
+  <table>
+    <thead><tr><th>Critère</th><th>Points</th></tr></thead>
+    <tbody>
+      <tr><td>Application Node.js (structure src/, routes / et /health, .env, .gitignore)</td><td>2</td></tr>
+      <tr><td>Tests Jest/Supertest (présents, passants)</td><td>2</td></tr>
+      <tr><td>Docker (Dockerfile Node 20, .dockerignore, build/run local)</td><td>2</td></tr>
+      <tr><td>Pipeline GitLab (test, security, build + push registry)</td><td>3</td></tr>
+      <tr><td>Sécurité (démonstration échec/correction faux secret)</td><td>2</td></tr>
+      <tr><td>Terraform AWS staging (fichiers, user_data, /health accessible)</td><td>3</td></tr>
+      <tr><td>Terraform Azure production (fichiers, image privée, /health accessible)</td><td>3</td></tr>
+      <tr><td>Livrables (dépôt, captures, compte-rendu)</td><td>1</td></tr>
+    </tbody>
+  </table>
+  <p><strong>Total : 20 points.</strong></p>
+</section>
+
+<!-- ========== 16. DÉPANNAGE RAPIDE (FAQ) ========== -->
+<section id="s16">
+  <h2>16. Dépannage rapide (FAQ)</h2>
+  <table>
+    <thead><tr><th>Problème</th><th>Piste de solution</th></tr></thead>
+    <tbody>
+      <tr><td>npm install échoue</td><td>Vérifier Node.js (node -v), supprimer node_modules et package-lock.json puis réessayer ; vérifier la connexion réseau.</td></tr>
+      <tr><td>Port déjà utilisé</td><td>Changer PORT dans .env ou arrêter le processus (task manager, ou <code>netstat -ano</code> sous Windows).</td></tr>
+      <tr><td>Docker daemon ne démarre pas</td><td>Lancer Docker Desktop ; sous Windows vérifier WSL2 ou Hyper-V.</td></tr>
+      <tr><td>Job GitLab failed</td><td>Lire les logs du job (Build → Pipelines → clic sur le job) ; vérifier l’indentation YAML et les commandes (npm ci, npm test).</td></tr>
+      <tr><td>Secret détecté (pipeline rouge)</td><td>Supprimer toute ligne type API_KEY=sk-... du code ; utiliser process.env et GitLab Variables pour les vrais secrets.</td></tr>
+      <tr><td>Terraform auth AWS</td><td>Variables AWS_ACCESS_KEY_ID et AWS_SECRET_ACCESS_KEY ; ou fichier ~/.aws/credentials ; vérifier les droits IAM (EC2).</td></tr>
+      <tr><td>Terraform auth Azure</td><td>Variables ARM_CLIENT_ID, ARM_CLIENT_SECRET, ARM_SUBSCRIPTION_ID, ARM_TENANT_ID ; Service Principal avec rôle Contributor.</td></tr>
+      <tr><td>Image introuvable (pull failed)</td><td>Vérifier l’URL de l’image et que le registry est accessible ; si privé : docker login, ou pour Azure les paramètres DOCKER_REGISTRY_*.</td></tr>
+      <tr><td>Site inaccessible (staging/production)</td><td>Security group (AWS) : port 80 ouvert ; Azure : WEBSITES_PORT=3000 ; conteneur bien lancé (docker ps ou logs Azure).</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ========== 17. NETTOYAGE DES RESSOURCES (COÛTS) ========== -->
+<section id="s17">
+  <h2>17. Nettoyage des ressources (coûts)</h2>
+  <p>Pour éviter des facturations après le TP, détruire toutes les ressources créées.</p>
+  <h3>AWS</h3>
+  <p>Dans <code>terraform/aws-staging/</code> : exécuter <code>terraform destroy</code>, confirmer par <code>yes</code>. Vérifier dans la console AWS (EC2 → Instances, VPC → Security groups) que l’instance et le security group ont été supprimés.</p>
+  <h3>Azure</h3>
+  <p>Dans <code>terraform/azure-production/</code> : exécuter <code>terraform destroy</code>, confirmer par <code>yes</code>. Vérifier dans le portail Azure (Resource groups, App Service) que le groupe de ressources et la Web App ont été supprimés.</p>
+  <div class="box box-attention">Les ressources actives (VM, Web App) génèrent des coûts. En cas de doute, supprimer le resource group entier dans Azure ou terminer l’instance EC2 dans AWS depuis la console.</div>
+</section>
+
+<footer style="margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.9em; color: #64748b;">
+  Support de TP — Chaîne DevSecOps multi-cloud. Module DevSecOps.
+</footer>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'neutral',
+    securityLevel: 'loose',
+    flowchart: { useMaxWidth: true, htmlLabels: true },
+    sequence: { useMaxWidth: true }
+  });
+</script>
+</body>
+</html>

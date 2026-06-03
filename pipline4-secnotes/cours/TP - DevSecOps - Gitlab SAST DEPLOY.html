@@ -1,0 +1,2970 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projet DevSecOps Complet — Support de Cours 4A Cybersécurité</title>
+<style>
+  /* ========== RESET & BASE ========== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background: #f7f8fa;
+    color: #23272f;
+    line-height: 1.75;
+    padding: 0;
+  }
+  .tree {
+  background: #f6f8fa;
+  border: 1px solid #d0d7de;
+  border-radius: 10px;
+  padding: 16px;
+  font-family: "Courier New", monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre;
+  overflow-x: auto;
+  color: #1f2328;
+}
+
+.tree code {
+  font-family: inherit;
+}
+
+  /* ========== PRINT ========== */
+  @media print {
+    body { background: #fff; font-size: 11pt; }
+    .no-print, nav.toc-nav { display: none !important; }
+    section { page-break-inside: avoid; }
+    h1, h2, h3 { page-break-after: avoid; }
+    .page-break { page-break-before: always; }
+    .container { max-width: 100%; padding: 0 1cm; }
+  }
+
+  /* ========== LAYOUT ========== */
+  .container { max-width: 1060px; margin: 0 auto; padding: 0 2rem 4rem; }
+
+  /* ========== COVER ========== */
+  .cover {
+    background: linear-gradient(135deg, #1a3a5c 0%, #2a6496 60%, #3a8fd4 100%);
+    color: #fff;
+    padding: 5rem 3rem 4rem;
+    text-align: center;
+    border-radius: 0 0 1.5rem 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .cover h1 { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: .5rem; }
+  .cover .subtitle { font-size: 1.25rem; font-weight: 300; opacity: .92; margin-bottom: 2rem; }
+  .cover .meta { font-size: .95rem; opacity: .8; line-height: 1.9; }
+  .cover .meta strong { color: #b8d9f8; }
+  .cover .badge {
+    display: inline-block; background: rgba(255,255,255,.18);
+    border: 1px solid rgba(255,255,255,.3);
+    padding: .3rem 1rem; border-radius: 2rem; font-size: .85rem; margin: .3rem;
+  }
+
+  /* ========== TYPOGRAPHY ========== */
+  h1 { font-size: 2rem; color: #1a3a5c; margin: 3rem 0 1rem; border-bottom: 3px solid #2a6496; padding-bottom: .5rem; }
+  h2 { font-size: 1.55rem; color: #1e4d78; margin: 2.5rem 0 .8rem; border-left: 5px solid #2a6496; padding-left: .8rem; }
+  h3 { font-size: 1.2rem; color: #2a6496; margin: 1.8rem 0 .6rem; }
+  h4 { font-size: 1.05rem; color: #3a7cc0; margin: 1.2rem 0 .4rem; }
+  p { margin: .6rem 0 1rem; }
+  ul, ol { margin: .5rem 0 1rem 1.5rem; }
+  li { margin-bottom: .35rem; }
+  strong { color: #1a3a5c; }
+  a { color: #2a6496; }
+
+  /* ========== CODE ========== */
+  pre {
+    background: #f0f3f7;
+    border: 1px solid #d4dbe4;
+    border-left: 4px solid #2a6496;
+    border-radius: .5rem;
+    padding: 1.1rem 1.3rem;
+    overflow-x: auto;
+    font-size: .88rem;
+    line-height: 1.6;
+    margin: 1rem 0 1.5rem;
+    font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  }
+  code {
+    font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    font-size: .88em;
+  }
+  p code, li code, td code {
+    background: #e8edf3;
+    padding: .15rem .4rem;
+    border-radius: .25rem;
+    color: #1a3a5c;
+  }
+
+  /* ========== CALLOUTS ========== */
+  .callout {
+    border-radius: .6rem;
+    padding: 1rem 1.3rem;
+    margin: 1.2rem 0 1.5rem;
+    display: flex;
+    gap: .8rem;
+    align-items: flex-start;
+  }
+  .callout .icon { font-size: 1.4rem; flex-shrink: 0; margin-top: .1rem; }
+  .callout-info    { background: #e7f1fb; border-left: 4px solid #2a6496; }
+  .callout-warning { background: #fff7e6; border-left: 4px solid #e6a817; }
+  .callout-danger  { background: #fce8e8; border-left: 4px solid #c0392b; }
+  .callout-success { background: #e8f6ef; border-left: 4px solid #27ae60; }
+  .callout-practice{ background: #f0e6fa; border-left: 4px solid #8e44ad; }
+  .callout p { margin: .2rem 0; }
+  .callout strong { display: block; margin-bottom: .2rem; }
+
+  /* ========== TABLES ========== */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0 1.5rem;
+    font-size: .93rem;
+  }
+  thead { background: #1a3a5c; color: #fff; }
+  th { padding: .7rem 1rem; text-align: left; font-weight: 600; }
+  td { padding: .6rem 1rem; border-bottom: 1px solid #e0e4ea; }
+  tbody tr:nth-child(even) { background: #f4f6f9; }
+  tbody tr:hover { background: #e7f1fb; }
+
+  /* ========== DIAGRAMS (CSS-based) ========== */
+  .diagram {
+    background: #fff;
+    border: 2px solid #d4dbe4;
+    border-radius: .8rem;
+    padding: 2rem;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+  }
+  .diagram-title {
+    text-align: center;
+    font-weight: 700;
+    color: #1a3a5c;
+    font-size: 1.05rem;
+    margin-bottom: 1.5rem;
+  }
+  .flow-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: .3rem;
+    margin-bottom: .8rem;
+  }
+  .flow-box {
+    background: #2a6496;
+    color: #fff;
+    padding: .55rem 1rem;
+    border-radius: .4rem;
+    font-size: .85rem;
+    font-weight: 600;
+    text-align: center;
+    min-width: 110px;
+    white-space: nowrap;
+  }
+  .flow-box.alt   { background: #27ae60; }
+  .flow-box.warn  { background: #e6a817; color: #23272f; }
+  .flow-box.infra { background: #8e44ad; }
+  .flow-box.db    { background: #c0392b; }
+  .flow-box.light { background: #e7f1fb; color: #1a3a5c; border: 2px solid #2a6496; }
+  .flow-arrow {
+    font-size: 1.3rem;
+    color: #7c8a9a;
+    font-weight: 700;
+    padding: 0 .15rem;
+  }
+  .flow-arrow-down {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #7c8a9a;
+    font-weight: 700;
+    margin: .2rem 0;
+  }
+
+  /* ========== ARCHITECTURE BOXES ========== */
+  .arch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .arch-card {
+    background: #fff;
+    border: 1px solid #d4dbe4;
+    border-top: 4px solid #2a6496;
+    border-radius: .5rem;
+    padding: 1.2rem;
+  }
+  .arch-card h4 { color: #1a3a5c; margin: 0 0 .5rem; font-size: .95rem; }
+  .arch-card p { font-size: .88rem; margin: 0; color: #555; }
+  .arch-card.green { border-top-color: #27ae60; }
+  .arch-card.orange { border-top-color: #e6a817; }
+  .arch-card.purple { border-top-color: #8e44ad; }
+  .arch-card.red { border-top-color: #c0392b; }
+
+  /* ========== TREE VIEW ========== */
+  .tree { font-family: monospace; background: #f9fafb; padding: 1rem 1.5rem; border-radius: .5rem; border: 1px solid #dde; font-size: .88rem; margin: 1rem 0 1.5rem; line-height: 1.6; }
+
+  /* ========== TOC NAV ========== */
+  nav.toc-nav {
+    background: #fff;
+    border: 1px solid #d4dbe4;
+    border-radius: .7rem;
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+  }
+  nav.toc-nav h2 { border: none; padding: 0; margin: 0 0 1rem; font-size: 1.3rem; }
+  nav.toc-nav ol { counter-reset: toc; list-style: none; margin-left: 0; }
+  nav.toc-nav > ol > li { counter-increment: toc; margin-bottom: .3rem; }
+  nav.toc-nav > ol > li::before { content: counter(toc) ". "; font-weight: 700; color: #2a6496; }
+  nav.toc-nav a { text-decoration: none; color: #1e4d78; }
+  nav.toc-nav a:hover { text-decoration: underline; }
+
+  /* ========== STEP BLOCKS ========== */
+  .step {
+    background: #fff;
+    border: 1px solid #d4dbe4;
+    border-radius: .6rem;
+    padding: 1.3rem 1.5rem;
+    margin: 1rem 0 1.5rem;
+    position: relative;
+    padding-left: 3.5rem;
+  }
+  .step::before {
+    position: absolute; left: 1rem; top: 1.2rem;
+    background: #2a6496; color: #fff;
+    width: 1.7rem; height: 1.7rem;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: .85rem;
+  }
+  .step:nth-child(1)::before  { content: "1"; }
+  .step:nth-child(2)::before  { content: "2"; }
+  .step:nth-child(3)::before  { content: "3"; }
+  .step:nth-child(4)::before  { content: "4"; }
+  .step:nth-child(5)::before  { content: "5"; }
+  .step:nth-child(6)::before  { content: "6"; }
+  .step:nth-child(7)::before  { content: "7"; }
+  .step:nth-child(8)::before  { content: "8"; }
+  .step:nth-child(9)::before  { content: "9"; }
+  .step:nth-child(10)::before { content: "10"; }
+
+  /* ========== SECTION SEPARATORS ========== */
+  .section-sep {
+    height: 4px;
+    background: linear-gradient(90deg, #2a6496 0%, #3a8fd4 50%, transparent 100%);
+    border: none;
+    margin: 3rem 0;
+    border-radius: 2px;
+  }
+
+  /* ========== RECAP BOX ========== */
+  .recap {
+    background: #f0f7ff;
+    border: 2px solid #2a6496;
+    border-radius: .6rem;
+    padding: 1.3rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .recap h4 { color: #1a3a5c; margin-bottom: .6rem; }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 700px) {
+    .cover { padding: 3rem 1.5rem 2.5rem; }
+    .cover h1 { font-size: 1.6rem; }
+    h1 { font-size: 1.5rem; }
+    h2 { font-size: 1.25rem; }
+    .flow-row { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .arch-grid { grid-template-columns: 1fr; }
+    .container { padding: 0 1rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- PAGE DE GARDE                                                 -->
+<!-- ============================================================ -->
+<header class="cover">
+  <h1>Projet DevSecOps Complet</h1>
+  <div class="subtitle">Application Node.js Vulnérable &middot; MongoDB &middot; GitLab CI/CD &middot; SonarQube &middot; Kubernetes &middot; AWS &middot; Terraform</div>
+  <div style="margin: 1.5rem 0;">
+    <span class="badge">4ᵉ année Cycle Ingénieur</span>
+    <span class="badge">Spécialité Cybersécurité</span>
+    <span class="badge">2025 – 2026</span>
+  </div>
+  <div class="meta">
+    <strong>Public cible :</strong> Étudiants ingénieurs 4A — Cybersécurité<br>
+    <strong>Prérequis :</strong> GitLab CI/CD, Jest, Docker, déploiement AWS/Azure/Kubernetes de base<br>
+    <strong>Objectif global :</strong> Concevoir, sécuriser et automatiser le cycle de vie complet d'une application vulnérable, du code au cloud.
+  </div>
+</header>
+
+<div class="container">
+
+<!-- ============================================================ -->
+<!-- TABLE DES MATIÈRES                                            -->
+<!-- ============================================================ -->
+<nav class="toc-nav" id="toc">
+  <h2>📑 Table des matières</h2>
+  <ol>
+    <li><a href="#sec1">Introduction</a></li>
+    <li><a href="#sec2">Objectifs pédagogiques</a></li>
+    <li><a href="#sec3">Présentation globale du scénario</a></li>
+    <li><a href="#sec4">Architecture générale du projet</a></li>
+    <li><a href="#sec5">Présentation de l'application vulnérable</a></li>
+    <li><a href="#sec6">Préparation de l'environnement</a></li>
+    <li><a href="#sec7">Mise en place de GitLab Runner local</a></li>
+    <li><a href="#sec8">Mise en place de SonarQube en local</a></li>
+    <li><a href="#sec9">Construction du pipeline GitLab CI/CD</a></li>
+    <li><a href="#sec10">Déploiement sur Kubernetes local</a></li>
+    <li><a href="#sec11">Automatisation AWS avec Terraform</a></li>
+    <li><a href="#sec12">Déploiement Kubernetes sur AWS</a></li>
+    <li><a href="#sec13">Analyse sécurité et remédiation</a></li>
+    <li><a href="#sec14">TP guidé</a></li>
+    <li><a href="#sec15">Synthèse</a></li>
+    <li><a href="#sec16">Annexes</a></li>
+  </ol>
+</nav>
+
+<!-- ============================================================ -->
+<!-- SECTION 1 — INTRODUCTION                                      -->
+<!-- ============================================================ -->
+<hr class="section-sep">
+<section id="sec1">
+<h1>1. Introduction</h1>
+
+<h2>1.1 Rappel du contexte DevSecOps</h2>
+<p>Le mouvement <strong>DevSecOps</strong> prolonge la culture DevOps en intégrant la sécurité (<em>Sec</em>) comme une responsabilité partagée tout au long du cycle de vie logiciel. Plutôt que de confier la sécurité à une équipe isolée intervenant en fin de projet, chaque étape — du commit initial au déploiement en production — intègre des contrôles et vérifications de sécurité automatisés.</p>
+
+<p>En tant que futurs ingénieurs en cybersécurité, vous devez maîtriser non seulement les techniques d'attaque et de défense, mais aussi les <strong>processus industriels</strong> qui permettent de construire des logiciels sécurisés à grande échelle. C'est exactement ce que ce module vous propose.</p>
+
+<h2>1.2 Ce que vous avez déjà vu</h2>
+<table>
+  <thead><tr><th>Module précédent</th><th>Compétences acquises</th></tr></thead>
+  <tbody>
+    <tr><td>Pipelines GitLab CI/CD</td><td>Création de fichiers <code>.gitlab-ci.yml</code>, stages, jobs, variables, artifacts</td></tr>
+    <tr><td>Tests Jest</td><td>Écriture de tests unitaires JavaScript, intégration dans un stage <code>test</code></td></tr>
+    <tr><td>Déploiement AWS</td><td>Utilisation de services AWS (EC2, S3, ECS) pour déployer une application</td></tr>
+    <tr><td>Déploiement Azure</td><td>Déploiement via Azure App Service / AKS</td></tr>
+    <tr><td>Kubernetes local</td><td>Déploiement de conteneurs sur un cluster local (Docker Desktop / Minikube)</td></tr>
+  </tbody>
+</table>
+
+<h2>1.3 Ce que vous allez apprendre ici</h2>
+<p>Ce module va <strong>unifier et approfondir</strong> toutes ces compétences dans un scénario réaliste et complet :</p>
+<ul>
+  <li>Comprendre une application volontairement vulnérable et ses failles</li>
+  <li>Mettre en place un <strong>GitLab Runner local</strong> sur votre PC pour exécuter les pipelines</li>
+  <li>Installer et configurer <strong>SonarQube localement</strong> pour l'analyse statique de sécurité (SAST)</li>
+  <li>Construire un pipeline CI/CD complet intégrant build, test, analyse SAST, conteneurisation et déploiement</li>
+  <li>Déployer sur <strong>Kubernetes local</strong> puis sur <strong>AWS via Terraform</strong></li>
+  <li>Interpréter les résultats d'analyse et proposer des remédiations</li>
+</ul>
+
+<h2>1.4 Vision globale du projet</h2>
+<div class="diagram">
+  <div class="diagram-title">Vue d'ensemble — Du code au cloud sécurisé</div>
+  <div class="flow-row">
+    <div class="flow-box light">👨‍💻 Développeur</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">GitLab (SaaS)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box warn">GitLab Runner (local)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box alt">Build &amp; Test</div>
+  </div>
+  <div class="flow-arrow-down">↓</div>
+  <div class="flow-row">
+    <div class="flow-box infra">SonarQube (local)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">Docker Build</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box alt">K8s Local</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box infra">Terraform → AWS EKS</div>
+  </div>
+</div>
+
+<div class="callout callout-info">
+  <div class="icon">💡</div>
+  <div>
+    <strong>Point clé</strong>
+    <p>Ce projet est conçu pour reproduire un <strong>flux de travail professionnel réaliste</strong>. Chaque outil et chaque étape a sa raison d'être, et vous devez comprendre <em>pourquoi</em> on utilise chaque composant, pas seulement <em>comment</em>.</p>
+  </div>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 2 — OBJECTIFS PÉDAGOGIQUES                            -->
+<!-- ============================================================ -->
+<hr class="section-sep">
+<section id="sec2">
+<h1>2. Objectifs pédagogiques</h1>
+
+<h2>2.1 Compétences techniques</h2>
+<ul>
+  <li>Analyser le code source d'une application Node.js pour y identifier des vulnérabilités courantes</li>
+  <li>Configurer un environnement de développement et de CI/CD complet sur une machine locale</li>
+  <li>Écrire et optimiser un fichier <code>.gitlab-ci.yml</code> multi-stages avec conditions, variables et artifacts</li>
+  <li>Maîtriser les commandes <code>docker</code>, <code>kubectl</code>, <code>terraform</code> dans un contexte d'automatisation</li>
+</ul>
+
+<h2>2.2 Compétences DevSecOps</h2>
+<ul>
+  <li>Intégrer l'analyse de sécurité statique (SAST) dans un pipeline CI/CD</li>
+  <li>Interpréter les résultats d'un scanner comme SonarQube et prioriser les remédiations</li>
+  <li>Comprendre les limites des outils SAST et la complémentarité avec d'autres approches (DAST, SCA, secrets scanning)</li>
+  <li>Appliquer les bonnes pratiques de gestion des secrets dans un pipeline</li>
+  <li>Distinguer ce qui relève de la détection automatisée et ce qui nécessite une revue manuelle</li>
+</ul>
+
+<h2>2.3 Compétences Cloud / Conteneurisation / IaC</h2>
+<ul>
+  <li>Créer des manifests Kubernetes (Deployment, Service, ConfigMap, Secret) et comprendre leur rôle</li>
+  <li>Déployer une application conteneurisée sur un cluster Kubernetes local</li>
+  <li>Concevoir une infrastructure AWS avec Terraform (VPC, EKS, IAM, Security Groups)</li>
+  <li>Automatiser le provisionnement et le déploiement cloud dans un pipeline CI/CD</li>
+  <li>Comprendre les implications de coût et de sécurité du déploiement cloud</li>
+</ul>
+
+<div class="recap">
+  <h4>📋 Tableau synthétique des objectifs</h4>
+  <table>
+    <thead><tr><th>Domaine</th><th>Objectif principal</th><th>Niveau visé</th></tr></thead>
+    <tbody>
+      <tr><td>Développement sécurisé</td><td>Identifier et comprendre les vulnérabilités applicatives</td><td>Intermédiaire-Avancé</td></tr>
+      <tr><td>CI/CD</td><td>Pipeline complet multi-stages automatisé</td><td>Avancé</td></tr>
+      <tr><td>SAST</td><td>SonarQube intégré, interprétation des résultats</td><td>Intermédiaire</td></tr>
+      <tr><td>Conteneurisation</td><td>Dockerfile optimisé, orchestration Kubernetes</td><td>Intermédiaire-Avancé</td></tr>
+      <tr><td>Infrastructure as Code</td><td>Terraform pour AWS EKS</td><td>Intermédiaire</td></tr>
+      <tr><td>Sécurité opérationnelle</td><td>Gestion des secrets, bonnes pratiques de déploiement</td><td>Avancé</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 3 — PRÉSENTATION GLOBALE DU SCÉNARIO                  -->
+<!-- ============================================================ -->
+<hr class="section-sep">
+<section id="sec3">
+<h1>3. Présentation globale du scénario</h1>
+
+<h2>3.1 Description du projet</h2>
+<p>Vous allez travailler sur <strong>SecNotes</strong>, une application web de gestion de notes internes d'entreprise. Cette application est <strong>volontairement vulnérable</strong> : elle simule ce qu'un développeur junior pourrait produire sans formation en sécurité. Votre mission est de l'intégrer dans un pipeline DevSecOps complet pour détecter, documenter et (partiellement) corriger ses failles.</p>
+
+<h2>3.2 Pourquoi une application vulnérable ?</h2>
+<p>Dans un contexte pédagogique, travailler avec du code vulnérable permet de :</p>
+<ul>
+  <li><strong>Observer concrètement</strong> ce que les outils SAST détectent (et ce qu'ils manquent)</li>
+  <li><strong>Comprendre les failles</strong> en les voyant dans du vrai code, pas seulement en théorie</li>
+  <li><strong>Mesurer l'apport</strong> d'un pipeline DevSecOps par rapport à un développement sans contrôle</li>
+  <li><strong>Pratiquer la remédiation</strong> guidée sur des vulnérabilités concrètes</li>
+</ul>
+
+<h2>3.3 Pourquoi chaque technologie ?</h2>
+<div class="arch-grid">
+  <div class="arch-card">
+    <h4>🟢 MongoDB</h4>
+    <p>Base NoSQL très utilisée avec Node.js. Permet de démontrer les <strong>injections NoSQL</strong>, un type de vulnérabilité moins connu que l'injection SQL classique mais tout aussi dangereux.</p>
+  </div>
+  <div class="arch-card green">
+    <h4>🔵 GitLab CI/CD</h4>
+    <p>Plateforme CI/CD intégrée au gestionnaire de code. Le fichier <code>.gitlab-ci.yml</code> permet de décrire tout le pipeline de manière déclarative, versionnée avec le code.</p>
+  </div>
+  <div class="arch-card orange">
+    <h4>🟡 GitLab Runner local</h4>
+    <p>GitLab SaaS ne peut pas exécuter vos jobs directement. Le Runner, installé sur votre PC, <strong>écoute GitLab</strong> et exécute réellement les commandes. C'est le « bras » de GitLab sur votre machine.</p>
+  </div>
+  <div class="arch-card purple">
+    <h4>🟣 SonarQube local</h4>
+    <p>Outil d'analyse statique de code (SAST) qui détecte bugs, code smells et vulnérabilités. Installé localement pour éviter les coûts cloud et garder le contrôle sur l'analyse.</p>
+  </div>
+  <div class="arch-card">
+    <h4>🐳 Docker</h4>
+    <p>Conteneurisation de l'application pour garantir la portabilité et la reproductibilité du déploiement, localement comme en cloud.</p>
+  </div>
+  <div class="arch-card red">
+    <h4>☸️ Kubernetes (local → AWS)</h4>
+    <p>Orchestrateur de conteneurs. On commence en local pour apprendre, puis on déploie sur AWS EKS pour simuler un environnement de production.</p>
+  </div>
+  <div class="arch-card purple">
+    <h4>🏗️ Terraform</h4>
+    <p>Infrastructure as Code : décrire l'infrastructure AWS (réseau, cluster, permissions) sous forme de fichiers versionnés et reproductibles.</p>
+  </div>
+</div>
+
+<div class="callout callout-warning">
+  <div class="icon">⚠️</div>
+  <div>
+    <strong>Attention — Distinction cruciale</strong>
+    <p>Ne confondez pas ces outils : <strong>GitLab</strong> stocke votre code et définit le pipeline. <strong>GitLab Runner</strong> exécute les jobs du pipeline sur votre machine. <strong>SonarQube</strong> analyse votre code. <strong>Docker</strong> empaquète votre application. <strong>Kubernetes</strong> orchestre les conteneurs. <strong>Terraform</strong> crée l'infrastructure cloud. Chacun a un rôle distinct et complémentaire.</p>
+  </div>
+</div>
+
+<h2>3.4 Tableau comparatif des composants</h2>
+<table>
+  <thead><tr><th>Composant</th><th>Rôle</th><th>S'exécute où ?</th><th>Interaction principale</th></tr></thead>
+  <tbody>
+    <tr><td>GitLab (SaaS)</td><td>Hébergement code + orchestration pipeline</td><td>Cloud GitLab</td><td>Reçoit push, déclenche pipeline</td></tr>
+    <tr><td>GitLab Runner</td><td>Exécution réelle des jobs CI/CD</td><td>PC local (votre machine)</td><td>Interroge GitLab, exécute commandes</td></tr>
+    <tr><td>SonarQube</td><td>Analyse statique (SAST)</td><td>PC local (conteneur Docker)</td><td>Reçoit le code du scanner, produit un rapport</td></tr>
+    <tr><td>Docker</td><td>Construction d'images conteneur</td><td>PC local</td><td>Build image, push registre</td></tr>
+    <tr><td>MongoDB</td><td>Base de données de l'application</td><td>PC local / Kubernetes</td><td>Stockage des notes (données applicatives)</td></tr>
+    <tr><td>Kubernetes</td><td>Orchestration des conteneurs</td><td>PC local → AWS</td><td>Gère les pods, services, scaling</td></tr>
+    <tr><td>Terraform</td><td>Provisionnement infrastructure AWS</td><td>PC local (CLI)</td><td>Crée VPC, EKS, IAM sur AWS</td></tr>
+    <tr><td>AWS</td><td>Cloud de production</td><td>Cloud Amazon</td><td>Héberge l'infrastructure et l'application</td></tr>
+  </tbody>
+</table>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 4 — ARCHITECTURE GÉNÉRALE                             -->
+<!-- ============================================================ -->
+<hr class="section-sep">
+<section id="sec4">
+<h1>4. Architecture générale du projet</h1>
+
+<h2>4.1 Architecture du flux DevSecOps complet</h2>
+<p>Le schéma suivant illustre le parcours complet, du code développé par l'étudiant jusqu'au déploiement en production sur AWS.</p>
+
+<div class="diagram">
+  <div class="diagram-title">🔄 Flux DevSecOps global — Du commit au déploiement</div>
+
+  <!-- Ligne 1 : Développement -->
+  <div style="margin-bottom:.3rem; font-size:.8rem; color:#7c8a9a; text-align:center;">PHASE 1 — Développement</div>
+  <div class="flow-row">
+    <div class="flow-box light">📝 Code source (Node.js)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box light">🧪 Tests locaux (Jest)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">⬆️ git push vers GitLab</div>
+  </div>
+
+  <div class="flow-arrow-down">⬇</div>
+
+  <!-- Ligne 2 : CI/CD -->
+  <div style="margin-bottom:.3rem; font-size:.8rem; color:#7c8a9a; text-align:center;">PHASE 2 — Intégration continue (CI)</div>
+  <div class="flow-row">
+    <div class="flow-box">GitLab détecte le push</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box warn">Runner local prend le job</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box alt">npm install</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box alt">npm test (Jest)</div>
+  </div>
+
+  <div class="flow-arrow-down">⬇</div>
+
+  <!-- Ligne 3 : Sécurité -->
+  <div style="margin-bottom:.3rem; font-size:.8rem; color:#7c8a9a; text-align:center;">PHASE 3 — Analyse sécurité (Sec)</div>
+  <div class="flow-row">
+    <div class="flow-box infra">sonar-scanner → SonarQube local</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box infra">Rapport vulnérabilités</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box alt">Quality Gate : Pass / Fail</div>
+  </div>
+
+  <div class="flow-arrow-down">⬇</div>
+
+  <!-- Ligne 4 : Build & Deploy -->
+  <div style="margin-bottom:.3rem; font-size:.8rem; color:#7c8a9a; text-align:center;">PHASE 4 — Build & Déploiement (Ops)</div>
+  <div class="flow-row">
+    <div class="flow-box">docker build → image</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box alt">kubectl apply (K8s local)</div>
+  </div>
+
+  <div class="flow-arrow-down">⬇</div>
+
+  <!-- Ligne 5 : Cloud -->
+  <div style="margin-bottom:.3rem; font-size:.8rem; color:#7c8a9a; text-align:center;">PHASE 5 — Infrastructure cloud (IaC)</div>
+  <div class="flow-row">
+    <div class="flow-box infra">terraform init/plan/apply</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box infra">AWS : VPC + EKS + IAM</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box alt">kubectl apply (K8s AWS)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box alt">🌐 Application en production</div>
+  </div>
+</div>
+
+<h2>4.2 Architecture applicative</h2>
+<div class="diagram">
+  <div class="diagram-title">Architecture de l'application SecNotes</div>
+  <div class="flow-row">
+    <div class="flow-box light">🌐 Client (navigateur / Postman)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">API REST (Express.js — port 3000)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box db">MongoDB (port 27017)</div>
+  </div>
+  <div style="text-align:center; margin-top:1rem; font-size:.85rem; color:#7c8a9a;">
+    L'API expose des endpoints CRUD (Create, Read, Update, Delete) pour les notes.<br>
+    MongoDB stocke les documents JSON des notes et des utilisateurs.
+  </div>
+</div>
+
+<h2>4.3 Architecture d'exécution locale</h2>
+<p>Tous les composants tournent sur <strong>votre machine locale</strong>. Voici la vue d'ensemble de ce qui s'exécute et comment les éléments communiquent.</p>
+
+<div class="diagram">
+  <div class="diagram-title">🖥️ Architecture locale — Votre PC</div>
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; max-width:700px; margin:0 auto;">
+    <div style="background:#e7f1fb; border:2px solid #2a6496; border-radius:.5rem; padding:1rem; text-align:center;">
+      <strong style="color:#1a3a5c;">GitLab Runner</strong><br>
+      <span style="font-size:.82rem;">Écoute GitLab SaaS<br>Exécute les jobs CI/CD<br>Mode : shell ou docker</span>
+    </div>
+    <div style="background:#f0e6fa; border:2px solid #8e44ad; border-radius:.5rem; padding:1rem; text-align:center;">
+      <strong style="color:#5b2c7e;">SonarQube</strong><br>
+      <span style="font-size:.82rem;">Conteneur Docker<br>Port 9000<br>Interface web d'analyse</span>
+    </div>
+    <div style="background:#e8f6ef; border:2px solid #27ae60; border-radius:.5rem; padding:1rem; text-align:center;">
+      <strong style="color:#1a7a42;">Docker Engine</strong><br>
+      <span style="font-size:.82rem;">Build images<br>Run conteneurs<br>Registre local</span>
+    </div>
+    <div style="background:#fff7e6; border:2px solid #e6a817; border-radius:.5rem; padding:1rem; text-align:center;">
+      <strong style="color:#8a6300;">Kubernetes</strong><br>
+      <span style="font-size:.82rem;">Docker Desktop K8s<br>ou Minikube<br>Pods, Services, Deployments</span>
+    </div>
+  </div>
+  <div style="text-align:center; margin-top:1.5rem;">
+    <div style="display:inline-block; background:#fce8e8; border:2px solid #c0392b; border-radius:.5rem; padding:.8rem 1.5rem;">
+      <strong style="color:#8a1c1c;">MongoDB</strong><br>
+      <span style="font-size:.82rem;">Conteneur Docker ou installation locale — Port 27017</span>
+    </div>
+  </div>
+</div>
+
+<h2>4.4 Architecture de déploiement AWS cible</h2>
+<div class="diagram">
+  <div class="diagram-title">☁️ Architecture AWS cible (provisionnée par Terraform)</div>
+  <div style="border:2px dashed #2a6496; border-radius:.8rem; padding:1.5rem; max-width:750px; margin:0 auto;">
+    <div style="text-align:center; font-weight:700; color:#1a3a5c; margin-bottom:1rem;">AWS Cloud — Region eu-west-1</div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+      <div style="background:#e7f1fb; border:1px solid #b0c4de; border-radius:.4rem; padding:.8rem; text-align:center; grid-column:span 2;">
+        <strong>VPC</strong> (10.0.0.0/16)<br>
+        <span style="font-size:.82rem;">Réseau isolé pour le cluster</span>
+      </div>
+      <div style="background:#e8f6ef; border:1px solid #27ae60; border-radius:.4rem; padding:.8rem; text-align:center;">
+        <strong>Subnet Public A</strong><br>
+        <span style="font-size:.82rem;">AZ-a · NAT Gateway · ALB</span>
+      </div>
+      <div style="background:#e8f6ef; border:1px solid #27ae60; border-radius:.4rem; padding:.8rem; text-align:center;">
+        <strong>Subnet Public B</strong><br>
+        <span style="font-size:.82rem;">AZ-b · Haute disponibilité</span>
+      </div>
+      <div style="background:#f0e6fa; border:1px solid #8e44ad; border-radius:.4rem; padding:.8rem; text-align:center; grid-column:span 2;">
+        <strong>Amazon EKS Cluster</strong><br>
+        <span style="font-size:.82rem;">Control Plane managé + Node Group (2× t3.medium)</span>
+      </div>
+      <div style="background:#fff7e6; border:1px solid #e6a817; border-radius:.4rem; padding:.8rem; text-align:center;">
+        <strong>Pod : secnotes-app</strong><br>
+        <span style="font-size:.82rem;">Image Docker de l'application</span>
+      </div>
+      <div style="background:#fce8e8; border:1px solid #c0392b; border-radius:.4rem; padding:.8rem; text-align:center;">
+        <strong>Pod : MongoDB</strong><br>
+        <span style="font-size:.82rem;">Base de données (ou DocumentDB)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2>4.5 Rôle de chaque composant — Synthèse visuelle</h2>
+<div class="diagram">
+  <div class="diagram-title">🧩 Qui fait quoi ?</div>
+  <table style="margin:0;">
+    <thead>
+      <tr><th>Composant</th><th>Analogie</th><th>Rôle précis dans le projet</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>GitLab</strong></td><td>Le chef d'orchestre</td><td>Stocke le code, définit le pipeline, affiche les résultats</td></tr>
+      <tr><td><strong>GitLab Runner</strong></td><td>Le musicien</td><td>Exécute réellement les commandes sur votre machine</td></tr>
+      <tr><td><strong>SonarQube</strong></td><td>L'inspecteur qualité</td><td>Analyse le code à la recherche de bugs et vulnérabilités</td></tr>
+      <tr><td><strong>Docker</strong></td><td>La boîte d'emballage</td><td>Empaquette l'application dans une image portable</td></tr>
+      <tr><td><strong>MongoDB</strong></td><td>Le classeur à dossiers</td><td>Stocke les données applicatives (notes, utilisateurs)</td></tr>
+      <tr><td><strong>Kubernetes</strong></td><td>Le gestionnaire d'entrepôt</td><td>Gère le déploiement, le scaling et la disponibilité des conteneurs</td></tr>
+      <tr><td><strong>Terraform</strong></td><td>L'architecte du bâtiment</td><td>Crée et configure l'infrastructure cloud (réseau, serveurs, permissions)</td></tr>
+      <tr><td><strong>AWS</strong></td><td>Le terrain de construction</td><td>Fournit les ressources cloud (serveurs, réseau, services managés)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 5 — APPLICATION VULNÉRABLE                            -->
+<!-- ============================================================ -->
+<hr class="section-sep">
+<section id="sec5">
+<h1>5. Présentation de l'application vulnérable — SecNotes</h1>
+
+<div class="callout callout-info">
+  <div class="icon">📦</div>
+  <div>
+    <strong>Application fournie séparément</strong>
+    <p>Le code source complet de l'application <strong>SecNotes</strong> est fourni dans un <strong>dossier téléchargeable séparé</strong> (<code>secnotes-vuln-app.zip</code>). Ce document de cours décrit l'application, son architecture et ses vulnérabilités, mais <strong>ne contient pas l'intégralité du code source</strong> pour rester lisible et pédagogique.</p>
+  </div>
+</div>
+
+<h2>5.1 Objectif fonctionnel</h2>
+<p><strong>SecNotes</strong> est une mini-application de gestion de notes internes d'entreprise. Elle permet à des collaborateurs de :</p>
+<ul>
+  <li>Créer un compte et s'authentifier</li>
+  <li>Créer, lire, modifier et supprimer des notes personnelles</li>
+  <li>Rechercher des notes par titre ou contenu</li>
+  <li>Accéder à un tableau de bord simple</li>
+</ul>
+<p>C'est volontairement simple pour que vous puissiez vous concentrer sur les aspects <strong>sécurité</strong> et <strong>DevSecOps</strong>, et non sur la complexité fonctionnelle.</p>
+
+<h2>5.2 Structure des dossiers</h2>
+
+<pre class="tree"><code>secnotes-vuln-app/
+├── src/
+│   ├── app.js                  # Point d'entrée Express
+│   ├── config/
+│   │   └── db.js               # Connexion MongoDB (⚠️ secrets en dur)
+│   ├── controllers/
+│   │   ├── authController.js   # Logique d'authentification
+│   │   └── noteController.js   # CRUD notes (⚠️ sans validation)
+│   ├── models/
+│   │   ├── User.js             # Schéma Mongoose User
+│   │   └── Note.js             # Schéma Mongoose Note
+│   ├── routes/
+│   │   ├── authRoutes.js       # Routes /api/auth/*
+│   │   └── noteRoutes.js       # Routes /api/notes/*
+│   └── middleware/
+│       └── auth.js             # Middleware JWT (⚠️ faible)
+├── tests/
+│   ├── auth.test.js            # Tests Jest authentification
+│   └── notes.test.js           # Tests Jest CRUD notes
+├── Dockerfile                  # (⚠️ mauvaises pratiques)
+├── .dockerignore
+├── package.json
+├── sonar-project.properties
+├── .gitlab-ci.yml
+├── k8s/
+│   ├── namespace.yaml
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   ├── configmap.yaml
+│   └── secret.yaml             # (⚠️ secrets en clair dans le YAML)
+└── terraform/
+    ├── main.tf
+    ├── variables.tf
+    ├── outputs.tf
+    └── provider.tf
+</code></pre>
+
+<h2>5.3 Endpoints principaux</h2>
+<table>
+  <thead><tr><th>Méthode</th><th>Route</th><th>Description</th><th>Vulnérabilité associée</th></tr></thead>
+  <tbody>
+    <tr><td><code>POST</code></td><td><code>/api/auth/register</code></td><td>Inscription utilisateur</td><td>Pas de validation d'entrée</td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/auth/login</code></td><td>Connexion</td><td>NoSQL Injection possible</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/notes</code></td><td>Liste des notes de l'utilisateur</td><td>Endpoint trop permissif</td></tr>
+    <tr><td><code>POST</code></td><td><code>/api/notes</code></td><td>Création d'une note</td><td>Pas de validation / sanitization</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/notes/:id</code></td><td>Détail d'une note</td><td>IDOR possible (pas de vérif propriétaire)</td></tr>
+    <tr><td><code>PUT</code></td><td><code>/api/notes/:id</code></td><td>Modification d'une note</td><td>Même IDOR</td></tr>
+    <tr><td><code>DELETE</code></td><td><code>/api/notes/:id</code></td><td>Suppression d'une note</td><td>Même IDOR</td></tr>
+    <tr><td><code>GET</code></td><td><code>/api/notes/search?q=...</code></td><td>Recherche de notes</td><td>NoSQL Injection via paramètre de recherche</td></tr>
+  </tbody>
+</table>
+
+<h2>5.4 Modèle de données MongoDB</h2>
+<p>L'application utilise deux collections MongoDB principales :</p>
+
+<h3>Collection <code>users</code></h3>
+<pre>
+{
+  "_id": ObjectId,
+  "username": String,        // Pas de contrainte de longueur
+  "email": String,           // Pas de validation format email
+  "password": String,        // ⚠️ Hashé avec algorithme faible (md5 dans la version vulnérable)
+  "role": String,            // "user" ou "admin" — modifiable à l'inscription !
+  "createdAt": Date
+}
+</pre>
+
+<h3>Collection <code>notes</code></h3>
+<pre>
+{
+  "_id": ObjectId,
+  "title": String,           // Pas de sanitization
+  "content": String,         // Pas de sanitization (XSS possible si rendu HTML)
+  "author": ObjectId,        // Référence vers users
+  "isPublic": Boolean,       // ⚠️ true par défaut
+  "createdAt": Date,
+  "updatedAt": Date
+}
+</pre>
+
+<h2>5.5 Inventaire des vulnérabilités</h2>
+<p>Le tableau ci-dessous recense les vulnérabilités <strong>intentionnellement introduites</strong> dans l'application :</p>
+
+<table>
+  <thead><tr><th>#</th><th>Vulnérabilité</th><th>Fichier(s)</th><th>Détectable par SonarQube ?</th><th>Sévérité</th></tr></thead>
+  <tbody>
+    <tr><td>V1</td><td><strong>NoSQL Injection</strong> — passage d'objets dans les requêtes MongoDB sans sanitization</td><td><code>authController.js</code>, <code>noteController.js</code></td><td>⚠️ Partiellement</td><td>🔴 Critique</td></tr>
+    <tr><td>V2</td><td><strong>Secrets en dur</strong> — chaîne de connexion MongoDB et clé JWT dans le code</td><td><code>config/db.js</code>, <code>middleware/auth.js</code></td><td>✅ Oui (code smell / security hotspot)</td><td>🔴 Critique</td></tr>
+    <tr><td>V3</td><td><strong>Absence de validation d'entrée</strong> — aucun schéma de validation sur les endpoints</td><td><code>controllers/*</code></td><td>⚠️ Partiellement</td><td>🟠 Haute</td></tr>
+    <tr><td>V4</td><td><strong>IDOR</strong> — pas de vérification que l'utilisateur est propriétaire de la note</td><td><code>noteController.js</code></td><td>❌ Non</td><td>🟠 Haute</td></tr>
+    <tr><td>V5</td><td><strong>Dépendances vulnérables</strong> — versions anciennes de packages npm</td><td><code>package.json</code></td><td>⚠️ Via plugins SCA</td><td>🟠 Haute</td></tr>
+    <tr><td>V6</td><td><strong>Hashage faible</strong> — utilisation de md5 au lieu de bcrypt</td><td><code>authController.js</code></td><td>⚠️ Partiellement</td><td>🔴 Critique</td></tr>
+    <tr><td>V7</td><td><strong>Dockerfile non sécurisé</strong> — exécution en root, pas de multi-stage build</td><td><code>Dockerfile</code></td><td>❌ Non (hors scope SAST)</td><td>🟡 Moyenne</td></tr>
+    <tr><td>V8</td><td><strong>Logs trop verbeux</strong> — mots de passe et tokens dans les logs</td><td><code>app.js</code>, <code>authController.js</code></td><td>⚠️ Partiellement</td><td>🟡 Moyenne</td></tr>
+    <tr><td>V9</td><td><strong>Secrets Kubernetes en clair</strong> — Secret manifest avec base64 seulement</td><td><code>k8s/secret.yaml</code></td><td>❌ Non</td><td>🟠 Haute</td></tr>
+    <tr><td>V10</td><td><strong>CORS trop permissif</strong> — <code>Access-Control-Allow-Origin: *</code></td><td><code>app.js</code></td><td>⚠️ Partiellement</td><td>🟡 Moyenne</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-danger">
+  <div class="icon">🚫</div>
+  <div>
+    <strong>Important — Limites de SonarQube</strong>
+    <p>SonarQube est un excellent outil SAST, mais il ne détecte <strong>pas tout</strong>. Les vulnérabilités logiques (IDOR, V4), les mauvaises pratiques Docker (V7), les secrets Kubernetes (V9) et les injections NoSQL complexes (V1) échappent souvent à l'analyse statique pure. C'est pourquoi un pipeline DevSecOps complet doit combiner <strong>plusieurs outils</strong> (SAST + SCA + DAST + secrets scanning + container scanning).</p>
+  </div>
+</div>
+
+<h2>5.6 Extrait de code — Exemple d'injection NoSQL</h2>
+<p>Pour illustrer la vulnérabilité V1, voici le code vulnérable dans le contrôleur d'authentification :</p>
+<pre>
+// authController.js — VERSION VULNÉRABLE
+exports.login = async (req, res) => {
+  try {
+    // ⚠️ DANGER : req.body est passé directement à la requête MongoDB
+    // Un attaquant peut envoyer { "username": {"$gt": ""}, "password": {"$gt": ""} }
+    // pour contourner l'authentification
+    const user = await User.findOne({
+      username: req.body.username,
+      password: req.body.password     // ⚠️ Pas de hashage + injection possible
+    });
+
+    if (user) {
+      const token = jwt.sign({ id: user._id }, 'ma-cle-secrete-en-dur');  // ⚠️ V2
+      console.log(`Login successful for ${user.username}, token: ${token}`); // ⚠️ V8
+      res.json({ token });
+    } else {
+      res.status(401).json({ error: 'Invalid credentials' });
+    }
+  } catch (err) {
+    console.error('Login error:', err);  // ⚠️ V8 — stack trace exposée
+    res.status(500).json({ error: err.message }); // ⚠️ Message d'erreur interne exposé
+  }
+};
+</pre>
+
+<div class="callout callout-practice">
+  <div class="icon">🎓</div>
+  <div>
+    <strong>Exercice mental</strong>
+    <p>En lisant cet extrait, identifiez <strong>combien de vulnérabilités distinctes</strong> sont présentes dans ces quelques lignes. Vous devriez en trouver au moins 4 (V1, V2, V6, V8). C'est un excellent exemple de code « dette sécurité » que l'on trouve fréquemment dans des projets non audités.</p>
+  </div>
+</div>
+
+<div class="recap">
+  <h4>📋 Récapitulatif — Section 5</h4>
+  <ul>
+    <li>SecNotes est une application Express.js + MongoDB volontairement vulnérable</li>
+    <li>Elle contient <strong>10 vulnérabilités identifiées</strong> couvrant OWASP Top 10</li>
+    <li>SonarQube détectera certaines d'entre elles, mais pas toutes</li>
+    <li>Le code source complet est dans le <strong>fichier téléchargeable séparé</strong></li>
+    <li>Le document de cours utilise des <strong>extraits ciblés</strong> pour illustrer les failles</li>
+  </ul>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 6 — PRÉPARATION DE L'ENVIRONNEMENT                   -->
+<!-- ============================================================ -->
+<hr class="section-sep">
+<section id="sec6">
+<h1>6. Préparation de l'environnement</h1>
+
+<p>Avant de commencer le projet, votre machine doit disposer de tous les outils nécessaires. Cette section détaille chaque installation, la vérification attendue et les erreurs fréquentes.</p>
+
+<h2>6.1 Prérequis matériels</h2>
+<table>
+  <thead><tr><th>Ressource</th><th>Minimum recommandé</th><th>Justification</th></tr></thead>
+  <tbody>
+    <tr><td>RAM</td><td>16 Go</td><td>SonarQube (2 Go) + Docker (2 Go) + Kubernetes (2 Go) + Node.js + système</td></tr>
+    <tr><td>Disque</td><td>40 Go libres</td><td>Images Docker, dépendances npm, base SonarQube, cache Terraform</td></tr>
+    <tr><td>CPU</td><td>4 cœurs</td><td>Build Docker et analyse SonarQube sont gourmands en CPU</td></tr>
+    <tr><td>OS</td><td>Windows 10/11 Pro, macOS 12+, ou Ubuntu 20.04+</td><td>Docker Desktop nécessite Hyper-V (Windows Pro) ou support natif</td></tr>
+  </tbody>
+</table>
+
+<h2>6.2 Installation des outils</h2>
+
+<h3>Node.js et npm</h3>
+<p>L'application SecNotes nécessite Node.js pour s'exécuter. Installez la version LTS (Long Term Support).</p>
+<pre>
+# Vérification après installation
+node --version     # Attendu : v18.x ou v20.x
+npm --version      # Attendu : 9.x ou 10.x
+</pre>
+<p><strong>Source :</strong> <a href="https://nodejs.org">https://nodejs.org</a> — téléchargez l'installeur LTS pour votre système.</p>
+
+<h3>Git</h3>
+<pre>
+git --version      # Attendu : git version 2.x
+</pre>
+
+<h3>Docker Desktop</h3>
+<p>Docker est indispensable pour ce projet. Il sert à construire l'image de l'application, exécuter SonarQube et faire tourner Kubernetes local.</p>
+<pre>
+docker --version           # Attendu : Docker version 24.x ou 25.x
+docker compose version     # Attendu : Docker Compose version v2.x
+</pre>
+
+<div class="callout callout-warning">
+  <div class="icon">⚠️</div>
+  <div>
+    <strong>Windows : Hyper-V requis</strong>
+    <p>Docker Desktop sur Windows nécessite <strong>Windows Pro/Enterprise/Education</strong> avec Hyper-V activé, ou <strong>WSL 2</strong>. Si vous êtes sur Windows Home, utilisez le backend WSL 2. Allez dans <em>Settings → General → Use the WSL 2 based engine</em>.</p>
+  </div>
+</div>
+
+<h3>MongoDB</h3>
+<p>Deux options pour MongoDB :</p>
+<table>
+  <thead><tr><th>Option</th><th>Avantages</th><th>Inconvénients</th></tr></thead>
+  <tbody>
+    <tr><td><strong>A) Conteneur Docker</strong> (recommandé)</td><td>Rapide, isolé, facile à supprimer</td><td>Nécessite Docker</td></tr>
+    <tr><td><strong>B) Installation native</strong></td><td>Performances natives</td><td>Plus complexe à installer/désinstaller</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Option A — MongoDB via Docker (recommandé) :</strong></p>
+<pre>
+# Lancer MongoDB en conteneur
+docker run -d --name mongodb \
+  -p 27017:27017 \
+  -e MONGO_INITDB_ROOT_USERNAME=admin \
+  -e MONGO_INITDB_ROOT_PASSWORD=admin123 \
+  mongo:7
+
+# Vérification
+docker ps | grep mongodb
+</pre>
+
+<h3>Compte GitLab et projet</h3>
+<p>Rendez-vous sur <a href="https://gitlab.com">https://gitlab.com</a> et :</p>
+<ol>
+  <li>Créez un compte si ce n'est pas déjà fait</li>
+  <li>Créez un nouveau projet nommé <code>secnotes-devsecops</code></li>
+  <li>Initialisez-le avec un README</li>
+  <li>Notez l'URL de votre dépôt : <code>https://gitlab.com/votre-username/secnotes-devsecops.git</code></li>
+</ol>
+
+<h3>kubectl</h3>
+<pre>
+kubectl version --client   # Attendu : Client Version: v1.28+ ou v1.29+
+</pre>
+
+<h3>Choix du cluster Kubernetes local</h3>
+<p>Vous avez deux options pour Kubernetes local. Voici un comparatif détaillé :</p>
+<table>
+  <thead><tr><th>Critère</th><th>Docker Desktop Kubernetes</th><th>Minikube</th></tr></thead>
+  <tbody>
+    <tr><td>Installation</td><td>Intégré à Docker Desktop (une case à cocher)</td><td>Nécessite une installation séparée</td></tr>
+    <tr><td>Facilité</td><td>⭐⭐⭐⭐⭐ Très simple</td><td>⭐⭐⭐ Modéré</td></tr>
+    <tr><td>Ressources</td><td>Partage les ressources Docker</td><td>VM dédiée (plus gourmand)</td></tr>
+    <tr><td>Accès images locales</td><td>✅ Direct (même daemon Docker)</td><td>⚠️ Nécessite <code>eval $(minikube docker-env)</code></td></tr>
+    <tr><td>Addons</td><td>Limité</td><td>Ingress, Dashboard, Metrics intégrés</td></tr>
+    <tr><td>Multi-nœuds</td><td>❌ Non</td><td>✅ Oui (avec <code>--nodes</code>)</td></tr>
+    <tr><td>Recommandation</td><td><strong>✅ Pour ce projet</strong></td><td>Alternatif si Docker Desktop K8s pose problème</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Pour Docker Desktop Kubernetes :</strong> Allez dans <em>Settings → Kubernetes → Enable Kubernetes</em>. Attendez le redémarrage.</p>
+<pre>
+# Vérification
+kubectl cluster-info
+# Attendu : Kubernetes control plane is running at https://kubernetes.docker.internal:6443
+</pre>
+
+<h3>Terraform</h3>
+<pre>
+terraform --version    # Attendu : Terraform v1.7+ ou v1.8+
+</pre>
+<p><strong>Source :</strong> <a href="https://developer.hashicorp.com/terraform/install">https://developer.hashicorp.com/terraform/install</a></p>
+
+<h3>AWS CLI</h3>
+<pre>
+aws --version          # Attendu : aws-cli/2.x
+aws configure          # Saisir : Access Key ID, Secret Key, Region (eu-west-1), Format (json)
+</pre>
+
+<div class="callout callout-danger">
+  <div class="icon">🔐</div>
+  <div>
+    <strong>Sécurité des credentials AWS</strong>
+    <p>Ne partagez <strong>jamais</strong> vos clés AWS. Ne les commitez <strong>jamais</strong> dans Git. Utilisez <code>aws configure</code> qui les stocke dans <code>~/.aws/credentials</code>. En environnement CI/CD, utilisez des variables d'environnement protégées dans GitLab.</p>
+  </div>
+</div>
+
+<h2>6.3 Tableau récapitulatif des vérifications</h2>
+<table>
+  <thead><tr><th>Outil</th><th>Commande de vérification</th><th>Version minimale</th></tr></thead>
+  <tbody>
+    <tr><td>Node.js</td><td><code>node --version</code></td><td>v18.0.0</td></tr>
+    <tr><td>npm</td><td><code>npm --version</code></td><td>9.0.0</td></tr>
+    <tr><td>Git</td><td><code>git --version</code></td><td>2.30</td></tr>
+    <tr><td>Docker</td><td><code>docker --version</code></td><td>24.0</td></tr>
+    <tr><td>kubectl</td><td><code>kubectl version --client</code></td><td>1.28</td></tr>
+    <tr><td>Terraform</td><td><code>terraform --version</code></td><td>1.7</td></tr>
+    <tr><td>AWS CLI</td><td><code>aws --version</code></td><td>2.0</td></tr>
+    <tr><td>MongoDB</td><td><code>docker ps | grep mongo</code></td><td>7.0</td></tr>
+    <tr><td>Kubernetes</td><td><code>kubectl cluster-info</code></td><td>—</td></tr>
+  </tbody>
+</table>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 7 — GITLAB RUNNER                                     -->
+<!-- ============================================================ -->
+<hr class="section-sep">
+<section id="sec7">
+<h1>7. Mise en place de GitLab Runner local</h1>
+
+<h2>7.1 Pourquoi GitLab Runner est indispensable</h2>
+<p>C'est l'un des concepts les plus mal compris par les débutants : <strong>GitLab lui-même n'exécute pas vos jobs CI/CD</strong>. GitLab est une plateforme web qui stocke votre code, définit votre pipeline et affiche les résultats. Mais l'exécution réelle des commandes (<code>npm install</code>, <code>npm test</code>, <code>docker build</code>…) est déléguée à un <strong>agent appelé GitLab Runner</strong>.</p>
+
+<div class="diagram">
+  <div class="diagram-title">🔗 Relation GitLab SaaS ↔ GitLab Runner local</div>
+  <div style="display:flex; gap:2rem; align-items:center; justify-content:center; flex-wrap:wrap;">
+    <div style="border:2px solid #2a6496; border-radius:.6rem; padding:1.2rem; text-align:center; min-width:200px; background:#e7f1fb;">
+      <strong style="color:#1a3a5c; font-size:1rem;">☁️ GitLab SaaS</strong><br>
+      <span style="font-size:.82rem;">gitlab.com<br><br>
+      • Stocke le code<br>
+      • Définit le pipeline<br>
+      • Affiche les résultats<br>
+      • Distribue les jobs</span>
+    </div>
+    <div style="font-size:2rem; color:#2a6496;">⇄</div>
+    <div style="border:2px solid #e6a817; border-radius:.6rem; padding:1.2rem; text-align:center; min-width:200px; background:#fff7e6;">
+      <strong style="color:#8a6300; font-size:1rem;">🖥️ GitLab Runner (votre PC)</strong><br>
+      <span style="font-size:.82rem;">Processus local<br><br>
+      • Interroge GitLab régulièrement<br>
+      • Récupère les jobs en attente<br>
+      • Exécute les commandes<br>
+      • Renvoie les résultats</span>
+    </div>
+  </div>
+  <div style="text-align:center; margin-top:1rem; font-size:.85rem; color:#7c8a9a;">
+    Communication HTTPS sortante (votre PC → gitlab.com). Pas besoin d'ouvrir de ports entrants.
+  </div>
+</div>
+
+<p><strong>Sans Runner, aucun job ne peut s'exécuter.</strong> Si vous poussez du code sur GitLab et que le pipeline reste en « pending », c'est presque toujours parce qu'aucun Runner actif n'est disponible pour prendre les jobs.</p>
+
+<h2>7.2 Modes d'exécution (executors)</h2>
+<p>Le Runner peut exécuter les jobs de différentes manières :</p>
+<table>
+  <thead><tr><th>Executor</th><th>Description</th><th>Avantages</th><th>Inconvénients</th></tr></thead>
+  <tbody>
+    <tr><td><strong>shell</strong></td><td>Exécute directement sur la machine</td><td>Simple, accès à tout l'environnement local</td><td>Moins isolé, risques de conflit</td></tr>
+    <tr><td><strong>docker</strong></td><td>Chaque job dans un conteneur Docker</td><td>Isolé, reproductible, propre</td><td>Plus complexe, pas d'accès direct au Docker hôte</td></tr>
+    <tr><td><strong>docker-machine</strong></td><td>Provisionne automatiquement des VMs</td><td>Scalabilité</td><td>Complexe, coûteux</td></tr>
+    <tr><td><strong>kubernetes</strong></td><td>Chaque job dans un pod Kubernetes</td><td>Natif K8s</td><td>Nécessite un cluster</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-success">
+  <div class="icon">✅</div>
+  <div>
+    <strong>Recommandation pour ce projet</strong>
+    <p>Utilisez l'executor <strong>shell</strong> pour commencer. C'est le plus simple : le Runner exécute les commandes directement sur votre machine, comme si vous les tapiez vous-même. Vous avez ainsi accès à Docker, kubectl, Terraform et tous les outils installés localement.</p>
+  </div>
+</div>
+
+<h2>7.3 Installation du Runner</h2>
+
+<h3>Sur Windows</h3>
+<pre>
+# 1. Créer un dossier pour le runner
+mkdir C:\GitLab-Runner
+cd C:\GitLab-Runner
+
+# 2. Télécharger le binaire (PowerShell)
+Invoke-WebRequest -Uri "https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-windows-amd64.exe" -OutFile "gitlab-runner.exe"
+
+# 3. Installer comme service Windows
+.\gitlab-runner.exe install
+.\gitlab-runner.exe start
+</pre>
+
+<h3>Sur macOS</h3>
+<pre>
+# Via Homebrew
+brew install gitlab-runner
+brew services start gitlab-runner
+</pre>
+
+<h3>Sur Linux (Ubuntu/Debian)</h3>
+<pre>
+# Ajouter le dépôt GitLab
+curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh" | sudo bash
+
+# Installer
+sudo apt-get install gitlab-runner
+
+# Vérifier
+gitlab-runner --version
+</pre>
+
+<h2>7.4 Enregistrement du Runner auprès du projet GitLab</h2>
+<p>L'enregistrement est l'étape qui <strong>lie votre Runner local à votre projet GitLab</strong>. Sans cet enregistrement, GitLab ne sait pas que votre Runner existe.</p>
+
+<h3>Étape 1 : Récupérer le token d'enregistrement</h3>
+<ol>
+  <li>Allez dans votre projet GitLab sur <a href="https://gitlab.com">gitlab.com</a></li>
+  <li>Naviguez vers <strong>Settings → CI/CD</strong></li>
+  <li>Déroulez la section <strong>Runners</strong></li>
+  <li>Cliquez sur <strong>New project runner</strong></li>
+  <li>Choisissez le système d'exploitation, ajoutez un tag (ex: <code>local</code>), et cliquez sur <strong>Create runner</strong></li>
+  <li>Copiez la <strong>commande d'enregistrement</strong> affichée (elle contient le token)</li>
+</ol>
+
+<h3>Étape 2 : Enregistrer le Runner</h3>
+<pre>
+gitlab-runner register \
+  --url "https://gitlab.com" \
+  --token "glrt-XXXXXXXXXXXXXXXXXXXX" \
+  --executor "shell" \
+  --description "Runner local DevSecOps"
+</pre>
+
+<p>Le Runner vous posera éventuellement des questions supplémentaires. Voici les réponses recommandées :</p>
+<table>
+  <thead><tr><th>Question</th><th>Réponse recommandée</th></tr></thead>
+  <tbody>
+    <tr><td>GitLab instance URL</td><td><code>https://gitlab.com</code></td></tr>
+    <tr><td>Registration token</td><td>Le token copié depuis GitLab</td></tr>
+    <tr><td>Description</td><td><code>Runner local DevSecOps</code></td></tr>
+    <tr><td>Tags</td><td><code>local, shell</code></td></tr>
+    <tr><td>Executor</td><td><code>shell</code></td></tr>
+  </tbody>
+</table>
+
+<h3>Étape 3 : Vérification</h3>
+<pre>
+# Le runner doit être actif
+gitlab-runner list
+
+# Vous devriez voir quelque chose comme :
+# Runtime platform  arch=amd64 os=linux/windows/darwin
+# Runner: Runner local DevSecOps, status: online
+</pre>
+
+<p>Retournez sur GitLab : dans <strong>Settings → CI/CD → Runners</strong>, votre runner doit apparaître avec un point <strong style="color:#27ae60;">vert</strong> (online).</p>
+
+<h2>7.5 Comment le Runner exécute un job — Vue détaillée</h2>
+<div class="diagram">
+  <div class="diagram-title">📋 Cycle de vie d'un job GitLab CI/CD</div>
+  <div class="flow-row">
+    <div class="flow-box light">1. git push</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">2. GitLab lit .gitlab-ci.yml</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">3. GitLab crée les jobs</div>
+  </div>
+  <div class="flow-arrow-down">↓</div>
+  <div class="flow-row">
+    <div class="flow-box warn">4. Runner interroge GitLab (polling)</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box warn">5. Runner télécharge le code</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box warn">6. Runner exécute les scripts</div>
+  </div>
+  <div class="flow-arrow-down">↓</div>
+  <div class="flow-row">
+    <div class="flow-box warn">7. Runner renvoie les logs à GitLab</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box alt">8. GitLab affiche résultat ✅ / ❌</div>
+  </div>
+</div>
+
+<h2>7.6 Erreurs fréquentes avec GitLab Runner</h2>
+
+<div class="callout callout-danger">
+  <div class="icon">❌</div>
+  <div>
+    <strong>Erreur : « This job is stuck because you don't have any active runners »</strong>
+    <p><strong>Cause :</strong> Aucun Runner enregistré ou Runner hors ligne.<br>
+    <strong>Solution :</strong> Vérifiez avec <code>gitlab-runner list</code> et <code>gitlab-runner verify</code>. Redémarrez avec <code>gitlab-runner restart</code>.</p>
+  </div>
+</div>
+
+<div class="callout callout-danger">
+  <div class="icon">❌</div>
+  <div>
+    <strong>Erreur : « Job failed: exit status 1 » sur <code>npm</code> ou <code>docker</code></strong>
+    <p><strong>Cause :</strong> L'outil n'est pas trouvé dans le PATH de l'utilisateur qui exécute le Runner.<br>
+    <strong>Solution (Windows) :</strong> Assurez-vous que le service GitLab Runner tourne avec un utilisateur qui a les outils dans son PATH. Relancez le service après modification du PATH.<br>
+    <strong>Solution (Linux) :</strong> Le runner s'exécute souvent en tant qu'utilisateur <code>gitlab-runner</code>. Ajoutez cet utilisateur aux groupes nécessaires : <code>sudo usermod -aG docker gitlab-runner</code>.</p>
+  </div>
+</div>
+
+<div class="callout callout-danger">
+  <div class="icon">❌</div>
+  <div>
+    <strong>Erreur : Le runner apparaît « offline » dans GitLab</strong>
+    <p><strong>Cause :</strong> Le processus Runner ne tourne plus, ou un firewall bloque la connexion sortante vers gitlab.com.<br>
+    <strong>Solution :</strong> <code>gitlab-runner run</code> (mode premier plan pour déboguer) ou <code>gitlab-runner restart</code>. Vérifiez votre connexion réseau et proxy éventuel.</p>
+  </div>
+</div>
+
+<div class="recap">
+  <h4>📋 Récapitulatif — Section 7</h4>
+  <ul>
+    <li>GitLab Runner est le composant qui <strong>exécute réellement</strong> les jobs CI/CD sur votre machine</li>
+    <li>L'executor <code>shell</code> est le plus simple pour un environnement de développement local</li>
+    <li>L'enregistrement lie votre Runner à votre projet GitLab via un token unique</li>
+    <li>Sans Runner actif, le pipeline reste bloqué en « pending »</li>
+    <li>Le Runner communique avec GitLab en HTTPS sortant (pas besoin d'ouvrir de ports)</li>
+  </ul>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 8 — SONARQUBE                                         -->
+<!-- ============================================================ -->
+<hr class="section-sep">
+<section id="sec8">
+<h1>8. Mise en place de SonarQube en local</h1>
+
+<h2>8.1 Qu'est-ce que l'analyse SAST ?</h2>
+<p><strong>SAST</strong> (Static Application Security Testing) consiste à analyser le <strong>code source</strong> d'une application <em>sans l'exécuter</em> pour y trouver des vulnérabilités, des bugs et des mauvaises pratiques. C'est l'équivalent numérique d'une relecture de code automatisée par un expert en sécurité.</p>
+
+<h3>SAST vs autres approches</h3>
+<table>
+  <thead><tr><th>Approche</th><th>Analyse quoi ?</th><th>Quand ?</th><th>Forces</th><th>Limites</th></tr></thead>
+  <tbody>
+    <tr><td><strong>SAST</strong></td><td>Code source</td><td>Avant exécution (CI)</td><td>Tôt dans le cycle, couvre tout le code</td><td>Faux positifs, pas de contexte runtime</td></tr>
+    <tr><td><strong>DAST</strong></td><td>Application en cours d'exécution</td><td>Après déploiement</td><td>Trouve les failles réelles</td><td>Tard dans le cycle, couverture partielle</td></tr>
+    <tr><td><strong>SCA</strong></td><td>Dépendances (packages)</td><td>CI</td><td>Détecte les CVE connues</td><td>Ne couvre pas le code écrit</td></tr>
+    <tr><td><strong>Secrets Scanning</strong></td><td>Secrets en dur dans le code</td><td>CI ou pre-commit</td><td>Prévient les fuites de secrets</td><td>Scope limité aux patterns connus</td></tr>
+    <tr><td><strong>Container Scanning</strong></td><td>Images Docker</td><td>Après build</td><td>Vulnérabilités OS et packages</td><td>Ne couvre pas le code applicatif</td></tr>
+  </tbody>
+</table>
+
+<h2>8.2 Installation de SonarQube via Docker</h2>
+<p>SonarQube s'installe très simplement via Docker. Nous utilisons l'édition <strong>Community</strong> (gratuite).</p>
+
+<pre>
+# Lancer SonarQube
+docker run -d --name sonarqube \
+  -p 9000:9000 \
+  -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true \
+  sonarqube:lts-community
+
+# Vérification : le conteneur doit être en cours d'exécution
+docker ps | grep sonarqube
+</pre>
+
+<p>Attendez 1 à 2 minutes que SonarQube démarre complètement, puis accédez à <strong><a href="http://localhost:9000">http://localhost:9000</a></strong>.</p>
+
+<div class="callout callout-info">
+  <div class="icon">🔑</div>
+  <div>
+    <strong>Identifiants par défaut</strong>
+    <p>Login : <code>admin</code> / Mot de passe : <code>admin</code>. SonarQube vous demandera de changer le mot de passe à la première connexion.</p>
+  </div>
+</div>
+
+<h2>8.3 Configuration du projet dans SonarQube</h2>
+<ol>
+  <li>Connectez-vous à <a href="http://localhost:9000">http://localhost:9000</a></li>
+  <li>Cliquez sur <strong>Create project → Manually</strong></li>
+  <li>Saisissez :
+    <ul>
+      <li>Project display name : <code>SecNotes</code></li>
+      <li>Project key : <code>secnotes</code></li>
+      <li>Main branch name : <code>main</code></li>
+    </ul>
+  </li>
+  <li>Cliquez sur <strong>Set Up</strong></li>
+  <li>Choisissez <strong>Locally</strong></li>
+  <li>Générez un <strong>token</strong> :
+    <ul>
+      <li>Name : <code>secnotes-token</code></li>
+      <li>Type : Project Analysis Token</li>
+      <li>Expires in : 30 days</li>
+    </ul>
+  </li>
+  <li><strong>Copiez et sauvegardez le token</strong> (il ne sera plus affiché)</li>
+</ol>
+
+<h2>8.4 Configuration du scanner Sonar</h2>
+<p>Dans le dossier de votre projet, créez (ou vérifiez) le fichier <code>sonar-project.properties</code> :</p>
+<pre>
+# sonar-project.properties
+sonar.projectKey=secnotes
+sonar.projectName=SecNotes
+sonar.projectVersion=1.0
+
+sonar.sources=src
+sonar.tests=tests
+sonar.language=js
+sonar.sourceEncoding=UTF-8
+
+sonar.host.url=http://localhost:9000
+
+# ⚠️ NE PAS mettre le token ici en production !
+# Utilisez une variable d'environnement dans le pipeline
+# sonar.token sera passé via la variable SONAR_TOKEN
+</pre>
+
+<h2>8.5 Exécution manuelle d'une analyse (test)</h2>
+<p>Avant d'intégrer dans le pipeline, testez l'analyse manuellement :</p>
+<pre>
+# Installer sonar-scanner globalement (ou utilisez npx)
+npm install -g sonarqube-scanner
+
+# Lancer l'analyse
+sonar-scanner \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.token=sqp_VOTRE_TOKEN_ICI
+</pre>
+
+<p>Après quelques minutes, retournez dans l'interface SonarQube. Vous devriez voir les résultats de l'analyse avec des <strong>bugs</strong>, <strong>code smells</strong> et <strong>security hotspots</strong>.</p>
+
+<h2>8.6 Lecture des r��sultats SonarQube</h2>
+<p>SonarQube organise ses résultats en plusieurs catégories :</p>
+<table>
+  <thead><tr><th>Catégorie</th><th>Description</th><th>Exemples dans SecNotes</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Bugs</strong></td><td>Erreurs de code pouvant causer un dysfonctionnement</td><td>Comparaisons incorrectes, variables non initialisées</td></tr>
+    <tr><td><strong>Vulnerabilities</strong></td><td>Failles de sécurité identifiées avec certitude</td><td>Injection, crypto faible</td></tr>
+    <tr><td><strong>Security Hotspots</strong></td><td>Code sensible nécessitant une revue manuelle</td><td>Secrets en dur, CORS, logs verbeux</td></tr>
+    <tr><td><strong>Code Smells</strong></td><td>Mauvaises pratiques impactant la maintenabilité</td><td>Fonctions trop longues, code dupliqué</td></tr>
+    <tr><td><strong>Coverage</strong></td><td>Pourcentage de code couvert par les tests</td><td>Dépend de vos tests Jest</td></tr>
+  </tbody>
+</table>
+
+<h2>8.7 Limites de SonarQube</h2>
+
+<div class="callout callout-warning">
+  <div class="icon">⚠️</div>
+  <div>
+    <strong>Ce que SonarQube ne détectera PAS dans SecNotes</strong>
+    <ul>
+      <li><strong>Injections NoSQL complexes</strong> — SonarQube analyse le code statiquement et ne comprend pas toujours le flux de données vers MongoDB</li>
+      <li><strong>IDOR (V4)</strong> — C'est une vulnérabilité de logique métier, invisible pour un analyseur statique</li>
+      <li><strong>Mauvaises pratiques Dockerfile</strong> — SonarQube analyse le code applicatif, pas les Dockerfiles (sauf avec des plugins spéciaux)</li>
+      <li><strong>Secrets dans les manifests Kubernetes</strong> — Hors scope SAST classique</li>
+      <li><strong>Dépendances vulnérables</strong> — SonarQube fait du SAST, pas du SCA (utilisez <code>npm audit</code> ou des outils dédiés)</li>
+    </ul>
+    <p><strong>Conclusion :</strong> SonarQube est un composant <em>nécessaire mais non suffisant</em> d'un pipeline DevSecOps.</p>
+  </div>
+</div>
+
+<div class="callout callout-danger">
+  <div class="icon">❌</div>
+  <div>
+    <strong>Erreur fréquente : SonarQube ne démarre pas</strong>
+    <p>Si le conteneur s'arrête immédiatement, c'est souvent dû à un manque de mémoire pour Elasticsearch.<br>
+    <strong>Solution Linux :</strong> <code>sudo sysctl -w vm.max_map_count=524288</code><br>
+    <strong>Solution Windows/macOS :</strong> Augmentez la mémoire allouée à Docker Desktop (au moins 4 Go).</p>
+  </div>
+</div>
+
+<div class="recap">
+  <h4>📋 Récapitulatif — Section 8</h4>
+  <ul>
+    <li>SonarQube est un outil SAST qui analyse le code source sans l'exécuter</li>
+    <li>Il détecte bugs, vulnérabilités, security hotspots et code smells</li>
+    <li>Il ne détecte pas les failles logiques, les problèmes Docker/K8s ni les dépendances vulnérables</li>
+    <li>L'édition Community est gratuite et suffisante pour ce projet</li>
+    <li>Le token d'analyse ne doit <strong>jamais</strong> être commité dans le code source</li>
+  </ul>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 9 — PIPELINE GITLAB CI/CD                             -->
+<!-- ============================================================ -->
+<hr class="section-sep">
+<section id="sec9">
+<h1>9. Construction du pipeline GitLab CI/CD</h1>
+
+<h2>9.1 Logique générale du pipeline</h2>
+<p>Notre pipeline suit un ordre logique qui reflète le cycle DevSecOps :</p>
+
+<div class="diagram">
+  <div class="diagram-title">🔄 Stages du pipeline GitLab CI/CD</div>
+  <div class="flow-row">
+    <div class="flow-box light">prepare</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">test</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box infra">sast</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box">build</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box alt">deploy_local</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box infra">infra_aws</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box alt">deploy_aws</div>
+  </div>
+</div>
+
+<table>
+  <thead><tr><th>Stage</th><th>Objectif</th><th>Job principal</th><th>Outils utilisés</th></tr></thead>
+  <tbody>
+    <tr><td><code>prepare</code></td><td>Installer les dépendances npm</td><td><code>install_deps</code></td><td>npm</td></tr>
+    <tr><td><code>test</code></td><td>Exécuter les tests unitaires</td><td><code>unit_tests</code></td><td>Jest</td></tr>
+    <tr><td><code>sast</code></td><td>Analyse de sécurité statique</td><td><code>sonarqube_scan</code></td><td>SonarQube + sonar-scanner</td></tr>
+    <tr><td><code>build</code></td><td>Construire l'image Docker</td><td><code>docker_build</code></td><td>Docker</td></tr>
+    <tr><td><code>deploy_local</code></td><td>Déployer sur Kubernetes local</td><td><code>k8s_local_deploy</code></td><td>kubectl</td></tr>
+    <tr><td><code>infra_aws</code></td><td>Provisionner l'infra AWS</td><td><code>terraform_apply</code></td><td>Terraform</td></tr>
+    <tr><td><code>deploy_aws</code></td><td>Déployer sur Kubernetes AWS</td><td><code>k8s_aws_deploy</code></td><td>kubectl + aws cli</td></tr>
+  </tbody>
+</table>
+
+<h2>9.2 Variables et secrets GitLab</h2>
+<p>Avant de créer le pipeline, configurez les variables CI/CD dans GitLab :</p>
+<ol>
+  <li><strong>Settings → CI/CD → Variables</strong></li>
+  <li>Ajoutez les variables suivantes :</li>
+</ol>
+
+<table>
+  <thead><tr><th>Variable</th><th>Type</th><th>Protected</th><th>Masked</th><th>Valeur</th></tr></thead>
+  <tbody>
+    <tr><td><code>SONAR_HOST_URL</code></td><td>Variable</td><td>Non</td><td>Non</td><td><code>http://localhost:9000</code></td></tr>
+    <tr><td><code>SONAR_TOKEN</code></td><td>Variable</td><td>Oui</td><td>Oui</td><td>Le token SonarQube généré</td></tr>
+    <tr><td><code>AWS_ACCESS_KEY_ID</code></td><td>Variable</td><td>Oui</td><td>Oui</td><td>Votre clé d'accès AWS</td></tr>
+    <tr><td><code>AWS_SECRET_ACCESS_KEY</code></td><td>Variable</td><td>Oui</td><td>Oui</td><td>Votre clé secrète AWS</td></tr>
+    <tr><td><code>AWS_DEFAULT_REGION</code></td><td>Variable</td><td>Non</td><td>Non</td><td><code>eu-west-1</code></td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-success">
+  <div class="icon">🔐</div>
+  <div>
+    <strong>Bonne pratique — Gestion des secrets</strong>
+    <p>Les variables marquées <strong>Masked</strong> ne seront jamais affichées dans les logs du pipeline. Les variables <strong>Protected</strong> ne sont disponibles que sur les branches protégées. C'est la bonne façon de gérer les secrets dans un pipeline CI/CD, contrairement à les mettre en dur dans le code (comme le fait volontairement notre application vulnérable).</p>
+  </div>
+</div>
+
+<h2>9.3 Le fichier <code>.gitlab-ci.yml</code> complet</h2>
+<p>Voici le pipeline complet, commenté bloc par bloc. Chaque section est expliquée en détail.</p>
+
+<pre>
+# ==============================================================
+# Pipeline DevSecOps complet — SecNotes
+# ==============================================================
+
+# Définition des stages dans l'ordre d'exécution
+stages:
+  - prepare
+  - test
+  - sast
+  - build
+  - deploy_local
+  - infra_aws
+  - deploy_aws
+
+# Variables globales
+variables:
+  APP_NAME: "secnotes"
+  DOCKER_IMAGE: "secnotes-app"
+  DOCKER_TAG: "$CI_COMMIT_SHORT_SHA"
+  K8S_NAMESPACE: "secnotes"
+
+# ---- STAGE 1 : PRÉPARATION ----
+# Ce job installe les dépendances npm.
+# Le dossier node_modules est mis en cache pour accélérer les builds suivants
+# et en artifact pour être disponible dans les jobs suivants.
+install_deps:
+  stage: prepare
+  tags:
+    - local          # S'exécute sur notre Runner local taggé "local"
+  script:
+    - echo "📦 Installation des dépendances..."
+    - cd secnotes-vuln-app
+    - npm ci          # npm ci est préféré à npm install en CI (plus rapide, déterministe)
+  artifacts:
+    paths:
+      - secnotes-vuln-app/node_modules/
+    expire_in: 1 hour
+  cache:
+    key: "$CI_COMMIT_REF_SLUG"
+    paths:
+      - secnotes-vuln-app/node_modules/
+
+# ---- STAGE 2 : TESTS UNITAIRES ----
+# Exécute les tests Jest. Si un test échoue, le pipeline s'arrête.
+# C'est le premier garde-fou : pas de code cassé en production.
+unit_tests:
+  stage: test
+  tags:
+    - local
+  dependencies:
+    - install_deps    # Récupère les artifacts (node_modules) du job précédent
+  script:
+    - echo "🧪 Exécution des tests unitaires..."
+    - cd secnotes-vuln-app
+    - npm test -- --coverage --forceExit
+  artifacts:
+    paths:
+      - secnotes-vuln-app/coverage/
+    expire_in: 1 week
+    when: always       # Conserve le rapport même si les tests échouent
+
+# ---- STAGE 3 : ANALYSE SAST SONARQUBE ----
+# Envoie le code à SonarQube local pour analyse statique.
+# Le Quality Gate détermine si le code est assez « propre » pour continuer.
+sonarqube_scan:
+  stage: sast
+  tags:
+    - local
+  dependencies:
+    - install_deps
+    - unit_tests       # Pour récupérer le rapport de couverture
+  script:
+    - echo "🔍 Analyse SAST avec SonarQube..."
+    - cd secnotes-vuln-app
+    - >
+      sonar-scanner
+      -Dsonar.host.url=$SONAR_HOST_URL
+      -Dsonar.token=$SONAR_TOKEN
+      -Dsonar.projectKey=secnotes
+      -Dsonar.sources=src
+      -Dsonar.tests=tests
+      -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+    - echo "✅ Analyse envoyée. Consultez http://localhost:9000 pour les résultats."
+  allow_failure: true   # Ne bloque pas le pipeline (à durcir en production)
+
+# ---- STAGE 4 : BUILD DOCKER ----
+# Construit l'image Docker de l'application.
+# L'image est taguée avec le SHA court du commit pour la traçabilité.
+docker_build:
+  stage: build
+  tags:
+    - local
+  script:
+    - echo "🐳 Construction de l'image Docker..."
+    - cd secnotes-vuln-app
+    - docker build -t $DOCKER_IMAGE:$DOCKER_TAG .
+    - docker tag $DOCKER_IMAGE:$DOCKER_TAG $DOCKER_IMAGE:latest
+    - echo "✅ Image construite : $DOCKER_IMAGE:$DOCKER_TAG"
+    - docker images | grep $DOCKER_IMAGE
+
+# ---- STAGE 5 : DÉPLOIEMENT KUBERNETES LOCAL ----
+# Applique les manifests Kubernetes pour déployer sur le cluster local.
+k8s_local_deploy:
+  stage: deploy_local
+  tags:
+    - local
+  dependencies:
+    - docker_build
+  script:
+    - echo "☸️ Déploiement sur Kubernetes local..."
+    - kubectl apply -f secnotes-vuln-app/k8s/namespace.yaml
+    - kubectl apply -f secnotes-vuln-app/k8s/configmap.yaml -n $K8S_NAMESPACE
+    - kubectl apply -f secnotes-vuln-app/k8s/secret.yaml -n $K8S_NAMESPACE
+    - kubectl apply -f secnotes-vuln-app/k8s/deployment.yaml -n $K8S_NAMESPACE
+    - kubectl apply -f secnotes-vuln-app/k8s/service.yaml -n $K8S_NAMESPACE
+    - echo "⏳ Attente du déploiement..."
+    - kubectl rollout status deployment/secnotes-app -n $K8S_NAMESPACE --timeout=120s
+    - echo "✅ Déploiement local terminé."
+    - kubectl get pods -n $K8S_NAMESPACE
+    - kubectl get svc -n $K8S_NAMESPACE
+  environment:
+    name: local
+    url: http://localhost:30000
+
+# ---- STAGE 6 : INFRASTRUCTURE AWS AVEC TERRAFORM ----
+# Provisionne l'infrastructure AWS (VPC, EKS, IAM...) via Terraform.
+# Ce stage ne s'exécute que sur la branche main et manuellement.
+terraform_apply:
+  stage: infra_aws
+  tags:
+    - local
+  script:
+    - echo "🏗️ Provisionnement de l'infrastructure AWS..."
+    - cd secnotes-vuln-app/terraform
+    - terraform init
+    - terraform plan -out=tfplan
+    - terraform apply -auto-approve tfplan
+    - echo "✅ Infrastructure AWS provisionnée."
+  when: manual         # Déclenchement manuel pour éviter les coûts accidentels
+  only:
+    - main             # Uniquement sur la branche principale
+  artifacts:
+    paths:
+      - secnotes-vuln-app/terraform/terraform.tfstate
+    expire_in: 1 day
+
+# ---- STAGE 7 : DÉPLOIEMENT SUR KUBERNETES AWS ----
+# Déploie l'application sur le cluster EKS provisionné par Terraform.
+k8s_aws_deploy:
+  stage: deploy_aws
+  tags:
+    - local
+  dependencies:
+    - terraform_apply
+    - docker_build
+  script:
+    - echo "☁️ Configuration de kubectl pour AWS EKS..."
+    - aws eks update-kubeconfig --name secnotes-cluster --region $AWS_DEFAULT_REGION
+    - echo "☸️ Déploiement sur Kubernetes AWS..."
+    - kubectl apply -f secnotes-vuln-app/k8s/namespace.yaml
+    - kubectl apply -f secnotes-vuln-app/k8s/configmap.yaml -n $K8S_NAMESPACE
+    - kubectl apply -f secnotes-vuln-app/k8s/secret.yaml -n $K8S_NAMESPACE
+    - kubectl apply -f secnotes-vuln-app/k8s/deployment.yaml -n $K8S_NAMESPACE
+    - kubectl apply -f secnotes-vuln-app/k8s/service.yaml -n $K8S_NAMESPACE
+    - kubectl rollout status deployment/secnotes-app -n $K8S_NAMESPACE --timeout=180s
+    - echo "✅ Déploiement AWS terminé."
+    - kubectl get svc -n $K8S_NAMESPACE
+  when: manual
+  only:
+    - main
+  environment:
+    name: production-aws
+</pre>
+
+<h2>9.4 Explication pédagogique des concepts clés</h2>
+
+<h3>Le mot-clé <code>dependencies</code></h3>
+<p>Dans GitLab CI, <code>dependencies</code> permet de spécifier quels jobs précédents fournissent des <strong>artifacts</strong> au job courant. Cela évite de télécharger tous les artifacts de tous les jobs précédents et garantit que le job a accès aux fichiers dont il a besoin.</p>
+
+<h3>Le mot-clé <code>artifacts</code></h3>
+<p>Les artifacts sont des fichiers produits par un job et conservés par GitLab. Ils peuvent être :</p>
+<ul>
+  <li><strong>Transmis aux jobs suivants</strong> (ex: <code>node_modules</code>, rapports de couverture)</li>
+  <li><strong>Téléchargés</strong> depuis l'interface GitLab pour inspection</li>
+  <li><strong>Expirés</strong> automatiquement après un délai configurable</li>
+</ul>
+
+<h3>Le mot-clé <code>when: manual</code></h3>
+<p>Un job marqué <code>when: manual</code> ne s'exécute que lorsqu'un utilisateur clique sur « Play » dans l'interface GitLab. C'est essentiel pour les jobs coûteux (Terraform sur AWS) ou irréversibles (déploiement en production).</p>
+
+<h3>Le mot-clé <code>allow_failure: true</code></h3>
+<p>Permet au pipeline de continuer même si ce job échoue. Utilisé ici pour SonarQube en phase d'apprentissage. <strong>En production réelle</strong>, il faudrait retirer cette option et configurer un Quality Gate strict.</p>
+
+<h3>Le mot-clé <code>tags</code></h3>
+<p>Les tags permettent de diriger un job vers un Runner spécifique. Ici, <code>tags: [local]</code> assure que le job est pris en charge par votre Runner local (celui enregistré avec le tag « local » à la section 7).</p>
+
+<div class="callout callout-practice">
+  <div class="icon">🎓</div>
+  <div>
+    <strong>Point pédagogique</strong>
+    <p>La beauté d'un pipeline CI/CD bien conçu est qu'il fonctionne comme un <strong>filet de sécurité automatisé</strong>. Chaque <code>git push</code> déclenche automatiquement toute la chaîne de vérification. Si un test échoue ou si SonarQube détecte une vulnérabilité critique, le pipeline s'arrête avant que le code défaillant n'atteigne la production.</p>
+  </div>
+</div>
+
+<div class="recap">
+  <h4>📋 Récapitulatif — Section 9</h4>
+  <ul>
+    <li>Le pipeline comporte <strong>7 stages</strong> ordonnés logiquement</li>
+    <li>Les <strong>variables CI/CD</strong> protègent les secrets (tokens, clés AWS)</li>
+    <li>Les <strong>artifacts</strong> transmettent les fichiers entre jobs</li>
+    <li>Les stages AWS sont en <strong>déclenchement manuel</strong> pour éviter les coûts accidentels</li>
+    <li>Le tag <code>local</code> dirige tous les jobs vers votre Runner local</li>
+  </ul>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 10 — KUBERNETES LOCAL                                 -->
+<!-- ============================================================ -->
+<hr class="section-sep">
+<section id="sec10">
+<h1>10. Déploiement sur Kubernetes local</h1>
+
+<h2>10.1 Rappel des concepts Kubernetes essentiels</h2>
+<div class="arch-grid">
+  <div class="arch-card">
+    <h4>Pod</h4>
+    <p>Plus petite unité déployable. Contient un ou plusieurs conteneurs partageant le réseau et le stockage.</p>
+  </div>
+  <div class="arch-card green">
+    <h4>Deployment</h4>
+    <p>Gère le cycle de vie des Pods : création, mise à jour, rollback, scaling.</p>
+  </div>
+  <div class="arch-card orange">
+    <h4>Service</h4>
+    <p>Expose les Pods sur le réseau (ClusterIP, NodePort, LoadBalancer). Point d'entrée stable.</p>
+  </div>
+  <div class="arch-card purple">
+    <h4>ConfigMap</h4>
+    <p>Stocke la configuration non sensible (URLs, paramètres) sous forme de clés-valeurs.</p>
+  </div>
+  <div class="arch-card red">
+    <h4>Secret</h4>
+    <p>Stocke les données sensibles (mots de passe, tokens). Encodé en base64 (⚠️ pas chiffré !).</p>
+  </div>
+  <div class="arch-card">
+    <h4>Namespace</h4>
+    <p>Isolation logique des ressources. Permet de séparer les environnements (dev, staging, prod).</p>
+  </div>
+</div>
+
+<h2>10.2 Les manifests Kubernetes</h2>
+
+<h3>Namespace</h3>
+<pre>
+# k8s/namespace.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: secnotes
+  labels:
+    project: secnotes
+    environment: local
+</pre>
+<p><strong>Pourquoi :</strong> Isole toutes les ressources SecNotes dans un espace dédié, évitant les conflits avec d'autres applications sur le cluster.</p>
+
+<h3>ConfigMap</h3>
+<pre>
+# k8s/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: secnotes-config
+  namespace: secnotes
+data:
+  NODE_ENV: "production"
+  PORT: "3000"
+  MONGO_HOST: "mongodb-service"
+  MONGO_PORT: "27017"
+  MONGO_DB: "secnotes"
+</pre>
+
+<h3>Secret</h3>
+<pre>
+# k8s/secret.yaml — ⚠️ VERSION VULNÉRABLE (à des fins pédagogiques)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secnotes-secrets
+  namespace: secnotes
+type: Opaque
+data:
+  MONGO_USERNAME: YWRtaW4=          # "admin" en base64
+  MONGO_PASSWORD: YWRtaW4xMjM=      # "admin123" en base64
+  JWT_SECRET: bWEtY2xlLXNlY3JldGU=  # "ma-cle-secrete" en base64
+</pre>
+
+<div class="callout callout-danger">
+  <div class="icon">🚫</div>
+  <div>
+    <strong>Mauvaise pratique — Secrets Kubernetes en clair dans Git</strong>
+    <p>Ce fichier <code>secret.yaml</code> contient des secrets encodés en base64 (<strong>pas chiffrés !</strong>) et sera commité dans Git. C'est une <strong>très mauvaise pratique</strong> volontairement intégrée dans le projet. En production, utilisez :</p>
+    <ul>
+      <li><strong>Sealed Secrets</strong> (Bitnami) — chiffre les secrets côté client</li>
+      <li><strong>External Secrets Operator</strong> — récupère les secrets depuis AWS Secrets Manager, Vault, etc.</li>
+      <li><strong>SOPS</strong> (Mozilla) — chiffrement des fichiers YAML</li>
+    </ul>
+  </div>
+</div>
+
+<h3>Deployment</h3>
+<pre>
+# k8s/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: secnotes-app
+  namespace: secnotes
+  labels:
+    app: secnotes
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: secnotes
+  template:
+    metadata:
+      labels:
+        app: secnotes
+    spec:
+      containers:
+        - name: secnotes
+          image: secnotes-app:latest    # Image locale
+          imagePullPolicy: Never        # Ne pas chercher sur un registre distant
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: secnotes-config
+            - secretRef:
+                name: secnotes-secrets
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "250m"
+---
+# Deployment MongoDB
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+  namespace: secnotes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo:7
+          ports:
+            - containerPort: 27017
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: secnotes-secrets
+                  key: MONGO_USERNAME
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secnotes-secrets
+                  key: MONGO_PASSWORD
+</pre>
+
+<p><strong>Point important :</strong> <code>imagePullPolicy: Never</code> indique à Kubernetes de ne pas chercher l'image sur Docker Hub mais d'utiliser l'image présente localement dans le daemon Docker. C'est essentiel quand on travaille avec des images construites localement.</p>
+
+<h3>Service</h3>
+<pre>
+# k8s/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: secnotes-service
+  namespace: secnotes
+spec:
+  type: NodePort
+  selector:
+    app: secnotes
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 30000       # Port accessible depuis votre navigateur
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+  namespace: secnotes
+spec:
+  type: ClusterIP           # Accessible uniquement dans le cluster
+  selector:
+    app: mongodb
+  ports:
+    - port: 27017
+      targetPort: 27017
+</pre>
+
+<h2>10.3 Commandes de déploiement et vérification</h2>
+<pre>
+# Appliquer tous les manifests
+kubectl apply -f k8s/namespace.yaml
+kubectl apply -f k8s/configmap.yaml -n secnotes
+kubectl apply -f k8s/secret.yaml -n secnotes
+kubectl apply -f k8s/deployment.yaml -n secnotes
+kubectl apply -f k8s/service.yaml -n secnotes
+
+# Vérifier l'état des pods
+kubectl get pods -n secnotes
+# Attendu : 2 pods secnotes-app (Running), 1 pod mongodb (Running)
+
+# Vérifier les services
+kubectl get svc -n secnotes
+# Attendu : secnotes-service NodePort 3000:30000, mongodb-service ClusterIP 27017
+
+# Voir les logs de l'application
+kubectl logs -f deployment/secnotes-app -n secnotes
+
+# Accéder à l'application
+# Ouvrez http://localhost:30000/api/notes dans votre navigateur
+</pre>
+
+<h2>10.4 Schéma de déploiement local</h2>
+<div class="diagram">
+  <div class="diagram-title">☸️ Architecture Kubernetes local — SecNotes</div>
+  <div style="border:2px solid #e6a817; border-radius:.6rem; padding:1.5rem; max-width:600px; margin:0 auto;">
+    <div style="text-align:center; font-weight:700; color:#8a6300; margin-bottom:1rem;">Namespace: secnotes</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+      <div style="background:#e7f1fb; border:1px solid #2a6496; border-radius:.4rem; padding:.8rem; text-align:center;">
+        <strong>Pod: secnotes-app (×2)</strong><br>
+        <span style="font-size:.8rem;">Image: secnotes-app:latest<br>Port: 3000</span>
+      </div>
+      <div style="background:#fce8e8; border:1px solid #c0392b; border-radius:.4rem; padding:.8rem; text-align:center;">
+        <strong>Pod: mongodb (×1)</strong><br>
+        <span style="font-size:.8rem;">Image: mongo:7<br>Port: 27017</span>
+      </div>
+      <div style="background:#e8f6ef; border:1px solid #27ae60; border-radius:.4rem; padding:.8rem; text-align:center;">
+        <strong>Service: NodePort</strong><br>
+        <span style="font-size:.8rem;">30000 → 3000<br>Accès externe</span>
+      </div>
+      <div style="background:#f0e6fa; border:1px solid #8e44ad; border-radius:.4rem; padding:.8rem; text-align:center;">
+        <strong>Service: ClusterIP</strong><br>
+        <span style="font-size:.8rem;">27017 → 27017<br>Interne uniquement</span>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center; margin-top:.8rem; font-size:.82rem; color:#7c8a9a;">
+    🌐 Accès navigateur : http://localhost:30000
+  </div>
+</div>
+
+<div class="callout callout-danger">
+  <div class="icon">❌</div>
+  <div>
+    <strong>Erreur fréquente : <code>ImagePullBackOff</code></strong>
+    <p><strong>Cause :</strong> Kubernetes essaie de tirer l'image depuis un registre distant (Docker Hub), alors qu'elle n'existe que localement.<br>
+    <strong>Solution :</strong> Vérifiez que <code>imagePullPolicy: Never</code> est bien présent dans le manifest. Si vous utilisez Minikube, exécutez d'abord <code>eval $(minikube docker-env)</code> puis reconstruisez l'image.</p>
+  </div>
+</div>
+
+<div class="callout callout-danger">
+  <div class="icon">❌</div>
+  <div>
+    <strong>Erreur fréquente : <code>CrashLoopBackOff</code></strong>
+    <p><strong>Cause :</strong> L'application plante au démarrage (souvent : impossible de se connecter à MongoDB).<br>
+    <strong>Solution :</strong> Vérifiez les logs avec <code>kubectl logs pod/NOM-DU-POD -n secnotes</code>. Assurez-vous que le pod MongoDB est bien démarré <em>avant</em> l'application. Vérifiez que les secrets correspondent aux credentials MongoDB.</p>
+  </div>
+</div>
+
+<div class="recap">
+  <h4>📋 Récapitulatif — Section 10</h4>
+  <ul>
+    <li>5 manifests Kubernetes : Namespace, ConfigMap, Secret, Deployment, Service</li>
+    <li><code>imagePullPolicy: Never</code> est crucial pour les images locales</li>
+    <li>NodePort (30000) rend l'application accessible depuis le navigateur</li>
+    <li>ClusterIP isole MongoDB du réseau extérieur</li>
+    <li>Les secrets base64 dans Git sont une <strong>mauvaise pratique</strong> à connaître</li>
+  </ul>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 11 — TERRAFORM AWS                                    -->
+<!-- ============================================================ -->
+<hr class="section-sep">
+<section id="sec11">
+<h1>11. Automatisation AWS avec Terraform</h1>
+
+<h2>11.1 Pourquoi Terraform ?</h2>
+<p><strong>Infrastructure as Code (IaC)</strong> signifie décrire votre infrastructure cloud sous forme de fichiers texte versionnés, plutôt que de cliquer dans une console web. Terraform est l'outil IaC le plus populaire et le plus polyvalent.</p>
+
+<table>
+  <thead><tr><th>Approche</th><th>Création manuelle (console AWS)</th><th>Infrastructure as Code (Terraform)</th></tr></thead>
+  <tbody>
+    <tr><td>Reproductibilité</td><td>❌ Dépend de la mémoire humaine</td><td>✅ Identique à chaque exécution</td></tr>
+    <tr><td>Versionnement</td><td>❌ Pas d'historique</td><td>✅ Versionné avec Git</td></tr>
+    <tr><td>Revue</td><td>❌ Pas de revue possible</td><td>✅ Code review comme pour le code applicatif</td></tr>
+    <tr><td>Automatisation</td><td>❌ Manuelle</td><td>✅ Intégrable dans un pipeline CI/CD</td></tr>
+    <tr><td>Documentation</td><td>❌ Externe nécessaire</td><td>✅ Le code EST la documentation</td></tr>
+    <tr><td>Destruction propre</td><td>⚠️ Risque d'oubli de ressources</td><td>✅ <code>terraform destroy</code> supprime tout</td></tr>
+  </tbody>
+</table>
+
+<h2>11.2 Ce que Terraform va créer</h2>
+<p>Notre configuration Terraform va provisionner l'infrastructure suivante sur AWS :</p>
+
+<div class="arch-grid">
+  <div class="arch-card">
+    <h4>VPC + Subnets</h4>
+    <p>Réseau virtuel isolé avec 2 subnets publics dans 2 zones de disponibilité pour la haute disponibilité.</p>
+  </div>
+  <div class="arch-card green">
+    <h4>Internet Gateway</h4>
+    <p>Passerelle permettant aux ressources du VPC d'accéder à Internet et d'être accessibles depuis l'extérieur.</p>
+  </div>
+  <div class="arch-card orange">
+    <h4>EKS Cluster</h4>
+    <p>Cluster Kubernetes managé par AWS. Le control plane est géré par AWS, vous ne gérez que les nœuds de travail.</p>
+  </div>
+  <div class="arch-card purple">
+    <h4>Node Group</h4>
+    <p>Groupe de nœuds EC2 (2× t3.medium) qui exécutent vos pods Kubernetes.</p>
+  </div>
+  <div class="arch-card red">
+    <h4>IAM Roles</h4>
+    <p>Rôles et politiques IAM pour que EKS et les nœuds puissent accéder aux services AWS nécessaires.</p>
+  </div>
+  <div class="arch-card">
+    <h4>Security Groups</h4>
+    <p>Règles de pare-feu contrôlant le trafic réseau entrant et sortant du cluster.</p>
+  </div>
+</div>
+
+<h2>11.3 Structure des fichiers Terraform</h2>
+<div class="tree">
+terraform/
+├── provider.tf      # Configuration du provider AWS
+├── variables.tf     # Déclaration des variables
+├── main.tf          # Ressources principales (VPC, EKS, IAM)
+└── outputs.tf       # Valeurs de sortie (endpoint du cluster, etc.)
+</div>
+
+<h3>provider.tf</h3>
+<pre>
+# Configuration du provider AWS
+terraform {
+  required_version = ">= 1.7"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = var.aws_region
+
+  # Les credentials sont lus depuis :
+  # 1. Variables d'environnement (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)
+  # 2. Fichier ~/.aws/credentials
+  # ⚠️ JAMAIS en dur dans ce fichier !
+}
+</pre>
+
+<h3>variables.tf</h3>
+<pre>
+variable "aws_region" {
+  description = "Région AWS de déploiement"
+  type        = string
+  default     = "eu-west-1"
+}
+
+variable "cluster_name" {
+  description = "Nom du cluster EKS"
+  type        = string
+  default     = "secnotes-cluster"
+}
+
+variable "node_instance_type" {
+  description = "Type d'instance EC2 pour les nœuds"
+  type        = string
+  default     = "t3.medium"
+}
+
+variable "node_desired_count" {
+  description = "Nombre de nœuds souhaité"
+  type        = number
+  default     = 2
+}
+</pre>
+
+<h3>main.tf (extraits commentés)</h3>
+<pre>
+# ===== VPC =====
+resource "aws_vpc" "main" {
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+
+  tags = {
+    Name    = "${var.cluster_name}-vpc"
+    Project = "secnotes"
+  }
+}
+
+# ===== Subnets (2 AZ pour haute disponibilité) =====
+resource "aws_subnet" "public_a" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.1.0/24"
+  availability_zone       = "${var.aws_region}a"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "${var.cluster_name}-public-a"
+    "kubernetes.io/role/elb" = "1"     # Tag requis par EKS pour les load balancers
+  }
+}
+
+resource "aws_subnet" "public_b" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.2.0/24"
+  availability_zone       = "${var.aws_region}b"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "${var.cluster_name}-public-b"
+    "kubernetes.io/role/elb" = "1"
+  }
+}
+
+# ===== Internet Gateway =====
+resource "aws_internet_gateway" "main" {
+  vpc_id = aws_vpc.main.id
+}
+
+# ... (route tables, IAM roles, EKS cluster, node group)
+
+# ===== EKS Cluster =====
+resource "aws_eks_cluster" "main" {
+  name     = var.cluster_name
+  role_arn = aws_iam_role.eks_cluster_role.arn
+
+  vpc_config {
+    subnet_ids = [
+      aws_subnet.public_a.id,
+      aws_subnet.public_b.id
+    ]
+  }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.eks_cluster_policy,
+    aws_iam_role_policy_attachment.eks_service_policy,
+  ]
+}
+
+# ===== Node Group =====
+resource "aws_eks_node_group" "main" {
+  cluster_name    = aws_eks_cluster.main.name
+  node_group_name = "${var.cluster_name}-nodes"
+  node_role_arn   = aws_iam_role.eks_node_role.arn
+  subnet_ids      = [aws_subnet.public_a.id, aws_subnet.public_b.id]
+
+  instance_types = [var.node_instance_type]
+
+  scaling_config {
+    desired_size = var.node_desired_count
+    max_size     = 3
+    min_size     = 1
+  }
+}
+</pre>
+
+<h3>outputs.tf</h3>
+<pre>
+output "cluster_endpoint" {
+  description = "Endpoint du cluster EKS"
+  value       = aws_eks_cluster.main.endpoint
+}
+
+output "cluster_name" {
+  description = "Nom du cluster EKS"
+  value       = aws_eks_cluster.main.name
+}
+
+output "kubeconfig_command" {
+  description = "Commande pour configurer kubectl"
+  value       = "aws eks update-kubeconfig --name ${aws_eks_cluster.main.name} --region ${var.aws_region}"
+}
+</pre>
+
+<h2>11.4 Workflow Terraform</h2>
+<div class="diagram">
+  <div class="diagram-title">🏗️ Les 3 étapes Terraform</div>
+  <div class="flow-row">
+    <div class="flow-box">terraform init</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box warn">terraform plan</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box alt">terraform apply</div>
+  </div>
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-top:1rem; text-align:center; font-size:.85rem;">
+    <div>Télécharge les providers<br>Initialise le backend</div>
+    <div>Calcule les changements<br><strong>Prévisualise</strong> sans rien modifier</div>
+    <div>Applique les changements<br>Crée/modifie les ressources AWS</div>
+  </div>
+</div>
+
+<pre>
+# 1. Initialiser (à faire une seule fois)
+cd terraform/
+terraform init
+# Attendu : "Terraform has been successfully initialized!"
+
+# 2. Planifier (voir ce qui va être créé)
+terraform plan
+# Attendu : "Plan: X to add, 0 to change, 0 to destroy."
+
+# 3. Appliquer (créer réellement les ressources)
+terraform apply
+# Confirmez avec "yes" quand demandé
+# Attendu : "Apply complete! Resources: X added."
+</pre>
+
+<div class="callout callout-danger">
+  <div class="icon">💰</div>
+  <div>
+    <strong>Attention — Coûts AWS !</strong>
+    <p>Un cluster EKS coûte environ <strong>0,10 $/heure</strong> pour le control plane + le coût des instances EC2 (2× t3.medium ≈ 0,08 $/heure). Cela représente environ <strong>5-6 $/jour</strong>. <strong>N'oubliez JAMAIS de détruire votre infrastructure après le TP :</strong></p>
+    <pre>terraform destroy    # Confirmez avec "yes"</pre>
+  </div>
+</div>
+
+<h2>11.5 État Terraform (tfstate)</h2>
+<p>Terraform maintient un fichier d'état (<code>terraform.tfstate</code>) qui fait le lien entre votre code et les ressources réelles sur AWS. Ce fichier est <strong>critique</strong> :</p>
+<ul>
+  <li>Ne le supprimez pas : Terraform ne saurait plus quelles ressources il gère</li>
+  <li>Ne le commitez pas dans Git (il peut contenir des secrets)</li>
+  <li>En production, stockez-le dans un backend distant (S3 + DynamoDB pour le verrouillage)</li>
+</ul>
+
+<div class="callout callout-danger">
+  <div class="icon">❌</div>
+  <div>
+    <strong>Erreur fréquente : « Error: No valid credential sources found »</strong>
+    <p><strong>Cause :</strong> Terraform ne trouve pas les credentials AWS.<br>
+    <strong>Solution :</strong> Vérifiez que <code>aws configure</code> a été exécuté ou que les variables d'environnement <code>AWS_ACCESS_KEY_ID</code> et <code>AWS_SECRET_ACCESS_KEY</code> sont définies.</p>
+  </div>
+</div>
+
+<div class="callout callout-danger">
+  <div class="icon">❌</div>
+  <div>
+    <strong>Erreur fréquente : « Error: creating EKS Cluster: AccessDeniedException »</strong>
+    <p><strong>Cause :</strong> Votre utilisateur IAM n'a pas les permissions suffisantes.<br>
+    <strong>Solution :</strong> L'utilisateur IAM doit avoir les politiques <code>AmazonEKSClusterPolicy</code>, <code>AmazonVPCFullAccess</code>, <code>IAMFullAccess</code> (ou <code>AdministratorAccess</code> pour le TP, à restreindre en production).</p>
+  </div>
+</div>
+
+<div class="recap">
+  <h4>📋 Récapitulatif — Section 11</h4>
+  <ul>
+    <li>Terraform permet de décrire l'infrastructure AWS sous forme de code versionné</li>
+    <li>Le workflow est : <code>init</code> → <code>plan</code> → <code>apply</code></li>
+    <li>L'infrastructure cible comprend : VPC, Subnets, EKS, Node Group, IAM, Security Groups</li>
+    <li>Le fichier d'état (<code>tfstate</code>) est critique et ne doit pas être commité dans Git</li>
+    <li><strong>Détruisez toujours les ressources après le TP</strong> pour éviter les coûts</li>
+  </ul>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 12 — DÉPLOIEMENT K8S AWS                              -->
+<!-- ============================================================ -->
+<hr class="section-sep">
+<section id="sec12">
+<h1>12. Déploiement Kubernetes sur AWS</h1>
+
+<h2>12.1 Lien entre Terraform et Kubernetes AWS</h2>
+<p>Terraform a créé l'infrastructure (le cluster EKS). Maintenant, il faut :</p>
+<ol>
+  <li><strong>Configurer <code>kubectl</code></strong> pour pointer vers le cluster AWS (au lieu du cluster local)</li>
+  <li><strong>Pousser l'image Docker</strong> vers un registre accessible depuis AWS (ECR ou Docker Hub)</li>
+  <li><strong>Appliquer les manifests Kubernetes</strong> (les mêmes qu'en local, avec quelques ajustements)</li>
+</ol>
+
+<h2>12.2 Configuration de kubectl pour AWS EKS</h2>
+<pre>
+# Configurer kubectl pour le cluster EKS
+aws eks update-kubeconfig --name secnotes-cluster --region eu-west-1
+
+# Vérification
+kubectl cluster-info
+# Attendu : Kubernetes control plane is running at https://XXXXXXXX.eks.amazonaws.com
+
+kubectl get nodes
+# Attendu : 2 nœuds en status "Ready"
+</pre>
+
+<h2>12.3 Push de l'image vers un registre</h2>
+<p>Le cluster AWS ne peut pas accéder aux images Docker locales de votre machine. Vous devez pousser l'image vers un <strong>registre de conteneurs</strong>.</p>
+
+<h3>Option : Amazon ECR (Elastic Container Registry)</h3>
+<pre>
+# Créer un dépôt ECR (une seule fois)
+aws ecr create-repository --repository-name secnotes-app --region eu-west-1
+
+# Se connecter à ECR
+aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com
+
+# Taguer et pousser l'image
+docker tag secnotes-app:latest ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/secnotes-app:latest
+docker push ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/secnotes-app:latest
+</pre>
+
+<div class="callout callout-info">
+  <div class="icon">💡</div>
+  <div>
+    <strong>Adaptation du manifest Deployment</strong>
+    <p>Pour le déploiement AWS, modifiez l'image dans <code>deployment.yaml</code> :<br>
+    <code>image: ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/secnotes-app:latest</code><br>
+    Et retirez <code>imagePullPolicy: Never</code> (puisque l'image vient d'un registre distant).</p>
+  </div>
+</div>
+
+<h2>12.4 Déploiement sur le cluster EKS</h2>
+<pre>
+# S'assurer que kubectl pointe vers le cluster AWS
+kubectl config current-context
+# Attendu : arn:aws:eks:eu-west-1:ACCOUNT_ID:cluster/secnotes-cluster
+
+# Appliquer les manifests
+kubectl apply -f k8s/namespace.yaml
+kubectl apply -f k8s/configmap.yaml -n secnotes
+kubectl apply -f k8s/secret.yaml -n secnotes
+kubectl apply -f k8s/deployment.yaml -n secnotes
+kubectl apply -f k8s/service.yaml -n secnotes
+
+# Vérification
+kubectl get pods -n secnotes
+kubectl get svc -n secnotes
+</pre>
+
+<h2>12.5 Accès à l'application déployée</h2>
+<p>Pour AWS, le Service de type <code>NodePort</code> ne suffit pas directement. Vous pouvez changer le type en <code>LoadBalancer</code> pour obtenir une URL publique :</p>
+<pre>
+# Modifier le service pour utiliser un LoadBalancer AWS
+kubectl patch svc secnotes-service -n secnotes -p '{"spec": {"type": "LoadBalancer"}}'
+
+# Obtenir l'URL du LoadBalancer
+kubectl get svc secnotes-service -n secnotes
+# La colonne EXTERNAL-IP affichera l'URL du load balancer AWS
+# Exemple : a1b2c3d4e5-1234567890.eu-west-1.elb.amazonaws.com
+</pre>
+
+<h2>12.6 Points de contrôle pédagogiques</h2>
+<p>Avant de considérer le déploiement AWS comme réussi, vérifiez :</p>
+<table>
+  <thead><tr><th>✓</th><th>Vérification</th><th>Commande</th></tr></thead>
+  <tbody>
+    <tr><td>☐</td><td>Tous les pods sont en « Running »</td><td><code>kubectl get pods -n secnotes</code></td></tr>
+    <tr><td>☐</td><td>L'application répond sur le LoadBalancer</td><td><code>curl http://EXTERNAL-IP:3000/api/notes</code></td></tr>
+    <tr><td>☐</td><td>MongoDB est connecté</td><td>Vérifiez les logs : <code>kubectl logs deployment/secnotes-app -n secnotes</code></td></tr>
+    <tr><td>☐</td><td>Pas de <code>CrashLoopBackOff</code></td><td><code>kubectl get pods -n secnotes -w</code></td></tr>
+    <tr><td>☐</td><td>Les nœuds EC2 sont visibles</td><td><code>kubectl get nodes</code></td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-danger">
+  <div class="icon">💰</div>
+  <div>
+    <strong>N'oubliez pas de nettoyer !</strong>
+    <p>Après le TP, détruisez <strong>toutes</strong> les ressources :</p>
+    <pre>
+# 1. Supprimer les ressources Kubernetes
+kubectl delete namespace secnotes
+
+# 2. Détruire l'infrastructure Terraform
+cd terraform/
+terraform destroy -auto-approve
+
+# 3. Supprimer le dépôt ECR si créé
+aws ecr delete-repository --repository-name secnotes-app --force --region eu-west-1
+    </pre>
+  </div>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 13 — ANALYSE SÉCURITÉ ET REMÉDIATION                  -->
+<!-- ============================================================ -->
+<hr class="section-sep">
+<section id="sec13">
+<h1>13. Analyse sécurité et remédiation</h1>
+
+<h2>13.1 Ce que le pipeline permet d'identifier</h2>
+<p>Après une exécution complète du pipeline, voici ce que les différents outils et étapes nous apprennent :</p>
+
+<table>
+  <thead><tr><th>Étape du pipeline</th><th>Ce qu'elle vérifie</th><th>Exemples de détection dans SecNotes</th></tr></thead>
+  <tbody>
+    <tr><td>Tests Jest</td><td>Comportement fonctionnel</td><td>Endpoints qui retournent les bons statuts HTTP, validation des données</td></tr>
+    <tr><td>SonarQube SAST</td><td>Qualité et sécurité du code</td><td>Secrets en dur, code smells, certaines vulnérabilités</td></tr>
+    <tr><td><code>npm audit</code></td><td>Dépendances vulnérables</td><td>CVE connues dans les packages npm utilisés</td></tr>
+    <tr><td>Docker build</td><td>Cohérence de l'image</td><td>Erreurs de build (fichiers manquants, mauvais Dockerfile)</td></tr>
+    <tr><td>Déploiement K8s</td><td>Configuration opérationnelle</td><td>Pods qui ne démarrent pas, problèmes de réseau</td></tr>
+  </tbody>
+</table>
+
+<h2>13.2 Exemples d'alertes SonarQube attendues</h2>
+<p>Pour l'application SecNotes, SonarQube devrait remonter les alertes suivantes :</p>
+
+<table>
+  <thead><tr><th>Type</th><th>Sévérité</th><th>Message attendu</th><th>Fichier</th></tr></thead>
+  <tbody>
+    <tr><td>Security Hotspot</td><td>🔴 High</td><td>Make sure this hardcoded secret is not used in production</td><td><code>config/db.js</code></td></tr>
+    <tr><td>Security Hotspot</td><td>🔴 High</td><td>Make sure that using a hardcoded JWT secret is safe here</td><td><code>middleware/auth.js</code></td></tr>
+    <tr><td>Security Hotspot</td><td>🟠 Medium</td><td>Make sure this permissive CORS policy is safe here</td><td><code>app.js</code></td></tr>
+    <tr><td>Bug</td><td>🟡 Minor</td><td>Use console.error for error logging</td><td>Divers fichiers</td></tr>
+    <tr><td>Code Smell</td><td>🟡 Minor</td><td>Refactor this function to reduce complexity</td><td><code>noteController.js</code></td></tr>
+  </tbody>
+</table>
+
+<h2>13.3 Remédiations recommandées</h2>
+
+<h3>V1 — NoSQL Injection → Validation et sanitization</h3>
+<pre>
+// AVANT (vulnérable)
+const user = await User.findOne({ username: req.body.username });
+
+// APRÈS (sécurisé) — Utiliser mongo-sanitize
+const sanitize = require('mongo-sanitize');
+const user = await User.findOne({ username: sanitize(req.body.username) });
+</pre>
+
+<h3>V2 — Secrets en dur → Variables d'environnement</h3>
+<pre>
+// AVANT (vulnérable)
+const JWT_SECRET = 'ma-cle-secrete-en-dur';
+
+// APRÈS (sécurisé) — Lire depuis l'environnement
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) throw new Error('JWT_SECRET environment variable is required');
+</pre>
+
+<h3>V6 — Hashage faible → bcrypt</h3>
+<pre>
+// AVANT (vulnérable)
+const hashedPassword = md5(password);
+
+// APRÈS (sécurisé)
+const bcrypt = require('bcrypt');
+const hashedPassword = await bcrypt.hash(password, 12);
+</pre>
+
+<h3>V7 — Dockerfile non sécurisé → Multi-stage + utilisateur non-root</h3>
+<pre>
+# AVANT (vulnérable)
+FROM node:18
+COPY . .
+RUN npm install
+CMD ["node", "src/app.js"]
+
+# APRÈS (sécurisé) — Multi-stage, non-root, .dockerignore
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+
+FROM node:18-alpine
+RUN addgroup -g 1001 appgroup && adduser -u 1001 -G appgroup -D appuser
+WORKDIR /app
+COPY --from=builder /app/node_modules ./node_modules
+COPY src/ ./src/
+USER appuser
+EXPOSE 3000
+CMD ["node", "src/app.js"]
+</pre>
+
+<h2>13.4 Limites de l'approche DevSecOps</h2>
+
+<div class="callout callout-warning">
+  <div class="icon">⚠️</div>
+  <div>
+    <strong>Un pipeline DevSecOps ne remplace pas tout</strong>
+    <ul>
+      <li><strong>Faux positifs :</strong> SonarQube peut signaler du code qui n'est pas réellement vulnérable en contexte. Il faut de l'expertise humaine pour trier.</li>
+      <li><strong>Faux négatifs :</strong> Des vulnérabilités logiques (IDOR, business logic flaws) échappent à toute analyse automatisée.</li>
+      <li><strong>Configuration :</strong> La sécurité de l'infrastructure (Security Groups, IAM, réseau) doit être auditée séparément.</li>
+      <li><strong>Runtime :</strong> Les vulnérabilités exploitables uniquement en runtime nécessitent du DAST ou du pentesting.</li>
+      <li><strong>Supply chain :</strong> La sécurité des dépendances nécessite des outils SCA dédiés (<code>npm audit</code>, Snyk, Dependabot).</li>
+    </ul>
+  </div>
+</div>
+
+<div class="recap">
+  <h4>📋 Récapitulatif — Section 13</h4>
+  <ul>
+    <li>Le pipeline détecte certaines vulnérabilités mais <strong>pas toutes</strong></li>
+    <li>Les remédiations suivent les bonnes pratiques : sanitization, variables d'environnement, bcrypt, Docker multi-stage</li>
+    <li>Un pipeline DevSecOps est <strong>nécessaire mais pas suffisant</strong></li>
+    <li>Il doit être complété par des audits manuels, du DAST et de la revue de code</li>
+  </ul>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 14 — TP GUIDÉ                                         -->
+<!-- ============================================================ -->
+<hr class="section-sep page-break">
+<section id="sec14">
+<h1>14. Travaux Pratiques guidés</h1>
+
+<div class="callout callout-practice">
+  <div class="icon">🎓</div>
+  <div>
+    <strong>Organisation du TP</strong>
+    <p>Ce TP est divisé en <strong>6 missions</strong> progressives. Chaque mission a des objectifs précis, des commandes à exécuter, des résultats attendus et des questions d'analyse. Avancez <strong>dans l'ordre</strong> : chaque mission dépend de la précédente.</p>
+  </div>
+</div>
+
+<!-- TP MISSION 1 -->
+<h2>🎯 Mission 1 — Préparation et découverte de l'application (2h)</h2>
+<h3>Objectif</h3>
+<p>Installer l'environnement, lancer l'application en local et comprendre son fonctionnement.</p>
+
+<h3>Étapes</h3>
+<div class="step">
+  <strong>Vérifier l'environnement</strong>
+  <p>Exécutez toutes les commandes de vérification de la section 6.3. Chaque outil doit retourner une version valide.</p>
+  <pre>node --version && npm --version && docker --version && git --version && kubectl version --client && terraform --version</pre>
+</div>
+<div class="step">
+  <strong>Décompresser l'application</strong>
+  <p>Décompressez <code>secnotes-vuln-app.zip</code> et explorez la structure des dossiers.</p>
+  <pre>unzip secnotes-vuln-app.zip
+cd secnotes-vuln-app
+ls -la</pre>
+</div>
+<div class="step">
+  <strong>Installer les dépendances et lancer</strong>
+  <pre>npm install
+# Lancer MongoDB si pas déjà fait
+docker run -d --name mongodb -p 27017:27017 mongo:7
+# Lancer l'application
+node src/app.js</pre>
+  <p><strong>Résultat attendu :</strong> « Server running on port 3000 » dans le terminal.</p>
+</div>
+<div class="step">
+  <strong>Tester les endpoints</strong>
+  <p>Avec Postman ou <code>curl</code>, testez :</p>
+  <pre>
+# Créer un utilisateur
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"username":"testuser","email":"test@test.com","password":"pass123"}'
+
+# Se connecter
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"testuser","password":"pass123"}'
+
+# Créer une note (utiliser le token retourné)
+curl -X POST http://localhost:3000/api/notes \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer VOTRE_TOKEN" \
+  -d '{"title":"Ma première note","content":"Contenu de test"}'</pre>
+</div>
+
+<h3>❓ Questions d'analyse</h3>
+<ol>
+  <li>Regardez le fichier <code>config/db.js</code>. Quel problème de sécurité identifiez-vous immédiatement ?</li>
+  <li>Essayez d'envoyer un objet JSON comme username lors du login : <code>{"username": {"$gt": ""}, "password": {"$gt": ""}}</code>. Que se passe-t-il ? Pourquoi ?</li>
+  <li>Créez une note avec un autre utilisateur. Essayez d'accéder à cette note avec le premier utilisateur. Est-ce possible ? Pourquoi ?</li>
+</ol>
+
+<h3>✅ Critères de réussite</h3>
+<ul>
+  <li>☐ L'application démarre sans erreur</li>
+  <li>☐ Les endpoints de création et consultation fonctionnent</li>
+  <li>☐ Vous avez identifié au moins 3 vulnérabilités en lisant le code</li>
+</ul>
+
+<!-- TP MISSION 2 -->
+<h2>🎯 Mission 2 — GitLab Runner et premier pipeline (2h)</h2>
+<h3>Objectif</h3>
+<p>Pousser le code sur GitLab, installer le Runner et vérifier qu'un pipeline simple fonctionne.</p>
+
+<h3>Étapes</h3>
+<div class="step">
+  <strong>Initialiser le dépôt Git et pousser sur GitLab</strong>
+  <pre>cd secnotes-vuln-app
+git init
+git remote add origin https://gitlab.com/VOTRE-USERNAME/secnotes-devsecops.git
+git add .
+git commit -m "Initial commit - SecNotes vulnerable app"
+git push -u origin main</pre>
+</div>
+<div class="step">
+  <strong>Installer et enregistrer le GitLab Runner</strong>
+  <p>Suivez les étapes de la section 7.3 et 7.4 du cours.</p>
+</div>
+<div class="step">
+  <strong>Créer un pipeline minimal</strong>
+  <p>Créez un fichier <code>.gitlab-ci.yml</code> minimal pour tester :</p>
+  <pre>stages:
+  - test
+
+hello_world:
+  stage: test
+  tags:
+    - local
+  script:
+    - echo "🎉 Le Runner fonctionne !"
+    - node --version
+    - docker --version</pre>
+  <pre>git add .gitlab-ci.yml
+git commit -m "Add minimal CI pipeline"
+git push</pre>
+</div>
+<div class="step">
+  <strong>Vérifier l'exécution</strong>
+  <p>Allez dans <strong>CI/CD → Pipelines</strong> dans GitLab. Le pipeline doit être vert.</p>
+</div>
+
+<h3>❓ Questions d'analyse</h3>
+<ol>
+  <li>Où s'est réellement exécuté le job <code>hello_world</code> ? Sur les serveurs de GitLab ou sur votre PC ?</li>
+  <li>Que se passerait-il si vous arrêtiez le service GitLab Runner sur votre PC et poussiez du code ?</li>
+  <li>Pourquoi le tag <code>local</code> est-il important dans la configuration ?</li>
+</ol>
+
+<!-- TP MISSION 3 -->
+<h2>🎯 Mission 3 — SonarQube et analyse SAST (2h)</h2>
+<h3>Objectif</h3>
+<p>Installer SonarQube, lancer une analyse et interpréter les résultats.</p>
+
+<h3>Étapes</h3>
+<div class="step">
+  <strong>Lancer SonarQube en Docker</strong>
+  <pre>docker run -d --name sonarqube -p 9000:9000 -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true sonarqube:lts-community</pre>
+  <p>Attendez 2 minutes puis accédez à <a href="http://localhost:9000">http://localhost:9000</a>.</p>
+</div>
+<div class="step">
+  <strong>Configurer le projet et générer un token</strong>
+  <p>Suivez les étapes de la section 8.3.</p>
+</div>
+<div class="step">
+  <strong>Lancer l'analyse manuellement</strong>
+  <pre>npx sonarqube-scanner -Dsonar.host.url=http://localhost:9000 -Dsonar.token=VOTRE_TOKEN</pre>
+</div>
+<div class="step">
+  <strong>Analyser les résultats</strong>
+  <p>Dans l'interface SonarQube, examinez :</p>
+  <ul>
+    <li>L'onglet <strong>Security Hotspots</strong></li>
+    <li>L'onglet <strong>Issues</strong></li>
+    <li>Le <strong>Quality Gate</strong> (Pass ou Fail ?)</li>
+  </ul>
+</div>
+
+<h3>❓ Questions d'analyse</h3>
+<ol>
+  <li>Combien de Security Hotspots SonarQube a-t-il identifiés ? Correspondent-ils aux vulnérabilités listées en section 5.5 ?</li>
+  <li>La vulnérabilité IDOR (V4) apparaît-elle dans les résultats ? Pourquoi ?</li>
+  <li>Le Quality Gate est-il passé ? Devrait-il l'être pour cette application ?</li>
+</ol>
+
+<!-- TP MISSION 4 -->
+<h2>🎯 Mission 4 — Pipeline complet avec Docker et K8s local (3h)</h2>
+<h3>Objectif</h3>
+<p>Mettre en place le pipeline complet de la section 9 et déployer sur Kubernetes local.</p>
+
+<h3>Étapes</h3>
+<div class="step">
+  <strong>Configurer les variables CI/CD dans GitLab</strong>
+  <p>Ajoutez <code>SONAR_HOST_URL</code> et <code>SONAR_TOKEN</code> dans Settings → CI/CD → Variables.</p>
+</div>
+<div class="step">
+  <strong>Remplacer le pipeline minimal par le pipeline complet</strong>
+  <p>Copiez le pipeline de la section 9.3 dans votre <code>.gitlab-ci.yml</code>.</p>
+</div>
+<div class="step">
+  <strong>Pousser et observer</strong>
+  <pre>git add .
+git commit -m "Add complete DevSecOps pipeline"
+git push</pre>
+  <p>Observez chaque stage dans l'interface GitLab CI/CD.</p>
+</div>
+<div class="step">
+  <strong>Vérifier le déploiement Kubernetes</strong>
+  <pre>kubectl get all -n secnotes
+curl http://localhost:30000/api/notes</pre>
+</div>
+
+<h3>✅ Critères de réussite</h3>
+<ul>
+  <li>☐ Les stages <code>prepare</code>, <code>test</code>, <code>sast</code>, <code>build</code>, <code>deploy_local</code> sont verts</li>
+  <li>☐ L'application est accessible sur <code>http://localhost:30000</code></li>
+  <li>☐ Les résultats SonarQube sont visibles sur <code>http://localhost:9000</code></li>
+</ul>
+
+<!-- TP MISSION 5 -->
+<h2>🎯 Mission 5 — Déploiement AWS avec Terraform (3h)</h2>
+<h3>Objectif</h3>
+<p>Provisionner l'infrastructure AWS et déployer l'application sur un cluster EKS.</p>
+
+<div class="callout callout-warning">
+  <div class="icon">💰</div>
+  <div>
+    <strong>Coûts AWS</strong>
+    <p>Cette mission génère des coûts AWS. Travaillez rapidement et <strong>détruisez tout à la fin</strong> avec <code>terraform destroy</code>.</p>
+  </div>
+</div>
+
+<h3>Étapes résumées</h3>
+<ol>
+  <li>Configurer les credentials AWS (<code>aws configure</code>)</li>
+  <li>Exécuter <code>terraform init</code>, <code>terraform plan</code>, <code>terraform apply</code></li>
+  <li>Attendre la création du cluster (~15 minutes)</li>
+  <li>Configurer kubectl : <code>aws eks update-kubeconfig --name secnotes-cluster --region eu-west-1</code></li>
+  <li>Pousser l'image Docker vers ECR</li>
+  <li>Déployer les manifests Kubernetes</li>
+  <li>Tester l'accès via le LoadBalancer</li>
+  <li><strong>DÉTRUIRE L'INFRASTRUCTURE : <code>terraform destroy</code></strong></li>
+</ol>
+
+<!-- TP MISSION 6 -->
+<h2>🎯 Mission 6 — Remédiation et amélioration (2h)</h2>
+<h3>Objectif</h3>
+<p>Corriger au moins 3 vulnérabilités et observer l'impact dans SonarQube.</p>
+
+<h3>Tâches</h3>
+<ol>
+  <li>Corriger V2 (secrets en dur) en utilisant des variables d'environnement</li>
+  <li>Corriger V6 (hashage md5) en passant à bcrypt</li>
+  <li>Corriger V7 (Dockerfile) avec un build multi-stage et un utilisateur non-root</li>
+  <li>Pousser les corrections et relancer le pipeline</li>
+  <li>Comparer les résultats SonarQube avant/après</li>
+</ol>
+
+<h3>❓ Questions finales</h3>
+<ol>
+  <li>Combien de Security Hotspots ont disparu après vos corrections ?</li>
+  <li>Quelles vulnérabilités restent indétectables par SonarQube même après correction ?</li>
+  <li>Quels outils supplémentaires ajouteriez-vous au pipeline pour améliorer la couverture de sécurité ?</li>
+</ol>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 15 — SYNTHÈSE                                         -->
+<!-- ============================================================ -->
+<hr class="section-sep page-break">
+<section id="sec15">
+<h1>15. Synthèse</h1>
+
+<h2>15.1 Bilan des acquis</h2>
+<p>À l'issue de ce module, vous avez acquis les compétences suivantes :</p>
+
+<table>
+  <thead><tr><th>Domaine</th><th>Compétence acquise</th></tr></thead>
+  <tbody>
+    <tr><td>Sécurité applicative</td><td>Identifier et comprendre les vulnérabilités courantes (OWASP Top 10) dans une application Node.js + MongoDB</td></tr>
+    <tr><td>CI/CD</td><td>Concevoir un pipeline GitLab CI/CD multi-stages complet avec un Runner local</td></tr>
+    <tr><td>SAST</td><td>Configurer et interpréter SonarQube pour l'analyse statique de sécurité</td></tr>
+    <tr><td>Conteneurisation</td><td>Construire des images Docker sécurisées et déployer sur Kubernetes</td></tr>
+    <tr><td>IaC</td><td>Provisionner une infrastructure AWS avec Terraform</td></tr>
+    <tr><td>DevSecOps</td><td>Comprendre les interactions entre tous les composants et les limites de l'automatisation</td></tr>
+  </tbody>
+</table>
+
+<h2>15.2 Difficultés prévisibles</h2>
+<ul>
+  <li><strong>Ressources machine :</strong> Faire tourner Docker + SonarQube + Kubernetes simultanément demande beaucoup de RAM. Fermez les applications non essentielles.</li>
+  <li><strong>Réseau et proxy :</strong> Si vous êtes derrière un proxy d'entreprise ou universitaire, GitLab Runner et Docker peuvent avoir du mal à se connecter. Configurez les variables <code>HTTP_PROXY</code> / <code>HTTPS_PROXY</code>.</li>
+  <li><strong>Permissions :</strong> Sur Linux, l'utilisateur <code>gitlab-runner</code> n'a souvent pas accès à Docker. N'oubliez pas <code>usermod -aG docker gitlab-runner</code>.</li>
+  <li><strong>Temps de build :</strong> Le premier <code>npm ci</code> et le premier <code>docker build</code> sont lents (téléchargement). Les builds suivants sont plus rapides grâce au cache.</li>
+</ul>
+
+<h2>15.3 Prolongements possibles</h2>
+<p>Ce module couvre le cœur du DevSecOps, mais de nombreuses extensions sont possibles :</p>
+
+<div class="arch-grid">
+  <div class="arch-card">
+    <h4>DAST</h4>
+    <p>Ajouter OWASP ZAP ou Nuclei au pipeline pour tester l'application en runtime.</p>
+  </div>
+  <div class="arch-card green">
+    <h4>Secrets Scanning</h4>
+    <p>Intégrer GitLeaks ou TruffleHog pour détecter les secrets commitées dans l'historique Git.</p>
+  </div>
+  <div class="arch-card orange">
+    <h4>Dependency Scanning (SCA)</h4>
+    <p>Ajouter Snyk ou <code>npm audit</code> pour détecter les CVE dans les dépendances.</p>
+  </div>
+  <div class="arch-card purple">
+    <h4>Container Scanning</h4>
+    <p>Scanner les images Docker avec Trivy ou Grype pour détecter les vulnérabilités OS.</p>
+  </div>
+  <div class="arch-card red">
+    <h4>Policy as Code</h4>
+    <p>Utiliser OPA/Gatekeeper pour définir des politiques de sécurité Kubernetes.</p>
+  </div>
+  <div class="arch-card">
+    <h4>Monitoring sécurité</h4>
+    <p>Intégrer Falco ou Prometheus/Grafana pour la surveillance runtime.</p>
+  </div>
+</div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 16 — ANNEXES                                          -->
+<!-- ============================================================ -->
+<hr class="section-sep page-break">
+<section id="sec16">
+<h1>16. Annexes</h1>
+
+<h2>Annexe A — Glossaire</h2>
+<table>
+  <thead><tr><th>Terme</th><th>Définition</th></tr></thead>
+  <tbody>
+    <tr><td><strong>CI/CD</strong></td><td>Continuous Integration / Continuous Delivery — Automatisation du build, test et déploiement</td></tr>
+    <tr><td><strong>SAST</strong></td><td>Static Application Security Testing — Analyse de sécurité du code source sans exécution</td></tr>
+    <tr><td><strong>DAST</strong></td><td>Dynamic Application Security Testing — Test de sécurité sur l'application en cours d'exécution</td></tr>
+    <tr><td><strong>SCA</strong></td><td>Software Composition Analysis — Analyse des dépendances et bibliothèques tierces</td></tr>
+    <tr><td><strong>IaC</strong></td><td>Infrastructure as Code — Description de l'infrastructure sous forme de fichiers versionnés</td></tr>
+    <tr><td><strong>IDOR</strong></td><td>Insecure Direct Object Reference — Accès non autorisé à des ressources via des identifiants prévisibles</td></tr>
+    <tr><td><strong>NoSQL Injection</strong></td><td>Injection de requêtes malveillantes dans une base NoSQL (ex: MongoDB)</td></tr>
+    <tr><td><strong>EKS</strong></td><td>Elastic Kubernetes Service — Service Kubernetes managé d'AWS</td></tr>
+    <tr><td><strong>ECR</strong></td><td>Elastic Container Registry — Registre d'images Docker managé d'AWS</td></tr>
+    <tr><td><strong>VPC</strong></td><td>Virtual Private Cloud — Réseau virtuel isolé dans le cloud AWS</td></tr>
+    <tr><td><strong>Quality Gate</strong></td><td>Seuil de qualité dans SonarQube déterminant si le code est acceptable</td></tr>
+    <tr><td><strong>Artifact</strong></td><td>Fichier produit par un job CI/CD et conservé pour les jobs suivants ou le téléchargement</td></tr>
+    <tr><td><strong>Runner</strong></td><td>Agent qui exécute les jobs d'un pipeline GitLab CI/CD</td></tr>
+    <tr><td><strong>Executor</strong></td><td>Méthode d'exécution des jobs par le Runner (shell, docker, kubernetes…)</td></tr>
+    <tr><td><strong>Pod</strong></td><td>Plus petite unité déployable dans Kubernetes, contenant un ou plusieurs conteneurs</td></tr>
+    <tr><td><strong>Deployment</strong></td><td>Ressource Kubernetes gérant le cycle de vie d'un ensemble de Pods</td></tr>
+    <tr><td><strong>tfstate</strong></td><td>Fichier d'état Terraform qui fait le lien entre le code et les ressources réelles</td></tr>
+  </tbody>
+</table>
+
+<h2>Annexe B — Commandes utiles</h2>
+<table>
+  <thead><tr><th>Contexte</th><th>Commande</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>Git</td><td><code>git log --oneline -10</code></td><td>Voir les 10 derniers commits</td></tr>
+    <tr><td>Docker</td><td><code>docker ps -a</code></td><td>Voir tous les conteneurs (y compris arrêtés)</td></tr>
+    <tr><td>Docker</td><td><code>docker logs -f NOM</code></td><td>Suivre les logs d'un conteneur</td></tr>
+    <tr><td>Docker</td><td><code>docker system prune -a</code></td><td>Nettoyer tout (images, conteneurs, caches)</td></tr>
+    <tr><td>K8s</td><td><code>kubectl get all -n secnotes</code></td><td>Voir toutes les ressources du namespace</td></tr>
+    <tr><td>K8s</td><td><code>kubectl describe pod NOM -n secnotes</code></td><td>Détails et événements d'un pod</td></tr>
+    <tr><td>K8s</td><td><code>kubectl logs -f deploy/secnotes-app -n secnotes</code></td><td>Logs de l'application</td></tr>
+    <tr><td>K8s</td><td><code>kubectl exec -it POD -n secnotes -- /bin/sh</code></td><td>Shell interactif dans un pod</td></tr>
+    <tr><td>K8s</td><td><code>kubectl delete namespace secnotes</code></td><td>Supprimer tout le namespace</td></tr>
+    <tr><td>Terraform</td><td><code>terraform state list</code></td><td>Lister les ressources gérées</td></tr>
+    <tr><td>Terraform</td><td><code>terraform destroy -auto-approve</code></td><td>Détruire toutes les ressources</td></tr>
+    <tr><td>Runner</td><td><code>gitlab-runner list</code></td><td>Voir les runners enregistrés</td></tr>
+    <tr><td>Runner</td><td><code>gitlab-runner verify</code></td><td>Vérifier la connectivité avec GitLab</td></tr>
+    <tr><td>npm</td><td><code>npm audit</code></td><td>Scanner les vulnérabilités des dépendances</td></tr>
+  </tbody>
+</table>
+
+<h2>Annexe C — Erreurs fréquentes en environnement local</h2>
+
+<h3>GitLab Runner</h3>
+<table>
+  <thead><tr><th>Symptôme</th><th>Cause probable</th><th>Solution</th></tr></thead>
+  <tbody>
+    <tr><td>Pipeline « pending » indéfiniment</td><td>Runner offline ou tags non correspondants</td><td><code>gitlab-runner restart</code> + vérifier les tags</td></tr>
+    <tr><td><code>command not found: npm</code></td><td>PATH non accessible au Runner</td><td>Relancer le service Runner après installation de Node.js</td></tr>
+    <tr><td><code>permission denied</code> sur Docker</td><td>Utilisateur gitlab-runner pas dans le groupe docker</td><td><code>sudo usermod -aG docker gitlab-runner</code> + redémarrer</td></tr>
+  </tbody>
+</table>
+
+<h3>SonarQube</h3>
+<table>
+  <thead><tr><th>Symptôme</th><th>Cause probable</th><th>Solution</th></tr></thead>
+  <tbody>
+    <tr><td>Conteneur s'arrête immédiatement</td><td><code>vm.max_map_count</code> trop bas (Linux)</td><td><code>sudo sysctl -w vm.max_map_count=524288</code></td></tr>
+    <tr><td>Analyse échoue : « Not authorized »</td><td>Token invalide ou expiré</td><td>Générer un nouveau token dans SonarQube</td></tr>
+    <tr><td>Résultats vides</td><td><code>sonar.sources</code> mal configuré</td><td>Vérifier le chemin dans <code>sonar-project.properties</code></td></tr>
+  </tbody>
+</table>
+
+<h3>Docker</h3>
+<table>
+  <thead><tr><th>Symptôme</th><th>Cause probable</th><th>Solution</th></tr></thead>
+  <tbody>
+    <tr><td><code>Cannot connect to the Docker daemon</code></td><td>Docker Desktop non démarré</td><td>Lancer Docker Desktop</td></tr>
+    <tr><td>Build très lent</td><td>Pas de <code>.dockerignore</code></td><td>Ajouter <code>node_modules</code>, <code>.git</code>, <code>coverage</code> au <code>.dockerignore</code></td></tr>
+    <tr><td><code>no space left on device</code></td><td>Disque plein (images Docker accumulées)</td><td><code>docker system prune -a</code></td></tr>
+  </tbody>
+</table>
+
+<h3>MongoDB</h3>
+<table>
+  <thead><tr><th>Symptôme</th><th>Cause probable</th><th>Solution</th></tr></thead>
+  <tbody>
+    <tr><td><code>MongoNetworkError</code></td><td>MongoDB pas démarré ou mauvais port</td><td><code>docker ps | grep mongo</code> — relancer si nécessaire</td></tr>
+    <tr><td><code>Authentication failed</code></td><td>Credentials incorrects</td><td>Vérifier les variables d'environnement / secrets K8s</td></tr>
+  </tbody>
+</table>
+
+<h3>Kubernetes</h3>
+<table>
+  <thead><tr><th>Symptôme</th><th>Cause probable</th><th>Solution</th></tr></thead>
+  <tbody>
+    <tr><td><code>ImagePullBackOff</code></td><td>Image locale non trouvée</td><td>Ajouter <code>imagePullPolicy: Never</code></td></tr>
+    <tr><td><code>CrashLoopBackOff</code></td><td>Application plante au démarrage</td><td><code>kubectl logs</code> pour voir l'erreur</td></tr>
+    <tr><td><code>connection refused</code> sur NodePort</td><td>Service mal configuré ou pod pas ready</td><td>Vérifier <code>kubectl get endpoints -n secnotes</code></td></tr>
+  </tbody>
+</table>
+
+<h3>Terraform</h3>
+<table>
+  <thead><tr><th>Symptôme</th><th>Cause probable</th><th>Solution</th></tr></thead>
+  <tbody>
+    <tr><td><code>No valid credential sources</code></td><td>AWS CLI pas configuré</td><td><code>aws configure</code></td></tr>
+    <tr><td><code>Error acquiring the state lock</code></td><td>Exécution Terraform précédente interrompue</td><td><code>terraform force-unlock LOCK_ID</code></td></tr>
+    <tr><td>EKS met 15+ min à se créer</td><td>Normal !</td><td>C'est le temps standard de provisionnement EKS</td></tr>
+  </tbody>
+</table>
+
+<h2>Annexe D — Checklist finale du projet</h2>
+<table>
+  <thead><tr><th>✓</th><th>Étape</th><th>Vérification</th></tr></thead>
+  <tbody>
+    <tr><td>☐</td><td>Environnement installé</td><td>Tous les outils retournent une version valide</td></tr>
+    <tr><td>☐</td><td>Application testée en local</td><td>Les endpoints répondent correctement</td></tr>
+    <tr><td>☐</td><td>GitLab Runner enregistré</td><td>Apparaît vert dans GitLab Settings</td></tr>
+    <tr><td>☐</td><td>SonarQube fonctionnel</td><td>Interface accessible sur :9000, résultats d'analyse visibles</td></tr>
+    <tr><td>☐</td><td>Pipeline complet exécuté</td><td>Stages prepare → test → sast → build → deploy_local verts</td></tr>
+    <tr><td>☐</td><td>Application sur K8s local</td><td>Accessible sur http://localhost:30000</td></tr>
+    <tr><td>☐</td><td>Infrastructure AWS provisionnée</td><td><code>terraform apply</code> réussi, cluster EKS visible</td></tr>
+    <tr><td>☐</td><td>Application sur K8s AWS</td><td>Accessible via le LoadBalancer</td></tr>
+    <tr><td>☐</td><td>Remédiations appliquées</td><td>Au moins 3 vulnérabilités corrigées</td></tr>
+    <tr><td>☐</td><td>Infrastructure AWS détruite</td><td><code>terraform destroy</code> exécuté avec succès</td></tr>
+  </tbody>
+</table>
+
+<h2>Annexe E — Tableau comparatif des outils de sécurité</h2>
+<table>
+  <thead><tr><th>Outil</th><th>Type</th><th>Cible</th><th>Intégration CI/CD</th><th>Licence</th></tr></thead>
+  <tbody>
+    <tr><td>SonarQube</td><td>SAST</td><td>Code source</td><td>✅ Excellente</td><td>Community (gratuit) / Enterprise</td></tr>
+    <tr><td>OWASP ZAP</td><td>DAST</td><td>App en runtime</td><td>✅ Bonne</td><td>Open source</td></tr>
+    <tr><td>Trivy</td><td>Container Scan + SCA</td><td>Images Docker + deps</td><td>✅ Excellente</td><td>Open source</td></tr>
+    <tr><td>GitLeaks</td><td>Secrets Scan</td><td>Historique Git</td><td>✅ Bonne</td><td>Open source</td></tr>
+    <tr><td>Snyk</td><td>SCA + Container + IaC</td><td>Dépendances, images, Terraform</td><td>✅ Excellente</td><td>Freemium</td></tr>
+    <tr><td>Checkov</td><td>IaC Scan</td><td>Terraform, K8s, Docker</td><td>✅ Bonne</td><td>Open source</td></tr>
+    <tr><td>Falco</td><td>Runtime Security</td><td>Comportement runtime K8s</td><td>⚠️ Monitoring</td><td>Open source</td></tr>
+  </tbody>
+</table>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- FOOTER                                                        -->
+<!-- ============================================================ -->
+<hr class="section-sep">
+<footer style="text-align:center; padding: 2rem 0; color: #7c8a9a; font-size: .9rem;">
+  <p><strong>Support de cours — Projet DevSecOps Complet</strong></p>
+  <p>4ᵉ année Cycle Ingénieur — Spécialité Cybersécurité — 2025-2026</p>
+  <p style="margin-top:1rem; font-size:.82rem;">
+    Ce document est un support pédagogique. L'application vulnérable SecNotes est fournie séparément.<br>
+    Ne déployez <strong>jamais</strong> une application vulnérable en production ou sur un réseau non isolé.
+  </p>
+</footer>
+
+</div><!-- /container -->
+</body>
+</html>
