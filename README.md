@@ -1,7 +1,7 @@
 # 🔐 DevSecOps — Parcours Complet UEMF
 
 > **Auteure :** Asma Daoui — 4ème année Ingénierie Cybersécurité  
-> **Module :** DevSecOps | **Année :** 2024–2025  
+> **Module :** DevSecOps | **Année :** 2025–2026
 > **Université :** Euro-Méditerranéenne de Fès (UEMF) — EDIA  
 > **GitHub :** [@BeeHope](https://github.com/BeeHope)
 
