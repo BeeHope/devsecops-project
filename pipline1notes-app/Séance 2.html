@@ -1,0 +1,2147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Séance 1-2 :  Introduction au DevSecOps et CI/CD Sécurisé</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header . subtitle {
+            font-size:  1.3em;
+            opacity: 0.95;
+            margin-bottom: 10px;
+        }
+        
+        .header .duration {
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius:  25px;
+            margin-top: 15px;
+            font-size:  1.1em;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 2em;
+            color: #1e3c72;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom:  4px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .subsection {
+            margin:  30px 0;
+            padding:  25px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            border-left:  5px solid #667eea;
+        }
+        
+        .subsection h3 {
+            color: #2a5298;
+            font-size: 1.6em;
+            margin-bottom:  15px;
+        }
+        
+        .concept-box {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+        
+        .concept-box h4 {
+            color: #1e3c72;
+            font-size: 1.4em;
+            margin-bottom:  15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .important-box {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border-left: 5px solid #f39c12;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .important-box strong {
+            color: #e67e22;
+            font-size: 1.1em;
+        }
+        
+        .example-box {
+            background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+            border-left: 5px solid #17a2b8;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .example-box h4 {
+            color: #0c5460;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color:  #f8f8f2;
+            padding: 20px;
+            border-radius:  8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+            position: relative;
+        }
+        
+        .code-block pre {
+            margin: 0;
+            white-space: pre;
+        }
+        
+        .code-comment {
+            color: #75715e;
+        }
+        
+        .code-keyword {
+            color: #66d9ef;
+        }
+        
+        .code-string {
+            color: #e6db74;
+        }
+        
+        .code-function {
+            color: #a6e22e;
+        }
+        
+        .code-number {
+            color: #ae81ff;
+        }
+        
+        .diagram {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .flow-step {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 25px;
+            border-radius:  8px;
+            margin: 10px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+        
+        .arrow {
+            display: inline-block;
+            font-size: 2em;
+            color: #667eea;
+            margin:  0 10px;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse:  collapse;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 1.1em;
+        }
+        
+        .comparison-table td {
+            padding: 15px;
+            border-bottom:  1px solid #dee2e6;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .comparison-table tr:hover {
+            background: #e9ecef;
+        }
+        
+        .list-styled {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .list-styled li {
+            padding: 12px 15px;
+            margin: 10px 0;
+            background: white;
+            border-left: 4px solid #667eea;
+            border-radius:  5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .list-styled li:before {
+            content: "✓";
+            color: #667eea;
+            font-weight:  bold;
+            margin-right:  10px;
+            font-size: 1.2em;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            background: #667eea;
+            color:  white;
+            border-radius:  15px;
+            font-size:  0.85em;
+            margin: 3px;
+            font-weight: 500;
+        }
+        
+        .badge. security { background: linear-gradient(45deg, #e74c3c, #c0392b); }
+        .badge.devops { background: linear-gradient(45deg, #27ae60, #218c53); }
+        .badge.automation { background: linear-gradient(45deg, #f39c12, #e67e22); }
+        
+        .step-by-step {
+            counter-reset: step-counter;
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .step-by-step li {
+            counter-increment: step-counter;
+            padding: 20px;
+            margin: 15px 0;
+            background:  white;
+            border-radius: 8px;
+            border-left:  5px solid #667eea;
+            position: relative;
+            padding-left: 70px;
+        }
+        
+        .step-by-step li:before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color:  white;
+            width: 40px;
+            height: 40px;
+            border-radius:  50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .visual-diagram {
+            background: #f8f9fa;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .box-diagram {
+            display: inline-block;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px;
+            min-width: 150px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .box-diagram. highlight {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #764ba2;
+        }
+        
+        .file-structure {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius:  8px;
+            margin:  15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .file-structure . folder {
+            color: #66d9ef;
+            font-weight: bold;
+        }
+        
+        .file-structure .file {
+            color: #a6e22e;
+            margin-left: 20px;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            . container {
+                box-shadow: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            . header h1 {
+                font-size: 1.8em;
+            }
+            .section-title {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Séance 1-2 : Introduction au DevSecOps et CI/CD Sécurisé</h1>
+            <div class="subtitle">ENSA FES</div>
+            <div class="duration">Durée : 3 heures</div>
+            <div style="margin-top: 20px;">
+                <span class="badge devops">DevSecOps</span>
+                <span class="badge automation">CI/CD</span>
+                <span class="badge security">Security</span>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- PARTIE 1: INTRODUCTION AU DEVSECOPS -->
+            <div class="section">
+                <h2 class="section-title">PARTIE 1 :  Comprendre le DevSecOps</h2>
+                
+                <div class="important-box">
+                    <strong>Objectif de cette partie :</strong>
+                    <p>Comprendre ce qu'est le DevSecOps, pourquoi c'est important, et comment cela change la façon dont nous développons et sécurisons les applications.</p>
+                </div>
+
+                <!-- 1.1 Le monde AVANT DevSecOps -->
+                <div class="subsection">
+                    <h3>1.1 - Le monde AVANT DevSecOps</h3>
+                    
+                    <div class="concept-box">
+                        <h4>Comment ça fonctionnait avant ?</h4>
+                        <p>Imaginez une entreprise qui veut créer une application web.  Voici comment ça se passait traditionnellement :</p>
+                        
+                        <div class="visual-diagram">
+                            <div class="box-diagram">
+                                <strong>Développeurs</strong>
+                                <p style="font-size: 0.9em; margin-top: 10px;">Écrivent le code</p>
+                                <p style="font-size: 0.8em; color: #666;">Durée : 6 mois</p>
+                            </div>
+                            <div class="arrow">→</div>
+                            <div class="box-diagram">
+                                <strong>Équipe Ops</strong>
+                                <p style="font-size: 0.9em; margin-top: 10px;">Déploient l'application</p>
+                                <p style="font-size: 0.8em; color: #666;">Durée : 2 semaines</p>
+                            </div>
+                            <div class="arrow">→</div>
+                            <div class="box-diagram">
+                                <strong>Équipe Sécurité</strong>
+                                <p style="font-size: 0.9em; margin-top: 10px;">Testent la sécurité</p>
+                                <p style="font-size: 0.8em; color: #666;">Durée : 1 mois</p>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 20px; padding:  15px; background: #fff3cd; border-radius: 8px;">
+                            <strong>Les problèmes de cette approche :</strong>
+                            <ul style="margin-top: 10px; margin-left: 20px;">
+                                <li>Très lent :  7-8 mois pour mettre en production</li>
+                                <li>Bugs découverts tard :  Coûteux à corriger</li>
+                                <li>Sécurité en dernier :  Si on découvre une faille, il faut tout recommencer</li>
+                                <li>Mauvaise communication : Les équipes ne se parlent pas assez</li>
+                                <li>Coût élevé : Corriger un bug en production coûte 100x plus cher qu'en développement</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="example-box">
+                        <h4>Exemple concret d'un problème</h4>
+                        <p><strong>Scénario :</strong> Une entreprise développe un site e-commerce pendant 6 mois. </p>
+                        <p style="margin-top: 10px;">Les développeurs finissent le code et le donnent à l'équipe Ops. </p>
+                        <p>L'équipe Ops le déploie sur les serveurs. </p>
+                        <p>L'équipe Sécurité fait un audit et découvre une faille SQL Injection critique.</p>
+                        <p style="margin-top: 10px; padding:  15px; background: #f8d7da; border-radius: 5px;">
+                            <strong>Résultat :</strong> Il faut repasser par les développeurs, corriger le code, retester, redéployer... 
+                            Cela ajoute 2-3 mois de retard et des coûts importants ! 
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 1.2 Qu'est-ce que le DevSecOps ? -->
+                <div class="subsection">
+                    <h3>1.2 - Qu'est-ce que le DevSecOps ?</h3>
+                    
+                    <div class="concept-box">
+                        <h4>Définition simple</h4>
+                        <p style="font-size: 1.1em; line-height: 1.8;">
+                            <strong>DevSecOps</strong> est une façon de travailler qui combine :
+                        </p>
+                        <ul class="list-styled" style="margin-top: 15px;">
+                            <li><strong>Dev</strong> (Development) = Développement</li>
+                            <li><strong>Sec</strong> (Security) = Sécurité</li>
+                            <li><strong>Ops</strong> (Operations) = Opérations/Déploiement</li>
+                        </ul>
+                        
+                        <div style="margin-top: 25px; padding: 20px; background: #d1ecf1; border-radius: 8px; border-left: 5px solid #17a2b8;">
+                            <strong>L'idée principale :</strong>
+                            <p style="margin-top: 10px; font-size: 1.05em;">
+                                Au lieu de penser à la sécurité à la fin, on l'intègre dès le début et tout au long du développement ! 
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="concept-box">
+                        <h4>Le nouveau modèle DevSecOps</h4>
+                        <div class="visual-diagram">
+                            <div style="margin:  20px 0;">
+                                <div class="box-diagram highlight">
+                                    <strong>Collaboration Continue</strong>
+                                    <p style="font-size: 0.9em; margin-top: 10px;">Dev + Sec + Ops travaillent ENSEMBLE</p>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
+                                <div class="box-diagram">
+                                    <strong>Code</strong>
+                                    <p style="font-size: 0.8em; margin-top: 5px;">+Tests sécu</p>
+                                </div>
+                                <div class="arrow">→</div>
+                                <div class="box-diagram">
+                                    <strong>Test</strong>
+                                    <p style="font-size: 0.8em; margin-top: 5px;">+Scan vulnérabilités</p>
+                                </div>
+                                <div class="arrow">→</div>
+                                <div class="box-diagram">
+                                    <strong>Build</strong>
+                                    <p style="font-size: 0.8em; margin-top: 5px;">+Analyse dépendances</p>
+                                </div>
+                                <div class="arrow">→</div>
+                                <div class="box-diagram">
+                                    <strong>Deploy</strong>
+                                    <p style="font-size: 0.8em; margin-top: 5px;">+Monitoring sécu</p>
+                                </div>
+                            </div>
+                            <p style="margin-top: 20px; font-style: italic; color: #666;">
+                                Ce cycle se répète automatiquement plusieurs fois par jour !
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="important-box">
+                        <strong>Les 4 principes clés du DevSecOps :</strong>
+                        <ol style="margin-top: 15px; margin-left: 20px; line-height: 2;">
+                            <li><strong>Shift-Left Security</strong> : Penser à la sécurité dès le début</li>
+                            <li><strong>Automatisation</strong> : Les tests de sécurité se font automatiquement</li>
+                            <li><strong>Collaboration</strong> :  Tout le monde est responsable de la sécurité</li>
+                            <li><strong>Rapidité</strong> : Déployer vite, mais en toute sécurité</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- 1.3 Le concept de Shift-Left Security -->
+                <div class="subsection">
+                    <h3>1.3 - Le concept de "Shift-Left Security"</h3>
+                    
+                    <div class="concept-box">
+                        <h4>Qu'est-ce que "Shift-Left" ?</h4>
+                        <p style="font-size: 1.05em; margin-bottom: 15px;">
+                            <strong>"Shift-Left"</strong> signifie littéralement "déplacer vers la gauche".  Mais vers la gauche de quoi ?
+                        </p>
+                        
+                        <div class="visual-diagram">
+                            <h4 style="margin-bottom: 20px;">La timeline du développement</h4>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin:  20px 0;">
+                                <div style="text-align: left; flex: 1;">
+                                    <div style="font-size: 2em;">←</div>
+                                    <div style="margin-top: 10px;"><strong>GAUCHE</strong></div>
+                                    <div style="font-size: 0.9em; color: #666;">Début du projet</div>
+                                </div>
+                                <div style="flex: 3; background: linear-gradient(to right, #27ae60, #f39c12, #e74c3c); height: 10px; border-radius: 5px; margin:  0 20px;"></div>
+                                <div style="text-align: right; flex: 1;">
+                                    <div style="font-size: 2em;">→</div>
+                                    <div style="margin-top: 10px;"><strong>DROITE</strong></div>
+                                    <div style="font-size:  0.9em; color: #666;">Production</div>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 30px;">
+                                <div style="display: inline-block; background: #d4edda; padding: 15px; border-radius: 8px; margin: 10px;">
+                                    <strong>Shift-Left</strong><br>
+                                    <span style="font-size: 0.9em;">Sécurité dès le design</span>
+                                </div>
+                                <div style="display: inline-block; background:  #f8d7da; padding: 15px; border-radius: 8px; margin: 10px;">
+                                    <strong>Approche classique</strong><br>
+                                    <span style="font-size: 0.9em;">Sécurité à la fin</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 25px; padding: 20px; background: #d1f2eb; border-radius: 8px;">
+                            <strong>Pourquoi c'est important ? </strong>
+                            <table class="comparison-table" style="margin-top: 15px;">
+                                <tr>
+                                    <th>Moment de détection</th>
+                                    <th>Coût de correction</th>
+                                    <th>Temps de correction</th>
+                                </tr>
+                                <tr>
+                                    <td>Pendant le design</td>
+                                    <td style="color: #27ae60; font-weight: bold;">1x (Référence)</td>
+                                    <td style="color: #27ae60;">1 heure</td>
+                                </tr>
+                                <tr>
+                                    <td>Pendant le développement</td>
+                                    <td style="color: #f39c12; font-weight: bold;">5x plus cher</td>
+                                    <td style="color: #f39c12;">5 heures</td>
+                                </tr>
+                                <tr>
+                                    <td>Pendant les tests</td>
+                                    <td style="color: #e67e22; font-weight: bold;">10x plus cher</td>
+                                    <td style="color: #e67e22;">1-2 jours</td>
+                                </tr>
+                                <tr>
+                                    <td>En production</td>
+                                    <td style="color: #e74c3c; font-weight: bold;">100x plus cher !</td>
+                                    <td style="color: #e74c3c;">1-2 semaines</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PARTIE 2: QU'EST-CE QUE LE CI/CD AVEC UN EXEMPLE COMPLET -->
+            <div class="section">
+                <h2 class="section-title">PARTIE 2 :  Comprendre le CI/CD avec un exemple pratique complet</h2>
+                
+                <div class="important-box">
+                    <strong>Objectif de cette partie :</strong>
+                    <p>Créer une application simple de A à Z et mettre en place un pipeline CI/CD pour comprendre concrètement comment ça fonctionne.</p>
+                </div>
+
+                <!-- 2.1 Notre application exemple :  "Liste de Tâches" -->
+                <div class="subsection">
+                    <h3>2.1 - Notre application exemple : Application "Liste de Tâches"</h3>
+                    
+                    <div class="concept-box">
+                        <h4>Description de l'application</h4>
+                        <p>Nous allons créer une application web très simple qui permet de :</p>
+                        <ul style="margin-top: 10px; margin-left: 20px; line-height: 2;">
+                            <li>Ajouter une tâche</li>
+                            <li>Afficher la liste des tâches</li>
+                            <li>Supprimer une tâche</li>
+                        </ul>
+                        
+                        <p style="margin-top: 20px;"><strong>Technologies utilisées :</strong></p>
+                        <ul style="margin-top: 10px; margin-left: 20px;">
+                            <li><strong>Node.js</strong> :  Pour le backend (serveur)</li>
+                            <li><strong>Express</strong> : Framework web simple</li>
+                            <li><strong>HTML/CSS</strong> : Pour l'interface utilisateur</li>
+                            <li><strong>Jest</strong> : Pour les tests</li>
+                        </ul>
+                    </div>
+
+                    <div class="concept-box">
+                        <h4>Structure du projet</h4>
+                        <p>Voici comment notre projet sera organisé :</p>
+                        
+                        <div class="file-structure">
+<pre>
+todo-app/
+├── app.js              <span class="code-comment"># Le serveur Node.js</span>
+├── tasks.js            <span class="code-comment"># La logique métier (gestion des tâches)</span>
+├── tasks.test.js       <span class="code-comment"># Les tests</span>
+├── public/
+│   └── index.html      <span class="code-comment"># L'interface web</span>
+├── package.json        <span class="code-comment"># Configuration du projet</span>
+├── . gitlab-ci.yml      <span class="code-comment"># Configuration du pipeline CI/CD</span>
+└── Dockerfile          <span class="code-comment"># Pour créer l'image Docker</span>
+</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2.2 Création de l'application étape par étape -->
+                <div class="subsection">
+                    <h3>2.2 - Création de l'application étape par étape</h3>
+                    
+                    <div class="concept-box">
+                        <h4>Étape 1 : Initialisation du projet</h4>
+                        <p>Créer le dossier du projet et initialiser Node.js :</p>
+                        
+                        <div class="code-block">
+<pre><span class="code-comment"># Créer un nouveau dossier</span>
+mkdir todo-app
+cd todo-app
+
+<span class="code-comment"># Initialiser un projet Node.js</span>
+npm init -y
+
+<span class="code-comment"># Installer les dépendances nécessaires</span>
+npm install express
+npm install --save-dev jest supertest
+</pre>
+                        </div>
+                    </div>
+
+                    <div class="concept-box">
+                        <h4>Étape 2 :  Créer le fichier tasks.js (logique métier)</h4>
+                        <p>Ce fichier contient les fonctions pour gérer les tâches : </p>
+                        
+                        <div class="code-block">
+<pre><span class="code-comment">// Fichier: tasks.js
+// Ce fichier gère la logique de notre application</span>
+
+<span class="code-comment">// Un tableau pour stocker les tâches (en mémoire pour simplifier)</span>
+<span class="code-keyword">let</span> tasks = [];
+
+<span class="code-comment">// Fonction pour obtenir toutes les tâches</span>
+<span class="code-keyword">function</span> <span class="code-function">getAllTasks</span>() {
+    <span class="code-keyword">return</span> tasks;
+}
+
+<span class="code-comment">// Fonction pour ajouter une nouvelle tâche</span>
+<span class="code-keyword">function</span> <span class="code-function">addTask</span>(title) {
+    <span class="code-comment">// Validation:  le titre ne doit pas être vide</span>
+    <span class="code-keyword">if</span> (! title || title.trim() === <span class="code-string">''</span>) {
+        <span class="code-keyword">throw new</span> Error(<span class="code-string">'Le titre de la tâche ne peut pas être vide'</span>);
+    }
+    
+    <span class="code-comment">// Créer un nouvel objet tâche</span>
+    <span class="code-keyword">const</span> newTask = {
+        id: Date.now(), <span class="code-comment">// ID unique basé sur le timestamp</span>
+        title:  title.trim(),
+        createdAt: <span class="code-keyword">new</span> Date()
+    };
+    
+    <span class="code-comment">// Ajouter la tâche au tableau</span>
+    tasks.push(newTask);
+    
+    <span class="code-keyword">return</span> newTask;
+}
+
+<span class="code-comment">// Fonction pour supprimer une tâche</span>
+<span class="code-keyword">function</span> <span class="code-function">deleteTask</span>(id) {
+    <span class="code-comment">// Trouver l'index de la tâche</span>
+    <span class="code-keyword">const</span> index = tasks.findIndex(task => task.id === parseInt(id));
+    
+    <span class="code-comment">// Si la tâche n'existe pas</span>
+    <span class="code-keyword">if</span> (index === -<span class="code-number">1</span>) {
+        <span class="code-keyword">throw new</span> Error(<span class="code-string">'Tâche non trouvée'</span>);
+    }
+    
+    <span class="code-comment">// Supprimer la tâche</span>
+    tasks.splice(index, <span class="code-number">1</span>);
+    
+    <span class="code-keyword">return true</span>;
+}
+
+<span class="code-comment">// Fonction pour réinitialiser les tâches (utile pour les tests)</span>
+<span class="code-keyword">function</span> <span class="code-function">resetTasks</span>() {
+    tasks = [];
+}
+
+<span class="code-comment">// Exporter les fonctions pour les utiliser ailleurs</span>
+module.exports = {
+    getAllTasks,
+    addTask,
+    deleteTask,
+    resetTasks
+};
+</pre>
+                        </div>
+                    </div>
+
+                    <div class="concept-box">
+                        <h4>Étape 3 : Créer le serveur web (app.js)</h4>
+                        <p>Ce fichier crée le serveur web et définit les routes (URLs) de l'application :</p>
+                        
+                        <div class="code-block">
+<pre><span class="code-comment">// Fichier: app.js
+// Ce fichier crée le serveur web</span>
+
+<span class="code-keyword">const</span> express = require(<span class="code-string">'express'</span>);
+<span class="code-keyword">const</span> { getAllTasks, addTask, deleteTask } = require(<span class="code-string">'./tasks'</span>);
+
+<span class="code-comment">// Créer une application Express</span>
+<span class="code-keyword">const</span> app = express();
+<span class="code-keyword">const</span> PORT = process.env.PORT || <span class="code-number">3000</span>;
+
+<span class="code-comment">// Middleware pour parser le JSON</span>
+app.use(express.json());
+
+<span class="code-comment">// Servir les fichiers statiques (HTML, CSS)</span>
+app.use(express.static(<span class="code-string">'public'</span>));
+
+<span class="code-comment">// ROUTE 1: Obtenir toutes les tâches
+// GET /api/tasks</span>
+app.get(<span class="code-string">'/api/tasks'</span>, (req, res) => {
+    <span class="code-keyword">try</span> {
+        <span class="code-keyword">const</span> tasks = getAllTasks();
+        res.json(tasks);
+    } <span class="code-keyword">catch</span> (error) {
+        res.status(<span class="code-number">500</span>).json({ error: error.message });
+    }
+});
+
+<span class="code-comment">// ROUTE 2: Ajouter une nouvelle tâche
+// POST /api/tasks</span>
+app. post(<span class="code-string">'/api/tasks'</span>, (req, res) => {
+    <span class="code-keyword">try</span> {
+        <span class="code-keyword">const</span> { title } = req.body;
+        <span class="code-keyword">const</span> newTask = addTask(title);
+        res.status(<span class="code-number">201</span>).json(newTask);
+    } <span class="code-keyword">catch</span> (error) {
+        res.status(<span class="code-number">400</span>).json({ error: error.message });
+    }
+});
+
+<span class="code-comment">// ROUTE 3: Supprimer une tâche
+// DELETE /api/tasks/: id</span>
+app.delete(<span class="code-string">'/api/tasks/:id'</span>, (req, res) => {
+    <span class="code-keyword">try</span> {
+        deleteTask(req.params.id);
+        res.status(<span class="code-number">200</span>).json({ message: <span class="code-string">'Tâche supprimée'</span> });
+    } <span class="code-keyword">catch</span> (error) {
+        res.status(<span class="code-number">404</span>).json({ error: error.message });
+    }
+});
+
+<span class="code-comment">// Démarrer le serveur</span>
+<span class="code-keyword">if</span> (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(<span class="code-string">`Serveur démarré sur le port ${PORT}`</span>);
+    });
+}
+
+<span class="code-comment">// Exporter l'app pour les tests</span>
+module.exports = app;
+</pre>
+                        </div>
+                    </div>
+
+                    <div class="concept-box">
+                        <h4>Étape 4 : Créer l'interface web (public/index.html)</h4>
+                        <p>Une interface simple pour interagir avec l'application : </p>
+                        
+                        <div class="code-block">
+<pre><span class="code-comment">&lt;!-- Fichier: public/index. html --&gt;</span>
+&lt;! DOCTYPE html&gt;
+&lt;html lang="fr"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Liste de Tâches&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            font-family:  Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .add-task {
+            margin-bottom: 20px;
+        }
+        input {
+            padding: 10px;
+            width: 70%;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+        . task-item {
+            background:  #f4f4f4;
+            padding: 15px;
+            margin:  10px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .delete-btn {
+            background: #e74c3c;
+            color:  white;
+            border: none;
+            padding:  5px 15px;
+            border-radius:  3px;
+            cursor:  pointer;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Ma Liste de Tâches&lt;/h1&gt;
+    
+    &lt;div class="add-task"&gt;
+        &lt;input type="text" id="taskInput" placeholder="Nouvelle tâche..."&gt;
+        &lt;button onclick="addTask()"&gt;Ajouter&lt;/button&gt;
+    &lt;/div&gt;
+    
+    &lt;ul id="taskList" class="task-list"&gt;&lt;/ul&gt;
+
+    &lt;script&gt;
+        <span class="code-comment">// Charger les tâches au démarrage</span>
+        loadTasks();
+
+        <span class="code-comment">// Fonction pour charger et afficher les tâches</span>
+        async <span class="code-keyword">function</span> <span class="code-function">loadTasks</span>() {
+            <span class="code-keyword">const</span> response = await fetch(<span class="code-string">'/api/tasks'</span>);
+            <span class="code-keyword">const</span> tasks = await response.json();
+            
+            <span class="code-keyword">const</span> taskList = document.getElementById(<span class="code-string">'taskList'</span>);
+            taskList. innerHTML = <span class="code-string">''</span>;
+            
+            tasks.forEach(task => {
+                <span class="code-keyword">const</span> li = document.createElement(<span class="code-string">'li'</span>);
+                li.className = <span class="code-string">'task-item'</span>;
+                li.innerHTML = <span class="code-string">`
+                    &lt;span&gt;${task.title}&lt;/span&gt;
+                    &lt;button class="delete-btn" onclick="deleteTask(${task.id})"&gt;Supprimer&lt;/button&gt;
+                `</span>;
+                taskList.appendChild(li);
+            });
+        }
+
+        <span class="code-comment">// Fonction pour ajouter une tâche</span>
+        async <span class="code-keyword">function</span> <span class="code-function">addTask</span>() {
+            <span class="code-keyword">const</span> input = document.getElementById(<span class="code-string">'taskInput'</span>);
+            <span class="code-keyword">const</span> title = input.value. trim();
+            
+            <span class="code-keyword">if</span> (! title) {
+                alert(<span class="code-string">'Veuillez entrer une tâche'</span>);
+                <span class="code-keyword">return</span>;
+            }
+            
+            await fetch(<span class="code-string">'/api/tasks'</span>, {
+                method: <span class="code-string">'POST'</span>,
+                headers: { <span class="code-string">'Content-Type'</span>: <span class="code-string">'application/json'</span> },
+                body: JSON. stringify({ title })
+            });
+            
+            input.value = <span class="code-string">''</span>;
+            loadTasks();
+        }
+
+        <span class="code-comment">// Fonction pour supprimer une tâche</span>
+        async <span class="code-keyword">function</span> <span class="code-function">deleteTask</span>(id) {
+            await fetch(<span class="code-string">`/api/tasks/${id}`</span>, {
+                method: <span class="code-string">'DELETE'</span>
+            });
+            
+            loadTasks();
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+                        </div>
+                    </div>
+
+                    <div class="concept-box">
+                        <h4>Étape 5 : Créer les tests (tasks.test.js)</h4>
+                        <p>Les tests vérifient que notre code fonctionne correctement : </p>
+                        
+                        <div class="code-block">
+<pre><span class="code-comment">// Fichier: tasks.test.js
+// Tests automatiques pour notre application</span>
+
+<span class="code-keyword">const</span> { getAllTasks, addTask, deleteTask, resetTasks } = require(<span class="code-string">'./tasks'</span>);
+
+<span class="code-comment">// Avant chaque test, on réinitialise les tâches</span>
+beforeEach(() => {
+    resetTasks();
+});
+
+<span class="code-comment">// TEST 1: Vérifier qu'on peut ajouter une tâche</span>
+test(<span class="code-string">'Doit ajouter une nouvelle tâche'</span>, () => {
+    <span class="code-keyword">const</span> task = addTask(<span class="code-string">'Acheter du lait'</span>);
+    
+    expect(task).toHaveProperty(<span class="code-string">'id'</span>);
+    expect(task.title).toBe(<span class="code-string">'Acheter du lait'</span>);
+    expect(getAllTasks()).toHaveLength(<span class="code-number">1</span>);
+});
+
+<span class="code-comment">// TEST 2: Vérifier qu'on ne peut pas ajouter une tâche vide</span>
+test(<span class="code-string">'Ne doit pas ajouter une tâche vide'</span>, () => {
+    expect(() => addTask(<span class="code-string">''</span>)).toThrow();
+    expect(() => addTask(<span class="code-string">'   '</span>)).toThrow();
+    expect(getAllTasks()).toHaveLength(<span class="code-number">0</span>);
+});
+
+<span class="code-comment">// TEST 3: Vérifier qu'on peut supprimer une tâche</span>
+test(<span class="code-string">'Doit supprimer une tâche existante'</span>, () => {
+    <span class="code-keyword">const</span> task = addTask(<span class="code-string">'Faire les courses'</span>);
+    deleteTask(task.id);
+    
+    expect(getAllTasks()).toHaveLength(<span class="code-number">0</span>);
+});
+
+<span class="code-comment">// TEST 4: Vérifier qu'on ne peut pas supprimer une tâche inexistante</span>
+test(<span class="code-string">'Doit lever une erreur si la tâche n\'existe pas'</span>, () => {
+    expect(() => deleteTask(<span class="code-number">999</span>)).toThrow(<span class="code-string">'Tâche non trouvée'</span>);
+});
+
+<span class="code-comment">// TEST 5: Vérifier qu'on peut obtenir toutes les tâches</span>
+test(<span class="code-string">'Doit retourner toutes les tâches'</span>, () => {
+    addTask(<span class="code-string">'Tâche 1'</span>);
+    addTask(<span class="code-string">'Tâche 2'</span>);
+    addTask(<span class="code-string">'Tâche 3'</span>);
+    
+    expect(getAllTasks()).toHaveLength(<span class="code-number">3</span>);
+});
+</pre>
+                        </div>
+                    </div>
+
+                    <div class="concept-box">
+                        <h4>Étape 6 :  Configurer package.json</h4>
+                        <p>Ajouter les scripts pour lancer l'application et les tests :</p>
+                        
+                        <div class="code-block">
+<pre>{
+  <span class="code-string">"name"</span>: <span class="code-string">"todo-app"</span>,
+  <span class="code-string">"version"</span>: <span class="code-string">"1.0.0"</span>,
+  <span class="code-string">"description"</span>: <span class="code-string">"Application de liste de tâches simple"</span>,
+  <span class="code-string">"main"</span>: <span class="code-string">"app. js"</span>,
+  <span class="code-string">"scripts"</span>: {
+    <span class="code-string">"start"</span>:  <span class="code-string">"node app.js"</span>,
+    <span class="code-string">"test"</span>: <span class="code-string">"jest"</span>,
+    <span class="code-string">"test:watch"</span>: <span class="code-string">"jest --watch"</span>
+  },
+  <span class="code-string">"dependencies"</span>: {
+    <span class="code-string">"express"</span>: <span class="code-string">"^4.18.2"</span>
+  },
+  <span class="code-string">"devDependencies"</span>: {
+    <span class="code-string">"jest"</span>: <span class="code-string">"^29.5.0"</span>,
+    <span class="code-string">"supertest"</span>: <span class="code-string">"^6.3.3"</span>
+  }
+}
+</pre>
+                        </div>
+                    </div>
+
+                    <div class="concept-box">
+                        <h4>Étape 7 : Tester l'application localement</h4>
+                        <p>Avant de configurer le CI/CD, testons l'application sur notre machine :</p>
+                        
+                        <div class="code-block">
+<pre><span class="code-comment"># Démarrer l'application</span>
+npm start
+
+<span class="code-comment"># Dans un autre terminal, lancer les tests</span>
+npm test
+
+<span class="code-comment"># Ouvrir le navigateur à l'adresse</span>
+http://localhost:3000
+</pre>
+                        </div>
+                        
+                        <p style="margin-top: 15px;">Vous devriez voir :</p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>L'application web dans le navigateur</li>
+                            <li>Pouvoir ajouter et supprimer des tâches</li>
+                            <li>Tous les tests passent (affichés en vert)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 2.3 Qu'est-ce que le CI/CD maintenant ? -->
+                <div class="subsection">
+                    <h3>2.3 - Maintenant, qu'est-ce que le CI/CD ?</h3>
+                    
+                    <div class="concept-box">
+                        <h4>Le problème sans CI/CD</h4>
+                        <p>Actuellement, nous devons :</p>
+                        <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                            <li>Manuellement lancer les tests :  <code>npm test</code></li>
+                            <li>Manuellement vérifier la sécurité</li>
+                            <li>Manuellement créer une image Docker</li>
+                            <li>Manuellement déployer l'application sur un serveur</li>
+                        </ul>
+                        
+                        <p style="margin-top: 15px; padding:  15px; background: #f8d7da; border-radius: 8px;">
+                            <strong>Problème :</strong> Si on oublie une étape, on peut déployer du code buggé ou non sécurisé ! 
+                        </p>
+                    </div>
+
+                    <div class="concept-box">
+                        <h4>La solution :  CI/CD</h4>
+                        <p style="font-size: 1.1em; margin-bottom: 15px;">
+                            <strong>CI/CD</strong> va automatiser toutes ces étapes.  À chaque fois qu'on envoie du code vers GitLab, le système va automatiquement :
+                        </p>
+                        
+                        <div class="visual-diagram">
+                            <div style="text-align: left; padding: 20px;">
+                                <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                                    <strong>1. Build (Construction)</strong>
+                                    <p>Installer les dépendances et vérifier que le code compile</p>
+                                </div>
+                                <div style="text-align: center; font-size: 2em; color: #667eea;">↓</div>
+                                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                                    <strong>2. Test</strong>
+                                    <p>Exécuter automatiquement tous les tests</p>
+                                </div>
+                                <div style="text-align: center; font-size: 2em; color: #667eea;">↓</div>
+                                <div style="background: #f8d7da; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                                    <strong>3. Security (Sécurité)</strong>
+                                    <p>Scanner le code pour détecter les vulnérabilités et secrets</p>
+                                </div>
+                                <div style="text-align: center; font-size: 2em; color:  #667eea;">↓</div>
+                                <div style="background: #d1ecf1; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                                    <strong>4. Package</strong>
+                                    <p>Créer une image Docker de l'application</p>
+                                </div>
+                                <div style="text-align: center; font-size: 2em; color: #667eea;">↓</div>
+                                <div style="background:  #e2e3e5; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                                    <strong>5. Deploy (Déploiement)</strong>
+                                    <p>Déployer automatiquement l'application sur le serveur</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2.4 Créer le Dockerfile -->
+                <div class="subsection">
+                    <h3>2.4 - Créer le Dockerfile pour empaqueter l'application</h3>
+                    
+                    <div class="concept-box">
+                        <h4>Qu'est-ce qu'un Dockerfile ?</h4>
+                        <p>Un Dockerfile est une recette qui dit à Docker comment créer une "image" de notre application.  Cette image contient tout ce dont l'application a besoin pour fonctionner.</p>
+                        
+                        <div class="code-block" style="margin-top: 15px;">
+<pre><span class="code-comment"># Fichier: Dockerfile
+# Recette pour créer une image Docker de notre application</span>
+
+<span class="code-comment"># ÉTAPE 1: Partir d'une image Node.js de base</span>
+FROM node: 18-alpine
+
+<span class="code-comment"># ÉTAPE 2: Définir le répertoire de travail</span>
+WORKDIR /app
+
+<span class="code-comment"># ÉTAPE 3: Copier les fichiers de dépendances</span>
+COPY package*.json ./
+
+<span class="code-comment"># ÉTAPE 4: Installer les dépendances</span>
+RUN npm install --production
+
+<span class="code-comment"># ÉTAPE 5: Copier le reste du code</span>
+COPY .  .
+
+<span class="code-comment"># ÉTAPE 6: Exposer le port 3000</span>
+EXPOSE 3000
+
+<span class="code-comment"># ÉTAPE 7: Définir la commande pour démarrer l'application</span>
+CMD ["node", "app.js"]
+</pre>
+                        </div>
+                        
+                        <p style="margin-top: 15px;">Pour tester localement :</p>
+                        <div class="code-block">
+<pre><span class="code-comment"># Construire l'image Docker</span>
+docker build -t todo-app: 1.0 .
+
+<span class="code-comment"># Lancer un conteneur</span>
+docker run -p 3000:3000 todo-app:1.0
+
+<span class="code-comment"># L'application est maintenant accessible sur http://localhost:3000</span>
+</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2.5 Créer le pipeline CI/CD -->
+                <div class="subsection">
+                    <h3>2.5 - Créer le pipeline CI/CD avec GitLab</h3>
+                    
+                    <div class="concept-box">
+                        <h4>Configuration complète du pipeline</h4>
+                        <p>Créer le fichier <code>. gitlab-ci.yml</code> à la racine du projet :</p>
+                        
+                        <div class="code-block">
+<pre><span class="code-comment"># Fichier: .gitlab-ci. yml
+# Configuration du pipeline CI/CD pour notre application</span>
+
+<span class="code-comment"># Définir les étapes du pipeline</span>
+<span class="code-keyword">stages</span>:
+  - build    <span class="code-comment"># Étape 1: Construire</span>
+  - test     <span class="code-comment"># Étape 2: Tester</span>
+  - security <span class="code-comment"># Étape 3: Vérifier la sécurité</span>
+  - package  <span class="code-comment"># Étape 4: Créer l'image Docker</span>
+  - deploy   <span class="code-comment"># Étape 5: Déployer</span>
+
+<span class="code-comment"># Variables globales</span>
+<span class="code-keyword">variables</span>:
+  APP_NAME: <span class="code-string">"todo-app"</span>
+  APP_VERSION: <span class="code-string">"1.0.0"</span>
+
+<span class="code-comment">############################################
+# STAGE 1: BUILD
+############################################</span>
+<span class="code-keyword">build-job</span>:
+  <span class="code-keyword">stage</span>: build
+  <span class="code-keyword">image</span>: node:18
+  <span class="code-keyword">script</span>: 
+    - echo <span class="code-string">"Installation des dépendances..."</span>
+    - npm install
+    - echo <span class="code-string">"Vérification que le code n'a pas d'erreurs de syntaxe..."</span>
+    - node -c app.js
+    - node -c tasks.js
+    - echo <span class="code-string">"Build terminé avec succès!"</span>
+  <span class="code-keyword">artifacts</span>: 
+    <span class="code-comment"># Sauvegarder node_modules pour les étapes suivantes</span>
+    <span class="code-keyword">paths</span>:
+      - node_modules/
+    <span class="code-keyword">expire_in</span>:  1 hour
+
+<span class="code-comment">############################################
+# STAGE 2: TEST
+############################################</span>
+<span class="code-keyword">test-job</span>: 
+  <span class="code-keyword">stage</span>: test
+  <span class="code-keyword">image</span>: node:18
+  <span class="code-keyword">script</span>:
+    - echo <span class="code-string">"Exécution des tests unitaires..."</span>
+    - npm test
+    - echo <span class="code-string">"Tous les tests sont passés!"</span>
+  <span class="code-keyword">coverage</span>:  '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+
+<span class="code-comment">############################################
+# STAGE 3: SECURITY
+############################################</span>
+<span class="code-keyword">security-secrets-scan</span>:
+  <span class="code-keyword">stage</span>: security
+  <span class="code-keyword">image</span>: zricethezav/gitleaks:latest
+  <span class="code-keyword">script</span>:
+    - echo <span class="code-string">"Recherche de secrets dans le code..."</span>
+    - gitleaks detect --source=.  --verbose --no-git
+    - echo <span class="code-string">"Aucun secret détecté!"</span>
+  <span class="code-keyword">allow_failure</span>: false
+
+<span class="code-keyword">security-dependencies-scan</span>:
+  <span class="code-keyword">stage</span>: security
+  <span class="code-keyword">image</span>: node:18
+  <span class="code-keyword">script</span>:
+    - echo <span class="code-string">"Vérification des vulnérabilités dans les dépendances..."</span>
+    - npm audit --audit-level=high
+    - echo <span class="code-string">"Aucune vulnérabilité critique détectée!"</span>
+  <span class="code-keyword">allow_failure</span>:  false
+
+<span class="code-comment">############################################
+# STAGE 4: PACKAGE
+############################################</span>
+<span class="code-keyword">package-docker</span>:
+  <span class="code-keyword">stage</span>: package
+  <span class="code-keyword">image</span>: docker:latest
+  <span class="code-keyword">services</span>:
+    - docker:dind
+  <span class="code-keyword">script</span>:
+    - echo <span class="code-string">"Construction de l'image Docker..."</span>
+    - docker build -t $APP_NAME:$APP_VERSION .
+    - docker build -t $APP_NAME:latest .
+    - echo <span class="code-string">"Image Docker créée avec succès!"</span>
+    - docker images
+  <span class="code-keyword">only</span>: 
+  - main
+
+<span class="code-comment">############################################
+# STAGE 5: DEPLOY
+############################################</span>
+<span class="code-keyword">deploy-staging</span>:
+<span class="code-keyword">stage</span>: deploy
+<span class="code-keyword">image</span>: docker:latest
+<span class="code-keyword">services</span>:
+  - docker:dind
+<span class="code-keyword">script</span>:
+  - echo <span class="code-string">"Déploiement en environnement de staging..."</span>
+  - echo <span class="code-string">"Arrêt de l'ancienne version si elle existe..."</span>
+  - docker stop todo-app-staging || true
+  - docker rm todo-app-staging || true
+  - echo <span class="code-string">"Démarrage de la nouvelle version..."</span>
+  - docker run -d --name todo-app-staging -p 3000:3000 $APP_NAME:$APP_VERSION
+  - echo <span class="code-string">"Application déployée sur staging!"</span>
+<span class="code-keyword">environment</span>:
+  <span class="code-keyword">name</span>: staging
+  <span class="code-keyword">url</span>: http://staging.todo-app.local:3000
+<span class="code-keyword">only</span>: 
+  - main
+
+<span class="code-keyword">deploy-production</span>:
+<span class="code-keyword">stage</span>: deploy
+<span class="code-keyword">image</span>: docker:latest
+<span class="code-keyword">services</span>: 
+  - docker:dind
+<span class="code-keyword">script</span>:
+  - echo <span class="code-string">"Déploiement en PRODUCTION..."</span>
+  - echo <span class="code-string">"Arrêt de l'ancienne version..."</span>
+  - docker stop todo-app-prod || true
+  - docker rm todo-app-prod || true
+  - echo <span class="code-string">"Démarrage de la nouvelle version..."</span>
+  - docker run -d --name todo-app-prod -p 8080:3000 $APP_NAME:$APP_VERSION
+  - echo <span class="code-string">"Application déployée en PRODUCTION!"</span>
+<span class="code-keyword">environment</span>:
+  <span class="code-keyword">name</span>: production
+  <span class="code-keyword">url</span>: http://www.todo-app.com
+<span class="code-keyword">when</span>: manual <span class="code-comment"># Nécessite une validation manuelle</span>
+<span class="code-keyword">only</span>:
+  - main
+</pre>
+                      </div>
+                  </div>
+
+                  <div class="concept-box">
+                      <h4>Explication détaillée du pipeline</h4>
+                      
+                      <div style="margin-top: 20px;">
+                          <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin:  15px 0;">
+                              <h4 style="color: #495057; margin-bottom: 10px;">Stage 1: Build</h4>
+                              <p><strong>Objectif :</strong> Vérifier que le code peut être construit</p>
+                              <p style="margin-top: 10px;"><strong>Actions :</strong></p>
+                              <ul style="margin-left: 20px; margin-top: 5px;">
+                                  <li>Installe toutes les dépendances avec <code>npm install</code></li>
+                                  <li>Vérifie la syntaxe du code JavaScript</li>
+                                  <li>Sauvegarde <code>node_modules/</code> pour les étapes suivantes</li>
+                              </ul>
+                              <p style="margin-top: 10px;"><strong>Si ça échoue :</strong> Le code a des erreurs de syntaxe ou des dépendances manquantes</p>
+                          </div>
+                          
+                          <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                              <h4 style="color: #495057; margin-bottom: 10px;">Stage 2: Test</h4>
+                              <p><strong>Objectif :</strong> Vérifier que le code fonctionne correctement</p>
+                              <p style="margin-top: 10px;"><strong>Actions :</strong></p>
+                              <ul style="margin-left: 20px; margin-top: 5px;">
+                                  <li>Exécute tous les tests avec <code>npm test</code></li>
+                                  <li>Vérifie que toutes les fonctions font ce qu'elles doivent faire</li>
+                                  <li>Calcule la couverture de code (pourcentage de code testé)</li>
+                              </ul>
+                              <p style="margin-top: 10px;"><strong>Si ça échoue :</strong> Au moins un test ne passe pas, il y a un bug dans le code</p>
+                          </div>
+                          
+                          <div style="background:  #f8f9fa; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                              <h4 style="color:  #495057; margin-bottom:  10px;">Stage 3: Security</h4>
+                              <p><strong>Objectif :</strong> Vérifier qu'il n'y a pas de problèmes de sécurité</p>
+                              <p style="margin-top: 10px;"><strong>Actions :</strong></p>
+                              <ul style="margin-left: 20px; margin-top: 5px;">
+                                  <li><strong>Job 1 :</strong> GitLeaks cherche des secrets (mots de passe, clés API) dans le code</li>
+                                  <li><strong>Job 2 :</strong> npm audit vérifie que les bibliothèques utilisées n'ont pas de vulnérabilités connues</li>
+                              </ul>
+                              <p style="margin-top: 10px;"><strong>Si ça échoue :</strong> Il y a un secret en clair ou une bibliothèque vulnérable</p>
+                          </div>
+                          
+                          <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                              <h4 style="color: #495057; margin-bottom: 10px;">Stage 4: Package</h4>
+                              <p><strong>Objectif :</strong> Créer une image Docker de l'application</p>
+                              <p style="margin-top: 10px;"><strong>Actions :</strong></p>
+                              <ul style="margin-left: 20px; margin-top: 5px;">
+                                  <li>Construit une image Docker contenant l'application et toutes ses dépendances</li>
+                                  <li>Tag l'image avec la version et "latest"</li>
+                                  <li>L'image peut maintenant être déployée n'importe où</li>
+                              </ul>
+                              <p style="margin-top:  10px;"><strong>Si ça échoue :</strong> Problème dans le Dockerfile</p>
+                          </div>
+                          
+                          <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                              <h4 style="color: #495057; margin-bottom: 10px;">Stage 5: Deploy</h4>
+                              <p><strong>Objectif :</strong> Mettre l'application en ligne</p>
+                              <p style="margin-top: 10px;"><strong>Actions : </strong></p>
+                              <ul style="margin-left: 20px; margin-top: 5px;">
+                                  <li><strong>Deploy staging :</strong> Déploiement automatique sur l'environnement de test</li>
+                                  <li><strong>Deploy production : </strong> Déploiement manuel sur l'environnement de production (nécessite un clic)</li>
+                              </ul>
+                              <p style="margin-top: 10px;"><strong>Pourquoi staging :</strong> Permet de tester en conditions réelles avant la production</p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <!-- 2.6 Mettre en place le pipeline -->
+              <div class="subsection">
+                  <h3>2.6 - Mettre en place le pipeline :  Étapes pratiques</h3>
+                  
+                  <ol class="step-by-step">
+                      <li>
+                          <strong>Créer un dépôt GitLab</strong>
+                          <p style="margin-top: 10px;">Aller sur GitLab et créer un nouveau projet "todo-app"</p>
+                      </li>
+                      
+                      <li>
+                          <strong>Initialiser Git localement</strong>
+                          <div class="code-block" style="margin-top: 10px;">
+<pre><span class="code-comment"># Dans le dossier todo-app</span>
+git init
+git add .
+git commit -m "Initial commit - Application Todo avec pipeline CI/CD"
+</pre>
+                          </div>
+                      </li>
+                      
+                      <li>
+                          <strong>Lier le dépôt local avec GitLab</strong>
+                          <div class="code-block" style="margin-top: 10px;">
+<pre><span class="code-comment"># Remplacer par votre URL GitLab</span>
+git remote add origin https://gitlab.com/votre-username/todo-app.git
+git branch -M main
+git push -u origin main
+</pre>
+                          </div>
+                      </li>
+                      
+                      <li>
+                          <strong>Observer le pipeline se lancer automatiquement</strong>
+                          <p style="margin-top:  10px;">
+                              Aller sur GitLab → Votre projet → CI/CD → Pipelines<br>
+                              Vous verrez le pipeline en cours d'exécution ! 
+                          </p>
+                      </li>
+                  </ol>
+              </div>
+
+              <!-- 2.7 Scénario complet -->
+              <div class="subsection">
+                  <h3>2.7 - Scénario complet : De la modification du code au déploiement</h3>
+                  
+                  <div class="example-box">
+                      <h4>Scénario :  Ajouter une nouvelle fonctionnalité</h4>
+                      <p><strong>Contexte :</strong> Vous voulez ajouter un compteur qui affiche le nombre total de tâches</p>
+                      
+                      <div class="timeline" style="margin-top: 20px;">
+                          <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #667eea;">
+                              <h4 style="color: #1e3c72; margin-bottom: 10px;">09h00 - Vous modifiez le code</h4>
+                              <p>Ajouter une nouvelle fonction dans tasks.js :</p>
+                              <div class="code-block" style="margin-top: 10px;">
+<pre><span class="code-comment">// Nouvelle fonction : compter les tâches</span>
+<span class="code-keyword">function</span> <span class="code-function">getTaskCount</span>() {
+  <span class="code-keyword">return</span> tasks.length;
+}
+
+<span class="code-comment">// Ne pas oublier de l'exporter</span>
+module.exports = {
+  getAllTasks,
+  addTask,
+  deleteTask,
+  resetTasks,
+  getTaskCount <span class="code-comment">// Nouvelle fonction exportée</span>
+};
+</pre>
+                              </div>
+                          </div>
+                          
+                          <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #667eea;">
+                              <h4 style="color: #1e3c72; margin-bottom: 10px;">09h10 - Vous ajoutez un test</h4>
+                              <p>Ajouter un test dans tasks.test.js : </p>
+                              <div class="code-block" style="margin-top: 10px;">
+<pre><span class="code-keyword">const</span> { getTaskCount } = require(<span class="code-string">'./tasks'</span>);
+
+test(<span class="code-string">'Doit retourner le nombre correct de tâches'</span>, () => {
+  addTask(<span class="code-string">'Tâche 1'</span>);
+  addTask(<span class="code-string">'Tâche 2'</span>);
+  
+  expect(getTaskCount()).toBe(<span class="code-number">2</span>);
+});
+</pre>
+                              </div>
+                          </div>
+                          
+                          <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #667eea;">
+                              <h4 style="color: #1e3c72; margin-bottom: 10px;">09h15 - Vous testez localement</h4>
+                              <div class="code-block" style="margin-top: 10px;">
+<pre>npm test
+
+<span class="code-comment"># Résultat :</span>
+PASS  tasks.test.js
+✓ Doit ajouter une nouvelle tâche
+✓ Ne doit pas ajouter une tâche vide
+✓ Doit supprimer une tâche existante
+✓ Doit lever une erreur si la tâche n'existe pas
+✓ Doit retourner toutes les tâches
+✓ Doit retourner le nombre correct de tâches
+
+Test Suites: 1 passed, 1 total
+Tests:        6 passed, 6 total
+</pre>
+                              </div>
+                          </div>
+                          
+                          <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #667eea;">
+                              <h4 style="color: #1e3c72; margin-bottom: 10px;">09h20 - Vous commitez et poussez</h4>
+                              <div class="code-block" style="margin-top: 10px;">
+<pre>git add .
+git commit -m "Ajout fonction getTaskCount"
+git push origin main
+</pre>
+                              </div>
+                          </div>
+                          
+                          <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #27ae60;">
+                              <h4 style="color: #155724; margin-bottom: 10px;">09h21 - Le pipeline CI/CD se déclenche automatiquement</h4>
+                              <p>GitLab détecte le nouveau commit et lance le pipeline</p>
+                          </div>
+                          
+                          <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #27ae60;">
+                              <h4 style="color: #155724; margin-bottom: 10px;">09h22 - Stage BUILD</h4>
+                              <div class="code-block" style="margin-top: 10px;">
+<pre>Running build-job...
+Installation des dépendances... 
+✓ npm install completed
+Vérification syntaxe...
+✓ Code syntax OK
+Build terminé avec succès! 
+Job succeeded
+</pre>
+                              </div>
+                          </div>
+                          
+                          <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #27ae60;">
+                              <h4 style="color: #155724; margin-bottom: 10px;">09h23 - Stage TEST</h4>
+                              <div class="code-block" style="margin-top: 10px;">
+<pre>Running test-job... 
+Exécution des tests unitaires...
+✓ 6 tests passed, 0 failed
+Tous les tests sont passés!
+Job succeeded
+</pre>
+                              </div>
+                          </div>
+                          
+                          <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #27ae60;">
+                              <h4 style="color: #155724; margin-bottom: 10px;">09h24 - Stage SECURITY</h4>
+                              <div class="code-block" style="margin-top: 10px;">
+<pre>Running security-secrets-scan...
+Recherche de secrets dans le code...
+✓ No secrets detected! 
+Job succeeded
+
+Running security-dependencies-scan...
+Vérification des vulnérabilités...
+✓ 0 vulnerabilities found
+Job succeeded
+</pre>
+                              </div>
+                          </div>
+                          
+                          <div style="background: white; padding:  20px; border-radius:  8px; margin: 15px 0; border-left:  5px solid #27ae60;">
+                              <h4 style="color: #155724; margin-bottom: 10px;">09h26 - Stage PACKAGE</h4>
+                              <div class="code-block" style="margin-top: 10px;">
+<pre>Running package-docker... 
+Construction de l'image Docker... 
+✓ Image built successfully
+✓ Tagged:  todo-app:1.0.0
+✓ Tagged: todo-app:latest
+Job succeeded
+</pre>
+                              </div>
+                          </div>
+                          
+                          <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #27ae60;">
+                              <h4 style="color: #155724; margin-bottom: 10px;">09h28 - Stage DEPLOY (Staging)</h4>
+                              <div class="code-block" style="margin-top: 10px;">
+<pre>Running deploy-staging...
+Déploiement en environnement de staging...
+✓ Old container stopped
+✓ New container started
+✓ Application déployée sur staging! 
+Environment: http://staging.todo-app.local: 3000
+Job succeeded
+</pre>
+                              </div>
+                          </div>
+                          
+                          <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #f39c12;">
+                              <h4 style="color: #856404; margin-bottom: 10px;">09h30 - Vous testez sur staging</h4>
+                              <p>Vous allez sur http://staging.todo-app.local:3000 et vérifiez que tout fonctionne</p>
+                          </div>
+                          
+                          <div style="background:  white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #17a2b8;">
+                              <h4 style="color:  #0c5460; margin-bottom: 10px;">09h35 - Vous déployez en production</h4>
+                              <p>Dans GitLab, vous cliquez sur le bouton "Play" du job "deploy-production"</p>
+                              <div class="code-block" style="margin-top: 10px;">
+<pre>Running deploy-production...
+Déploiement en PRODUCTION...
+✓ Application déployée en PRODUCTION!
+Environment: http://www.todo-app.com
+Job succeeded
+</pre>
+                              </div>
+                          </div>
+                          
+                          <div style="background: #d4edda; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #28a745;">
+                              <h4 style="color: #155724; margin-bottom: 10px;">09h40 - Résultat final</h4>
+                              <ul style="margin-left: 20px; line-height: 2;">
+                                  <li>Temps total : 20 minutes</li>
+                                  <li>Tout est automatique (sauf le clic final pour la production)</li>
+                                  <li>Tous les tests ont passé</li>
+                                  <li>Aucun problème de sécurité détecté</li>
+                                  <li>L'application est maintenant en production avec la nouvelle fonctionnalité</li>
+                              </ul>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <!-- 2.8 Scénario avec problème de sécurité -->
+              <div class="subsection">
+                  <h3>2.8 - Scénario alternatif : Quand le pipeline détecte un problème</h3>
+                  
+                  <div class="example-box">
+                      <h4>Scénario : Un développeur commet un secret par erreur</h4>
+                      
+                      <div class="timeline" style="margin-top: 20px;">
+                          <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #667eea;">
+                              <h4 style="color: #1e3c72; margin-bottom: 10px;">10h00 - Modification du code</h4>
+                              <p>Le développeur ajoute par erreur une clé API en clair :</p>
+                              <div class="code-block" style="margin-top: 10px;">
+<pre><span class="code-comment">// Fichier:  config.js (MAUVAISE PRATIQUE)</span>
+<span class="code-keyword">const</span> config = {
+  apiKey: <span class="code-string">"sk-abc123def456789"</span>,  <span class="code-comment">// SECRET EN CLAIR! </span>
+  databaseUrl: <span class="code-string">"mongodb://admin:password123@localhost/todos"</span>
+};
+
+module.exports = config;
+</pre>
+                              </div>
+                          </div>
+                          
+                          <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #667eea;">
+                              <h4 style="color: #1e3c72; margin-bottom: 10px;">10h05 - Commit et push</h4>
+                              <div class="code-block" style="margin-top: 10px;">
+<pre>git add config.js
+git commit -m "Ajout configuration"
+git push origin main
+</pre>
+                              </div>
+                          </div>
+                          
+                          <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #27ae60;">
+                              <h4 style="color: #155724; margin-bottom: 10px;">10h06 - Pipeline démarre</h4>
+                              <p>Les stages BUILD et TEST passent normalement... </p>
+                          </div>
+                          
+                          <div style="background: white; padding:  20px; border-radius:  8px; margin: 15px 0; border-left:  5px solid #e74c3c;">
+                              <h4 style="color:  #721c24; margin-bottom: 10px;">10h08 - Stage SECURITY :  ÉCHEC !</h4>
+                              <div class="code-block" style="margin-top: 10px;">
+<pre>Running security-secrets-scan...
+Recherche de secrets dans le code... 
+
+ERROR: Secret detected! 
+
+Finding:      apiKey
+Secret:      sk-abc123def456789
+File:        config.js
+Line:        2
+Commit:      a1b2c3d
+Rule:        generic-api-key
+Severity:    CRITICAL
+
+Finding:     database-password
+Secret:      mongodb://admin:password123@localhost/todos
+File:        config.js
+Line:        3
+Rule:        database-credentials
+Severity:    CRITICAL
+
+2 secrets detected! 
+
+PIPELINE STOPPED - Code blocked from deployment
+Job failed
+</pre>
+                              </div>
+                          </div>
+                          
+                          <div style="background: white; padding:  20px; border-radius:  8px; margin: 15px 0; border-left:  5px solid #f39c12;">
+                              <h4 style="color: #856404; margin-bottom: 10px;">10h10 - Notification reçue</h4>
+                              <p>Le développeur reçoit un email de GitLab :</p>
+                              <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                                  <strong>Pipeline failed</strong><br>
+                                  Project: todo-app<br>
+                                  Commit: "Ajout configuration"<br>
+                                  Failed at: security-secrets-scan<br>
+                                  Reason: 2 secrets detected in code<br>
+                                  <span style="color: #e74c3c; font-weight: bold;">Code NOT deployed</span>
+                              </div>
+                          </div>
+                          
+                          <div style="background: white; padding:  20px; border-radius:  8px; margin: 15px 0; border-left:  5px solid #667eea;">
+                              <h4 style="color: #1e3c72; margin-bottom: 10px;">10h15 - Correction du code</h4>
+                              <p>Le développeur corrige en utilisant des variables d'environnement :</p>
+                              <div class="code-block" style="margin-top: 10px;">
+<pre><span class="code-comment">// Fichier: config.js (BONNE PRATIQUE)</span>
+<span class="code-keyword">const</span> config = {
+  apiKey: process.env.API_KEY,  <span class="code-comment">// Variable d'environnement</span>
+  databaseUrl: process. env.DATABASE_URL
+};
+
+module.exports = config;
+</pre>
+                              </div>
+                          </div>
+                          
+                          <div style="background: white; padding:  20px; border-radius:  8px; margin: 15px 0; border-left:  5px solid #667eea;">
+                              <h4 style="color: #1e3c72; margin-bottom: 10px;">10h20 - Nouveau commit</h4>
+                              <div class="code-block" style="margin-top: 10px;">
+<pre>git add config. js
+git commit -m "Fix:  utilisation de variables d'environnement pour les secrets"
+git push origin main
+</pre>
+                              </div>
+                          </div>
+                          
+                          <div style="background: #d4edda; padding: 20px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #28a745;">
+                              <h4 style="color: #155724; margin-bottom: 10px;">10h25 - Pipeline réussit</h4>
+                              <div class="code-block" style="margin-top: 10px;">
+<pre>Running security-secrets-scan...
+Recherche de secrets dans le code... 
+✓ No secrets detected! 
+Job succeeded
+
+Pipeline succeeded - Code deployed to staging
+</pre>
+                              </div>
+                              <p style="margin-top: 15px;"><strong>Résultat :</strong> Le code vulnérable n'a JAMAIS atteint la production grâce au pipeline CI/CD !</p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <!-- PARTIE 3: TRAVAUX PRATIQUES -->
+          <div class="section">
+              <h2 class="section-title">PARTIE 3 :  Travaux Pratiques Guidés</h2>
+              
+              <div class="important-box">
+                  <strong>Objectif :</strong>
+                  <p>Créer votre propre application avec un pipeline CI/CD complet, de A à Z. </p>
+              </div>
+
+              <div class="subsection">
+                  <h3>TP :  Créer et déployer l'application Todo avec CI/CD</h3>
+                  
+                  <ol class="step-by-step">
+                      <li>
+                          <strong>Préparer l'environnement</strong>
+                          <p>Vérifier que vous avez :</p>
+                          <ul style="margin-left: 20px; margin-top: 10px;">
+                              <li>Node.js installé (version 18 ou supérieure)</li>
+                              <li>Git installé</li>
+                              <li>Un compte GitLab</li>
+                              <li>Docker installé (optionnel pour tester localement)</li>
+                          </ul>
+                      </li>
+                      
+                      <li>
+                          <strong>Créer le projet localement</strong>
+                          <div class="code-block" style="margin-top: 10px;">
+<pre>mkdir todo-app
+cd todo-app
+npm init -y
+npm install express
+npm install --save-dev jest supertest
+</pre>
+                          </div>
+                      </li>
+                      
+                      <li>
+                          <strong>Créer tous les fichiers de l'application</strong>
+                          <p>Créer les fichiers suivants avec le contenu fourni plus haut :</p>
+                          <ul style="margin-left: 20px; margin-top: 10px;">
+                              <li>tasks.js (logique métier)</li>
+                              <li>app.js (serveur web)</li>
+                              <li>tasks.test.js (tests)</li>
+                              <li>public/index.html (interface web)</li>
+                              <li>package.json (avec les scripts)</li>
+                              <li>Dockerfile</li>
+                              <li>. gitlab-ci.yml (pipeline)</li>
+                          </ul>
+                      </li>
+                      
+                      <li>
+                          <strong>Tester localement</strong>
+                          <div class="code-block" style="margin-top: 10px;">
+<pre><span class="code-comment"># Lancer les tests</span>
+npm test
+
+<span class="code-comment"># Démarrer l'application</span>
+npm start
+
+<span class="code-comment"># Ouvrir http://localhost:3000 dans le navigateur</span>
+</pre>
+                          </div>
+                          <p style="margin-top: 10px;">Vérifier que : </p>
+                          <ul style="margin-left: 20px; margin-top: 5px;">
+                              <li>Tous les tests passent</li>
+                              <li>L'application fonctionne dans le navigateur</li>
+                              <li>Vous pouvez ajouter et supprimer des tâches</li>
+                          </ul>
+                      </li>
+                      
+                      <li>
+                          <strong>Créer un dépôt GitLab</strong>
+                          <p style="margin-top: 10px;">Sur GitLab. com :</p>
+                          <ul style="margin-left: 20px; margin-top: 5px;">
+                              <li>Cliquer sur "New Project"</li>
+                              <li>Choisir "Create blank project"</li>
+                              <li>Nom :  "todo-app"</li>
+                              <li>Visibilité : Private</li>
+                              <li>Cliquer sur "Create project"</li>
+                          </ul>
+                      </li>
+                      
+                      <li>
+                          <strong>Pousser le code vers GitLab</strong>
+                          <div class="code-block" style="margin-top: 10px;">
+<pre>git init
+git add .
+git commit -m "Initial commit:  Application Todo avec pipeline CI/CD complet"
+git remote add origin https://gitlab.com/VOTRE-USERNAME/todo-app.git
+git branch -M main
+git push -u origin main
+</pre>
+                          </div>
+                      </li>
+                      
+                      <li>
+                          <strong>Observer le pipeline</strong>
+                          <p style="margin-top:  10px;">Dans GitLab :</p>
+                          <ul style="margin-left: 20px; margin-top: 5px;">
+                              <li>Aller dans CI/CD → Pipelines</li>
+                              <li>Cliquer sur le pipeline en cours</li>
+                              <li>Observer chaque stage s'exécuter</li>
+                              <li>Cliquer sur chaque job pour voir les logs détaillés</li>
+                          </ul>
+                      </li>
+                      
+                      <li>
+                          <strong>Tester la détection de secrets</strong>
+                          <p>Créer un fichier test-secret.js :</p>
+                          <div class="code-block" style="margin-top: 10px;">
+<pre><span class="code-keyword">const</span> secret = <span class="code-string">"sk-1234567890abcdefgh"</span>;
+</pre>
+                          </div>
+                          <p style="margin-top: 10px;">Commiter et pousser :</p>
+                          <div class="code-block" style="margin-top: 10px;">
+<pre>git add test-secret.js
+git commit -m "Test:  ajout d'un secret pour tester la détection"
+git push
+</pre>
+                          </div>
+                          <p style="margin-top:  10px;">Observer que le pipeline échoue au stage security</p>
+                      </li>
+                      
+                      <li>
+                          <strong>Corriger et relancer</strong>
+                          <div class="code-block" style="margin-top: 10px;">
+<pre>git rm test-secret.js
+git commit -m "Fix: suppression du fichier avec secret"
+git push
+</pre>
+                          </div>
+                          <p style="margin-top: 10px;">Cette fois le pipeline doit réussir complètement</p>
+                      </li>
+                      
+                      <li>
+                          <strong>Ajouter une nouvelle fonctionnalité</strong>
+                          <p>Exercice : Ajouter la fonctionnalité pour marquer une tâche comme "complétée"</p>
+                          <ul style="margin-left: 20px; margin-top: 10px;">
+                              <li>Modifier tasks.js pour ajouter une fonction <code>completeTask(id)</code></li>
+                              <li>Ajouter des tests dans tasks.test.js</li>
+                              <li>Modifier app.js pour ajouter une route PATCH /api/tasks/:id</li>
+                              <li>Modifier index.html pour ajouter un bouton "Terminer"</li>
+                              <li>Commiter et pousser</li>
+                              <li>Observer le pipeline valider automatiquement vos changements</li>
+                          </ul>
+                      </li>
+                  </ol>
+              </div>
+
+              <div class="concept-box" style="margin-top: 30px;">
+                  <h4>Critères de réussite du TP</h4>
+                  <ul class="list-styled">
+                      <li>L'application fonctionne localement</li>
+                      <li>Tous les tests passent (au moins 5 tests)</li>
+                      <li>Le fichier . gitlab-ci.yml est correctement configuré</li>
+                      <li>Le pipeline s'exécute automatiquement à chaque push</li>
+                      <li>Les 5 stages passent au vert (build, test, security, package, deploy)</li>
+                      <li>La détection de secrets fonctionne (testé et vérifié)</li>
+                      <li>Vous avez ajouté au moins une nouvelle fonctionnalité avec tests</li>
+                  </ul>
+              </div>
+          </div>
+
+          <!-- PARTIE 4: SYNTHÈSE ET CONCEPTS CLÉS -->
+          <div class="section">
+              <h2 class="section-title">PARTIE 4 : Synthèse et Concepts Clés</h2>
+              
+              <div class="subsection">
+                  <h3>Ce que vous avez appris</h3>
+                  
+                  <div class="concept-box">
+                      <h4>1. DevSecOps</h4>
+                      <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                          <li><strong>Définition :</strong> Approche qui intègre la sécurité dès le début du développement</li>
+                          <li><strong>Shift-Left :</strong> Penser à la sécurité tôt coûte 100x moins cher</li>
+                          <li><strong>Collaboration :</strong> Dev, Sec et Ops travaillent ensemble</li>
+                          <li><strong>Automatisation :</strong> Les contrôles de sécurité sont automatiques</li>
+                      </ul>
+                  </div>
+
+                  <div class="concept-box">
+                      <h4>2. CI/CD (Continuous Integration / Continuous Deployment)</h4>
+                      <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                          <li><strong>CI (Continuous Integration) :</strong> Intégrer et tester le code plusieurs fois par jour</li>
+                          <li><strong>CD (Continuous Deployment) :</strong> Déployer automatiquement le code validé</li>
+                          <li><strong>Pipeline :</strong> Séquence automatisée d'étapes (build → test → security → package → deploy)</li>
+                          <li><strong>Avantages :</strong> Rapidité, qualité, sécurité, coûts réduits</li>
+                      </ul>
+                  </div>
+
+                  <div class="concept-box">
+                      <h4>3. Les étapes d'un pipeline CI/CD</h4>
+                      <table class="comparison-table" style="margin-top: 15px;">
+                          <tr>
+                              <th>Étape</th>
+                              <th>Objectif</th>
+                              <th>Outils</th>
+                          </tr>
+                          <tr>
+                              <td><strong>Build</strong></td>
+                              <td>Compiler et construire l'application</td>
+                              <td>npm, maven, gradle</td>
+                          </tr>
+                          <tr>
+                              <td><strong>Test</strong></td>
+                              <td>Vérifier que le code fonctionne</td>
+                              <td>Jest, JUnit, PyTest</td>
+                          </tr>
+                          <tr>
+                              <td><strong>Security</strong></td>
+                              <td>Détecter les vulnérabilités</td>
+                              <td>GitLeaks, npm audit, SonarQube</td>
+                          </tr>
+                          <tr>
+                              <td><strong>Package</strong></td>
+                              <td>Créer une image déployable</td>
+                              <td>Docker</td>
+                          </tr>
+                          <tr>
+                              <td><strong>Deploy</strong></td>
+                              <td>Mettre en production</td>
+                              <td>Kubernetes, Docker</td>
+                          </tr>
+                      </table>
+                  </div>
+
+                  <div class="concept-box">
+                      <h4>4. Sécurité dans le pipeline</h4>
+                      <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                          <li><strong>Détection de secrets :</strong> GitLeaks cherche les mots de passe en clair</li>
+                          <li><strong>Scan de dépendances :</strong> npm audit vérifie les bibliothèques vulnérables</li>
+                          <li><strong>Security Gate :</strong> Point de contrôle qui bloque le code non sécurisé</li>
+                          <li><strong>Principe :</strong> Mieux vaut bloquer en développement qu'en production</li>
+                      </ul>
+                  </div>
+              </div>
+
+              <div class="subsection">
+                  <h3>Vocabulaire à retenir</h3>
+                  
+                  <table class="comparison-table">
+                      <tr>
+                          <th style="width: 30%;">Terme</th>
+                          <th>Signification</th>
+                      </tr>
+                      <tr>
+                          <td><strong>DevSecOps</strong></td>
+                          <td>Development + Security + Operations - Approche intégrant la sécurité dans le DevOps</td>
+                      </tr>
+                      <tr>
+                          <td><strong>CI/CD</strong></td>
+                          <td>Continuous Integration / Continuous Deployment - Automatisation du développement au déploiement</td>
+                      </tr>
+                      <tr>
+                          <td><strong>Pipeline</strong></td>
+                          <td>Séquence d'étapes automatisées pour traiter le code</td>
+                      </tr>
+                      <tr>
+                          <td><strong>Stage</strong></td>
+                          <td>Étape majeure du pipeline (build, test, deploy... )</td>
+                      </tr>
+                      <tr>
+                          <td><strong>Job</strong></td>
+                          <td>Tâche spécifique dans un stage</td>
+                      </tr>
+                      <tr>
+                          <td><strong>Artifact</strong></td>
+                          <td>Fichier sauvegardé entre les stages du pipeline</td>
+                      </tr>
+                      <tr>
+                          <td><strong>Security Gate</strong></td>
+                          <td>Point de contrôle qui bloque le code non conforme</td>
+                      </tr>
+                      <tr>
+                          <td><strong>Shift-Left</strong></td>
+                          <td>Intégrer la sécurité tôt dans le cycle de développement</td>
+                      </tr>
+                      <tr>
+                          <td><strong>Secret</strong></td>
+                          <td>Information sensible (mot de passe, clé API, token)</td>
+                      </tr>
+                      <tr>
+                          <td><strong>Docker</strong></td>
+                          <td>Technologie de conteneurisation d'applications</td>
+                      </tr>
+                      <tr>
+                          <td><strong>Image Docker</strong></td>
+                          <td>Package contenant l'application et ses dépendances</td>
+                      </tr>
+                      <tr>
+                          <td><strong>Staging</strong></td>
+                          <td>Environnement de pré-production pour tester</td>
+                      </tr>
+                      <tr>
+                          <td><strong>Production</strong></td>
+                          <td>Environnement accessible aux utilisateurs finaux</td>
+                      </tr>
+                  </table>
+              </div>
+
+              <div class="important-box" style="margin-top: 30px;">
+                  <strong>Points clés à retenir</strong>
+                  <ul style="margin-top: 15px; margin-left: 20px; line-height: 2;">
+                      <li>Le DevSecOps intègre la sécurité dès le début, pas à la fin</li>
+                      <li>Le CI/CD automatise tout le processus du code à la production</li>
+                      <li>Un pipeline a plusieurs stages qui s'exécutent séquentiellement</li>
+                      <li>Si un stage échoue, le pipeline s'arrête (protection)</li>
+                      <li>Les tests et la sécurité sont vérifiés automatiquement</li>
+                      <li>Corriger un bug tôt coûte 100x moins cher qu'en production</li>
+                      <li>GitLab CI/CD utilise le fichier .gitlab-ci.yml pour la configuration</li>
+                      <li>Docker permet de packager l'application pour un déploiement uniforme</li>
+                  </ul>
+              </div>
+          </div>
+
+          <!-- PARTIE 5: RESSOURCES ET PROCHAINE SÉANCE -->
+          <div class="section">
+              <h2 class="section-title">PARTIE 5 : Ressources et Préparation</h2>
+              
+              <div class="subsection">
+                  <h3>Ressources pour approfondir</h3>
+                  
+                  <div class="concept-box">
+                      <h4>Documentation officielle</h4>
+                      <ul class="list-styled">
+                          <li><strong>GitLab CI/CD :</strong> https://docs.gitlab.com/ee/ci/</li>
+                          <li><strong>Node.js :</strong> https://nodejs.org/docs/</li>
+                          <li><strong>Express.js :</strong> https://expressjs.com/</li>
+                          <li><strong>Jest (tests) :</strong> https://jestjs.io/</li>
+                          <li><strong>Docker :</strong> https://docs.docker.com/</li>
+                          <li><strong>GitLeaks :</strong> https://github.com/gitleaks/gitleaks</li>
+                      </ul>
+                  </div>
+
+                  <div class="concept-box">
+                      <h4>Tutoriels recommandés</h4>
+                      <ul class="list-styled">
+                          <li>GitLab CI/CD Tutorial for Beginners (YouTube)</li>
+                          <li>Docker in 100 Seconds (Fireship on YouTube)</li>
+                          <li>Introduction to DevSecOps (LinkedIn Learning)</li>
+                          <li>Jest Crash Course (Traversy Media)</li>
+                      </ul>
+                  </div>
+              </div>
+
+              <div class="subsection">
+                  <h3>Préparation pour la prochaine séance</h3>
+                  
+                  <div class="important-box">
+                      <strong>À faire avant la séance 3</strong>
+                      <ul style="margin-top: 15px; margin-left: 20px; line-height: 2;">
+                          <li>Terminer le TP : votre application Todo doit être complètement fonctionnelle avec pipeline CI/CD</li>
+                          <li>Ajouter au moins 2 nouvelles fonctionnalités avec tests</li>
+                          <li>Lire la documentation de Terraform (introduction)</li>
+                          <li>Installer Terraform sur votre machine</li>
+                          <li>Revoir les concepts de cette séance</li>
+                          <li>Préparer des questions sur ce que vous n'avez pas compris</li>
+                      </ul>
+                  </div>
+
+                  <div class="example-box" style="margin-top: 20px;">
+                      <h4>Prochaine séance :  Infrastructure as Code (IaC) Sécurisée</h4>
+                      <p style="margin-top: 15px;"><strong>Au programme :</strong></p>
+                      <ul style="margin-left: 20px; margin-top: 10px; line-height: 2;">
+                          <li>Qu'est-ce que l'Infrastructure as Code ? </li>
+                          <li>Introduction à Terraform</li>
+                          <li>Créer des ressources cloud avec du code</li>
+                          <li>Scanner la sécurité de l'infrastructure (Terrascan, Checkov)</li>
+                          <li>Intégrer l'IaC dans le pipeline CI/CD</li>
+                          <li>Gestion des secrets avec HashiCorp Vault</li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Footer -->
+          <div style="text-align: center; padding: 30px; background:  #f8f9fa; border-radius: 10px; margin-top: 40px;">
+              
+              
+              <div style="margin-top: 30px; padding:  20px; background: white; border-radius: 10px; display: inline-block;">
+                  <p style="font-size:  0.9em; color: #999; margin-bottom: 5px;">Module DevSecOps et Sécurité Opérationnelle</p>
+                  <p style="font-size: 0.9em; color: #999; margin-bottom: 5px;">Cycle Ingénieur Cybersécurité</p>
+                  <p style="font-size: 0.9em; color: #999;">Décembre 2025</p>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <script>
+      // Animation au scroll
+      window.addEventListener('scroll', function() {
+          const sections = document.querySelectorAll('. section');
+          sections.forEach(section => {
+              const rect = section.getBoundingClientRect();
+              if (rect.top < window.innerHeight * 0.75) {
+                  section.style.opacity = '1';
+                  section.style.transform = 'translateY(0)';
+              }
+          });
+      });
+
+      // Animation initiale
+      document.addEventListener('DOMContentLoaded', function() {
+          const sections = document.querySelectorAll('. section');
+          sections.forEach(section => {
+              section.style.opacity = '0';
+              section.style.transform = 'translateY(20px)';
+              section.style.transition = 'all 0.6s ease';
+          });
+
+          setTimeout(() => {
+              sections[0].style.opacity = '1';
+              sections[0].style.transform = 'translateY(0)';
+          }, 100);
+      });
+
+      // Copie du code au clic
+      document.querySelectorAll('.code-block').forEach(block => {
+          block.style.cursor = 'pointer';
+          block.title = 'Cliquer pour copier le code';
+          
+          block.addEventListener('click', function() {
+              const text = this.innerText;
+              navigator.clipboard.writeText(text).then(() => {
+                  const originalBg = this.style.background;
+                  this.style. background = '#27ae60';
+                  setTimeout(() => {
+                      this. style.background = originalBg;
+                  }, 200);
+                  
+                  const message = document.createElement('div');
+                  message.textContent = 'Code copié ! ';
+                  message.style. cssText = 'position: fixed; top: 20px; right: 20px; background: #27ae60; color: white; padding: 15px 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 9999;';
+                  document.body. appendChild(message);
+                  
+                  setTimeout(() => {
+                      message.remove();
+                  }, 2000);
+              });
+          });
+      });
+
+      // Smooth scroll
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function (e) {
+              e.preventDefault();
+              const target = document.querySelector(this. getAttribute('href'));
+              if (target) {
+                  target. scrollIntoView({
+                      behavior: 'smooth',
+                      block: 'start'
+                  });
+              }
+          });
+      });
+  </script>
+</body>
+</html>
